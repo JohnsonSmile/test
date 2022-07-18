@@ -9,18 +9,23 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './theme';
+import { getLibrary } from './clients';
+import { Web3ReactProvider } from '@web3-react/core';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <>
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
-      </Suspense>
-    </BrowserRouter>
-    <ToastContainer />
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <BrowserRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ThemeProvider theme={theme}>
+              <App />
+          </ThemeProvider>
+        </Suspense>
+      </BrowserRouter>
+      <ToastContainer />
+    </Web3ReactProvider>
   </>
 );
 

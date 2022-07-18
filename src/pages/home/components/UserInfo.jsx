@@ -1,6 +1,7 @@
 import { Avatar, Typography, Box } from "@mui/material"
 import { makeStyles } from '@mui/styles'
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 
 const stringAvatar = (name) => {
@@ -48,9 +49,13 @@ const useStyles = makeStyles({
 
 export const UserInfo = () => {
     const [isLogin, setIsLogin] = useState(false)
+    const navigate = useNavigate()
 
     const handleLoginClick = () => {
-        setIsLogin(true)
+        // jump to login page
+        navigate('/login')
+        // TODO:login state should be in global mobx
+        // setIsLogin(true)
     }
 
     const classes = useStyles()
