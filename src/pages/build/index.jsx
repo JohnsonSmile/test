@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardMedia, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Button, Card, CardMedia, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
@@ -82,7 +82,7 @@ const BuildPage = () => {
     
     return (
         <>
-            <Box sx={{ backgroundColor: '#FFF', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Box sx={{ backgroundColor: '#EEE', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Typography variant={'inherit'} sx={{ py: 3 }}>已经铸造的总数:1234</Typography>
                 <Box>
                     <CardMedia 
