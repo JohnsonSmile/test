@@ -30,7 +30,11 @@ const MyNFTPage = () => {
 
     const navigate = useNavigate()
     const handleDetailClick = (nftinfo) => {
-        navigate(`/mynft/${nftinfo.type}`)
+        navigate('/mynft/list', {
+            state: {
+                type: nftinfo.type,
+            }
+        })
     }
 
     return (

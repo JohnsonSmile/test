@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+
 const { Box, Card, Button, Typography, Divider } = require("@mui/material")
 
 
@@ -23,6 +25,16 @@ const nftInfos = [
 
 
 const MyNFTSortPage = () => {
+
+    const navigate = useNavigate()
+    const handleStakeClick = () => {
+        navigate('/stake', {
+            state: {
+                id: 1238
+            }
+        })
+    }
+
     return (
         <Box sx={{display: 'flex', flexDirection:' column', gap: 3, py: 3, backgroundColor: '#eee'}}>
             {nftInfos.map(nftinfo => {
@@ -46,7 +58,7 @@ const MyNFTSortPage = () => {
                         <Box sx={{py: 3, px: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1}}>
                             <Typography variant="inherit">操作:</Typography>
                             {nftinfo.status === 1 && <Box sx={{display: 'flex', gap: 2,}}>
-                                    <Button variant="contained">去质押</Button>
+                                    <Button variant="contained" onClick={handleStakeClick}>去质押</Button>
                                     <Button variant="outlined">去出售</Button>
                                 </Box>}
                             {nftinfo.status === 2 && <Box>

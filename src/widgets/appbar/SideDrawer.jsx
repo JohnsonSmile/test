@@ -24,7 +24,7 @@ const listItems = [
         isReady: true
     },{
         title: '质押',
-        url: '/',
+        url: '/stake',
         isReady: true
     },{
         title: '每日签到',
