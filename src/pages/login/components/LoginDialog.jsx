@@ -72,7 +72,7 @@ const LoginDialog = (props) => {
             <DialogContent>
                 <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 1}}>
 
-                    <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center'}} gutterBottom>
+                    <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12}} gutterBottom>
                         请选择您的钱包连接至<CardMedia component='img'sx={{
                             height: 20,
                             width: 20,

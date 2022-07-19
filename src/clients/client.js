@@ -250,5 +250,6 @@ export {
   useActivatingConnector,
   useEagerConnect,
   useInactiveListener,
+  ToggleLoginButton,
   injected,
 };

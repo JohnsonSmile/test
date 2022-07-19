@@ -1,37 +1,34 @@
-import { useState } from 'react';
-import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Drawer} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, Toolbar, IconButton, Typography, Badge} from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import SideDrawer from './SideDrawer';
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 const TopAppBar = () => {
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const toggleDrawer = (open) => {
-    setIsDrawerOpen(open);
-  };
-
+  const location = useLocation()
+  const [title, setTitle] = useState('')
+  useEffect(() => {
+    if (location.pathname === '/home') {
+      setTitle('VBank Value')
+    } else if (location.pathname === '/build') {
+      setTitle('铸造')
+    }
+  }, [location])
+  
   return (
     <Box sx={{ flexGrow: 1, display: 'flex' }}>
       <AppBar position="sticky" sx={{backgroundColor: 'transparent', boxShadow: 'none'}}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            sx={{ mr: 2 }}
-            onClick={() => { toggleDrawer(true) }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <SideDrawer />
           <Typography
             variant="h6"
             noWrap
             component="div"
           >
-            Value Bank
+            { title }
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box >
@@ -51,14 +48,6 @@ const TopAppBar = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Drawer 
-        anchor='left'
-        open={isDrawerOpen}
-        onClose={() => {toggleDrawer(false)}}>
-        <Box>
-          HEllo
-        </Box>    
-      </Drawer>
     </Box>
   );
 }

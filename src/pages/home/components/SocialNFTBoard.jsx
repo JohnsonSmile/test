@@ -6,9 +6,15 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const SocialNFTBoard = (props) => {
     const { socialData } = props;
+    const navigate = useNavigate()
+    const handleBuildNFTClick = () => {
+        // TODO: if user logged in
+        navigate('/build')
+    }
     return (
         <Card sx={{ minWidth: 275, pb: 2 }}>
         <CardContent>
@@ -72,7 +78,7 @@ const SocialNFTBoard = (props) => {
             </Grid>
         </CardContent>
         <CardActions sx={{display: 'flex', px: 2}}>
-            <Button variant="contained" size="small" sx={{ flex:1 }}>铸造NFT</Button>
+            <Button onClick={ handleBuildNFTClick } variant="contained" size="small" sx={{ flex:1 }}>铸造NFT</Button>
             <Button variant="outlined" size="small" sx={{ flex:1 }}>交易NFT</Button>
         </CardActions>
         </Card>

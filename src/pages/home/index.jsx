@@ -1,7 +1,4 @@
-import TopAppBar from "../../widgets/appbar/TopAppBar"
-import {Box, Fab} from '@mui/material';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import ScrollTop from "../../widgets/scrolltop/ScrollTop";
+import {Box} from '@mui/material';
 import { UserInfo } from "./components/UserInfo";
 import Features from "./components/Features";
 import GlobalData from "./components/GlobalData";
@@ -105,25 +102,16 @@ const vsdUsdtData = {
 const HomePage = (props) => {
     return (
         <>
-            <Box sx={{backgroundColor: '#1976d2'}}>
-                <TopAppBar />
-                <div id="back-to-top-anchor" />
-                <Box>
-                    <UserInfo />
-                    <Box sx={{
-                        backgroundColor: '#eee', 
-                        borderRadius: '30px 30px 0 0',
-                        overflow: 'hidden'
-                    }}>
-                        <Features features={features} informations={informations} />
-                        <GlobalData socialData={socialData} vsdData={vsdData} vsdUsdtData={vsdUsdtData} />
-                    </Box>
+            <Box>
+                <UserInfo />
+                <Box sx={{
+                    backgroundColor: '#eee', 
+                    borderRadius: '30px 30px 0 0',
+                    overflow: 'hidden'
+                }}>
+                    <Features features={features} informations={informations} />
+                    <GlobalData socialData={socialData} vsdData={vsdData} vsdUsdtData={vsdUsdtData} />
                 </Box>
-                <ScrollTop {...props } anchorName='#back-to-top-anchor'>
-                    <Fab size="small" aria-label="scroll back to top">
-                        <KeyboardArrowUpIcon />
-                    </Fab>
-                </ScrollTop>
             </Box>
         </>
     )
