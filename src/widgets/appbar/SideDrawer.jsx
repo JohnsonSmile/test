@@ -28,7 +28,7 @@ const listItems = [
         isReady: true
     },{
         title: '每日签到',
-        url: '/',
+        url: '/sign',
         isReady: true
     },{
         title: '代币交易市场',

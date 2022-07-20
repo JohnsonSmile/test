@@ -8,6 +8,7 @@ import LoginPage from './pages/login';
 import MarketPage from './pages/market';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
+import SignPage from './pages/sign';
 import StakePage from './pages/stake';
 import Layout from './widgets/layout/Layout';
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route index path="/mynft/list" element={<MyNFTListPage />}/>
           <Route index path="/stake" element={<StakePage />}/>
           <Route index path="/market" element={<MarketPage />}/>
+          <Route index path="/sign" element={<SignPage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

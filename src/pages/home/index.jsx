@@ -9,51 +9,61 @@ const features = [
     {
         image: '',
         title: 'NFT铸造',
+        url: '/build',
         isReady: true
     },
     {
         image: '',
         title: 'NFT市场',
+        url: '/market',
         isReady: true
     },
     {
         image: '',
         title: '代币交易',
+        url: '/',
         isReady: true
     },
     {
         image: '',
         title: '每日签到',
+        url: '/sign',
         isReady: true
     },
     {
         image: '',
         title: '个人中心',
+        url: '/',
         isReady: true
     },
     {
         image: '',
         title: '邀请推广',
+        url: '/',
         isReady: true
     },
     {
         image: '',
         title: '我的资产',
+        url: '/',
         isReady: true
     },
     {
         image: '',
         title: '聊天应用',
+        url: '/',
         isReady: true
     },
     {
         image: '',
         title: '排行榜',
+        url: '/',
         isReady: false
     },
     {
         image: '',
         title: '资产和成',
+        url: '/',
         isReady: false
     },
 ]
