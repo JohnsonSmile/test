@@ -154,7 +154,7 @@ const MyNFTListPage = () => {
     }, [location])
 
     return (
-        <Box sx={{ backgroundColor: '#eee', height: '100vh'}}>
+        <Box sx={{ backgroundColor: '#eee', minHeight: '100vh'}}>
             <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
                     <Typography variant="inherit">类型:</Typography>

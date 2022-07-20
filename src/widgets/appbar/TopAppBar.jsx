@@ -31,6 +31,8 @@ const TopAppBar = () => {
       // }
     } else if (location.pathname === '/stake') {
       setTitle('质押')
+    } else if (location.pathname === '/market') {
+      setTitle('NFT交易市场')
     }
   }, [location])
   

@@ -20,7 +20,7 @@ const listItems = [
         isReady: true
     },{
         title: 'NFT交易市场',
-        url: '/',
+        url: '/market',
         isReady: true
     },{
         title: '质押',
