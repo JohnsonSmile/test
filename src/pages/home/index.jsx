@@ -21,7 +21,7 @@ const features = [
     {
         image: '',
         title: '代币交易',
-        url: '/',
+        url: '/lpmarket',
         isReady: true
     },
     {

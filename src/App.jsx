@@ -5,6 +5,7 @@ import { useActivatingConnector, useEagerConnect, useInactiveListener } from './
 import BuildPage from './pages/build';
 import HomePage from './pages/home';
 import LoginPage from './pages/login';
+import LPMarketPage from './pages/lpmarket';
 import MarketPage from './pages/market';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
@@ -27,6 +28,7 @@ const App = () => {
           <Route index path="/stake" element={<StakePage />}/>
           <Route index path="/market" element={<MarketPage />}/>
           <Route index path="/sign" element={<SignPage />}/>
+          <Route index path="/lpmarket" element={<LPMarketPage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

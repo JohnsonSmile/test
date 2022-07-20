@@ -32,7 +32,7 @@ const listItems = [
         isReady: true
     },{
         title: '代币交易市场',
-        url: '/',
+        url: '/lpmarket',
         isReady: true
     },{
         title: '邀请他人',
