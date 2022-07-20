@@ -41,15 +41,11 @@ const NFTStake = () => {
     }
 
     const handleStakeRecordClick = () => {
-        navigate('/mynft/list', { 
-            state: {
-                type: 1
-            }
-        })
+        navigate('/mynft/list')
     }
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', px: 6}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', px: 5}}>
             <Box>
                 <Card sx={{
                     display: "flex",
@@ -69,8 +65,8 @@ const NFTStake = () => {
                         image={'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500'} />
                 </Card>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                <Typography component={'span'} id="type-select-label" sx={{ mr: 1, color: '#333'}}>NFT类型:</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', mt: 2 }}>
+                <Typography component={'div'} id="type-select-label" sx={{ mr: 1, display: 'block', color: '#333'}}>NFT类型:</Typography>
                 <Select
                     labelId="type-select-label"
                     value={selectedType}
@@ -82,11 +78,11 @@ const NFTStake = () => {
                         })}
                 </Select>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', mt: 2 }}>
                 <Typography component={'span'} sx={{ mr: 1, color: '#333'}}>NFT编号:</Typography>
                 <MultipleSelection nftIDs={nftIDs} onNFTSelected={onNFTSelected} />
             </Box>
-            <Typography component={'div'} sx={{ color: '#333', alignSelf: 'flex-start', mt: 2, px: 1 }}>已选择编号:</Typography>
+            <Typography component={'div'} sx={{ color: '#333', alignSelf: 'flex-start', mt: 2, }}>已选择编号:</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', alignSelf: 'flex-start', gap: 0.5, px: 1, mt: 2 }}>
               {selectedIDs.map((value) => (
                 <Chip key={value} label={value} />
