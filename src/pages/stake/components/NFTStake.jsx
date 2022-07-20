@@ -1,5 +1,6 @@
 import { Box, Button, Card, CardMedia, Chip, MenuItem, Select, Typography } from "@mui/material"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import MultipleSelection from "./MultipleSelection"
 
 const nftTypes = [
@@ -26,7 +27,7 @@ const NFTStake = () => {
 
     const [selectedType, setSelectedType] = useState(1)
     const [selectedIDs, setSelectedIDs] = useState([])
-
+    const navigate = useNavigate()
     const handleTypeChange = (e) => {
         setSelectedType(e.target.value)
     }
@@ -37,6 +38,14 @@ const NFTStake = () => {
 
     const handleStakeClick = () => {
         // TODO: stake selected nfts
+    }
+
+    const handleStakeRecordClick = () => {
+        navigate('/mynft/list', { 
+            state: {
+                type: 1
+            }
+        })
     }
 
     return (
@@ -87,8 +96,9 @@ const NFTStake = () => {
                 <Typography component={'div'} sx={{ color: '#333'}}>每日产出:</Typography>
                 <Typography component={'div'} sx={{ color: '#333'}}>12VSD</Typography>
             </Box>
-            <Box>
-                <Button variant='contained' size="large" sx={{mt: 4, px: 5, py: 1}} onClick={handleStakeClick}>质押</Button>
+            <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'space-between', alignItems: 'center', mt: 2, py: 1, width: '100%' }}>
+                <Button variant='contained' size="large" sx={{minWidth: 105}} onClick={handleStakeClick}>质押</Button>
+                <Button variant='outlined' size="large" sx={{minWidth: 105}}  onClick={handleStakeRecordClick}>质押记录</Button>
             </Box>
         </Box>
     )

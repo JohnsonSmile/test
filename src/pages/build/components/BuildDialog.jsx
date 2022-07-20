@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, Dialog, DialogContent, DialogTitle, Fade, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/styles";
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
-        padding: theme.spacing(5),
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
+        minWidth: 200,
+        minHeight: 195,
     },
     '& .MuiDialogActions-root': {
         padding: theme.spacing(2),
@@ -64,20 +67,32 @@ const BuildDialog = (props) => {
                 Value Bank
             </BootstrapDialogTitle>
             <DialogContent>
-                <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 1, color: '#333'}}>
-                    {!result && <>Loading...</>}
-                    {result && result.cropper && <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center'}} gutterBottom>
-                        {result.cropper}个铜
-                    </Typography>}
-                    {result && result.silver && <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center'}} gutterBottom>
-                        {result.silver}个银
-                    </Typography>}
-                    {result && result.gold && <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center'}} gutterBottom>
-                        {result.gold}个金
-                    </Typography>}
-                    {result && result.diamond && <Typography sx={{color: '#333', display: 'flex', alignItems: 'center', justifyContent: 'center'}} gutterBottom>
-                        {result.diamond}个钻
-                    </Typography>}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexDirection: 'column', gap: 1, color: '#333', height: '100%'}}>
+                    {!result && <Box sx={{ minHeight: 140, display: 'flex', alignItems: 'center' }}>
+                            <Fade
+                            in={!result}
+                            style={{
+                                transitionDelay: !result ? '800ms' : '0ms',
+                            }}
+                            unmountOnExit
+                            >
+                                <CircularProgress />
+                            </Fade>
+                        </Box>}
+                    {result && <Box sx={{ minHeight: 140, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+                        {result && result.cropper && <Typography sx={{color: '#333' }} gutterBottom>
+                            {result.cropper}个铜
+                        </Typography>}
+                        {result && result.silver && <Typography sx={{color: '#333' }} gutterBottom>
+                            {result.silver}个银
+                        </Typography>}
+                        {result && result.gold && <Typography sx={{color: '#333' }} gutterBottom>
+                            {result.gold}个金
+                        </Typography>}
+                        {result && result.diamond && <Typography sx={{color: '#333' }} gutterBottom>
+                            {result.diamond}个钻
+                        </Typography>}
+                    </Box>}
                     
                     <Box fullWidth sx={{
                         display: 'flex', 

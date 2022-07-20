@@ -18,16 +18,17 @@ const TopAppBar = () => {
     } else if (location.pathname === '/mynft') {
       setTitle('我的NFT')
     } else if (location.pathname === '/mynft/list') {
-      const type = location.state.type
-      if (type === 1) {
-        setTitle('铜')
-      } else if (type === 2) {
-        setTitle('银')
-      } else if (type === 3) {
-        setTitle('金')
-      } else if (type === 4) {
-        setTitle('钻')
-      }
+      setTitle('NFT列表')
+      // const type = location.state.type
+      // if (type === 1) {
+      //   setTitle('铜')
+      // } else if (type === 2) {
+      //   setTitle('银')
+      // } else if (type === 3) {
+      //   setTitle('金')
+      // } else if (type === 4) {
+      //   setTitle('钻')
+      // }
     } else if (location.pathname === '/stake') {
       setTitle('质押')
     }
