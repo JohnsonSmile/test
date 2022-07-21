@@ -1,9 +1,7 @@
-import { Box, Button, Card, CardContent, CardMedia, Divider, Typography } from "@mui/material"
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material"
 import SettingsIcon from '@mui/icons-material/Settings';
 import HistoryIcon from '@mui/icons-material/History';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import BNBIcon from '../../../assets/icon/bnb.png'
-import PancakeIcon from '../../../assets/icon/pancake.png'
 
 const LiquidityCard = () => {
     return (

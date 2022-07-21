@@ -72,6 +72,11 @@ const SideDrawer = () => {
         setIsDrawerOpen(false)
         navigate(item.url)
     }
+
+    const handleProfileClick = () => { 
+        setIsDrawerOpen(false)
+        navigate('/profile')
+    }
     return (
         <Box sx={{backgroundColor: '#1976d2'}}>
             <IconButton
@@ -147,6 +152,7 @@ const SideDrawer = () => {
                                 <Button variant="contained" 
                                     startIcon={<Avatar sx={{width: 35, height: 35}}/>}
                                     sx={{ px: 4, py: 1 }}
+                                    onClick={handleProfileClick}
                                 >个人中心</Button>
                             </Box>
                         </Box>

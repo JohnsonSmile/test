@@ -27,7 +27,7 @@ const SignPage = () => {
     }
 
     return (
-        <Box sx={{ backgroundColor: '#fff', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <Box sx={{ backgroundColor: '#fff', minHeight: 'calc(100vh - 56px)', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <Card sx={{ height: '100%', m: 3 }}>
                 <SignCalendar markers={markers} />
             </Card>

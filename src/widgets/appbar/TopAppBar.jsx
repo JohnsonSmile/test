@@ -39,6 +39,8 @@ const TopAppBar = () => {
       setTitle('代币交易市场')
     } else if (location.pathname === '/invite') {
       setTitle('推广联盟')
+    } else if (location.pathname === '/profile') {
+      setTitle('个人中心')
     }
   }, [location])
   

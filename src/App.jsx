@@ -10,6 +10,7 @@ import LPMarketPage from './pages/lpmarket';
 import MarketPage from './pages/market';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
+import ProfilePage from './pages/profile';
 import SignPage from './pages/sign';
 import StakePage from './pages/stake';
 import Layout from './widgets/layout/Layout';
@@ -31,6 +32,7 @@ const App = () => {
           <Route index path="/sign" element={<SignPage />}/>
           <Route index path="/lpmarket" element={<LPMarketPage />}/>
           <Route index path="/invite" element={<InvitePage />}/>
+          <Route index path="/profile" element={<ProfilePage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

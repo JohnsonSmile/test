@@ -140,7 +140,7 @@ const MarketPage = () => {
         setKeyword(e.target.value)
     }
 
-    return  <Box sx={{ backgroundColor: '#eee', minHeight: '100vh', px: 3, pb: 5}}>
+    return  <Box sx={{ backgroundColor: '#eee', minHeight: 'calc(100vh - 56px)', px: 3, pb: 5}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Box sx={{display: 'flex', alignItems: 'center'}}>
                         <Typography variant="inherit">类型:</Typography>

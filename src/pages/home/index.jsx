@@ -33,13 +33,13 @@ const features = [
     {
         image: '',
         title: '个人中心',
-        url: '/',
+        url: '/profile',
         isReady: true
     },
     {
         image: '',
         title: '邀请推广',
-        url: '/',
+        url: '/invite',
         isReady: true
     },
     {
