@@ -1,7 +1,14 @@
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Avatar, Box, Card, Divider, Typography } from "@mui/material"
+import { useNavigate } from 'react-router-dom';
 
 const ProfileCard = () => {
+
+    const navigate = useNavigate()
+    const handleSettingClick = () => {
+        navigate('/setting')
+    }
+
     return (
         <Card>
             <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', my: 3}}>
@@ -16,7 +23,8 @@ const ProfileCard = () => {
                         <Typography sx={{color: 'InfoText', textAlign: 'center'}}>0x395...B72E</Typography>
                     </Box>
                 </Box>
-                <SettingsIcon sx={{ width: 30, height: 30, alignSelf: 'flex-start', px: 1.5}} />
+                <SettingsIcon sx={{ width: 30, height: 30, alignSelf: 'flex-start', px: 1.5, cursor: 'pointer'}} 
+                    onClick={handleSettingClick}/>
             </Box>
             <Divider />
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between' }}>

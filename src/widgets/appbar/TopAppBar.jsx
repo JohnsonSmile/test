@@ -41,6 +41,8 @@ const TopAppBar = () => {
       setTitle('推广联盟')
     } else if (location.pathname === '/profile') {
       setTitle('个人中心')
+    } else if (location.pathname === '/setting') {
+      setTitle('修改信息')
     }
   }, [location])
   
