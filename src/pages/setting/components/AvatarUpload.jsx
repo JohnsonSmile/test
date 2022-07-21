@@ -55,8 +55,8 @@ const AvatarUpload = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 64,
-                height: 64,
+                width: 100,
+                height: 100,
                 borderRadius: 50,
                 boxSizing: 'border-box',
                 marginTop: '20px',
@@ -71,8 +71,8 @@ const AvatarUpload = ({
               alt="avatar"
               image={avatarImg}
               sx={{
-                width: 64,
-                height: 64,
+                width: 100,
+                height: 100,
                 borderRadius: 50,
                 boxSizing: 'border-box',
                 marginTop: '20px',

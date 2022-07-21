@@ -19,8 +19,8 @@ const ProfilePage = () => {
             <Box sx={{ pt: 2 }}>
                 <ProfileCard />
             </Box>
-            <List sx={{ width: '100%', bgcolor: 'background.paper', mt: 4 }}>
-                <ListItem secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handleMyAssetsClick}>
+            <List sx={{ width: '100%', bgcolor: 'background.paper', mt: 3 }}>
+                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handleMyAssetsClick}>
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <AssetsIcon />
@@ -28,7 +28,7 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="我的资产" />
                 </ListItem>
-                <ListItem secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
+                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <SignIcon />
@@ -36,7 +36,7 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="每日签到" />
                 </ListItem>
-                <ListItem secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
+                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <PromotionIcon />
@@ -44,7 +44,7 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="推广详情" />
                 </ListItem>
-                <ListItem secondaryAction={<Box sx={{display: 'flex', alignItems: 'center'}} >
+                <ListItem sx={{py:1}} secondaryAction={<Box sx={{display: 'flex', alignItems: 'center'}} >
                         <Typography sx={{color: '#000', opacity: 0.4}}>敬请期待</Typography>
                         <KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}}/>
                     </Box>}>

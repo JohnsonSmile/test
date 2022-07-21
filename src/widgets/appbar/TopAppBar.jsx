@@ -53,7 +53,9 @@ const TopAppBar = () => {
       setShouldBackShow(true)
       setHeaderColor('#FFF')
     } else if (location.pathname === '/setting') {
-      setTitle('修改信息')
+      setTitle('编辑信息')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/myassets') {
       setTitle('我的资产')
     }
@@ -73,7 +75,8 @@ const TopAppBar = () => {
             component="div" 
             sx={{
               color: headerColor === '#FFF' ? '#333' : '#FFF',
-              fontSize: 16
+              fontSize: 16,
+              fontWeight: 800
             }} 
           >
             { title }
