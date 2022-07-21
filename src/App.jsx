@@ -4,6 +4,7 @@ import './App.css';
 import { useActivatingConnector, useEagerConnect, useInactiveListener } from './clients';
 import BuildPage from './pages/build';
 import HomePage from './pages/home';
+import InvitePage from './pages/invite';
 import LoginPage from './pages/login';
 import LPMarketPage from './pages/lpmarket';
 import MarketPage from './pages/market';
@@ -29,6 +30,7 @@ const App = () => {
           <Route index path="/market" element={<MarketPage />}/>
           <Route index path="/sign" element={<SignPage />}/>
           <Route index path="/lpmarket" element={<LPMarketPage />}/>
+          <Route index path="/invite" element={<InvitePage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

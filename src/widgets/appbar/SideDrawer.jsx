@@ -36,7 +36,7 @@ const listItems = [
         isReady: true
     },{
         title: '邀请他人',
-        url: '/',
+        url: '/invite',
         isReady: true
     },{
         title: '消息中心',
