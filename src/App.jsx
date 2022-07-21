@@ -8,6 +8,7 @@ import InvitePage from './pages/invite';
 import LoginPage from './pages/login';
 import LPMarketPage from './pages/lpmarket';
 import MarketPage from './pages/market';
+import MyAssetsPage from './pages/myassets';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
 import ProfilePage from './pages/profile';
@@ -35,6 +36,7 @@ const App = () => {
           <Route index path="/invite" element={<InvitePage />}/>
           <Route index path="/profile" element={<ProfilePage />}/>
           <Route index path="/setting" element={<SettingPage />}/>
+          <Route index path="/myassets" element={<MyAssetsPage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

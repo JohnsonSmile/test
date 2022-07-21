@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Drawer, IconButton, List, ListItemButton, ListSubheader, Typography } from "@mui/material"
 import { useState } from "react";
-import MenuIcon from '@mui/icons-material/Menu';
+import { ReactComponent as MenuIcon } from '../../assets/icon/menu.svg'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 
@@ -78,7 +78,7 @@ const SideDrawer = () => {
         navigate('/profile')
     }
     return (
-        <Box sx={{backgroundColor: '#1976d2'}}>
+        <Box sx={{backgroundColor: '#1976d2', flex: 1, justifyContent: 'flex-start', display: 'flex'}}>
             <IconButton
             size="large"
             edge="start"

@@ -1,8 +1,9 @@
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge} from '@mui/material';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SideDrawer from './SideDrawer';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
@@ -10,7 +11,15 @@ const TopAppBar = () => {
 
   const location = useLocation()
   const [title, setTitle] = useState('')
+  const [shouldBackShow, setShouldBackShow] = useState(false)
+  const [headerColor, setHeaderColor] = useState('transparent')
+  const navigate = useNavigate()
+  const handleBackClick = () => {
+    navigate(-1)
+  }
   useEffect(() => {
+    setShouldBackShow(false)
+    setHeaderColor('transparent')
     if (location.pathname === '/home') {
       setTitle('VBank Value')
     } else if (location.pathname === '/build') {
@@ -41,26 +50,36 @@ const TopAppBar = () => {
       setTitle('推广联盟')
     } else if (location.pathname === '/profile') {
       setTitle('个人中心')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/setting') {
       setTitle('修改信息')
+    } else if (location.pathname === '/myassets') {
+      setTitle('我的资产')
     }
   }, [location])
   
   return (
     <Box sx={{ flexGrow: 1, display: 'flex' }}>
-      <AppBar position="sticky" sx={{backgroundColor: 'transparent', boxShadow: 'none'}}>
+      <AppBar position="sticky" sx={{backgroundColor: headerColor, boxShadow: 'none'}}>
         <Toolbar>
-          <SideDrawer />
+          {shouldBackShow && <Box sx={{flex: 1, display: 'flex' }}><ArrowBackIosNewIcon sx={{
+            color: headerColor === '#FFF' ? '#333' : '#FFF'
+          }} onClick={handleBackClick}/></Box>}
+          {!shouldBackShow && <SideDrawer />}
           <Typography
             variant="h6"
             noWrap
-            component="div"
+            component="div" 
+            sx={{
+              color: headerColor === '#FFF' ? '#333' : '#FFF',
+              fontSize: 16
+            }} 
           >
             { title }
           </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box >
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Box sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -72,7 +91,7 @@ const TopAppBar = () => {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
           </Box>
         </Toolbar>
       </AppBar>

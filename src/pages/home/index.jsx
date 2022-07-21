@@ -45,7 +45,7 @@ const features = [
     {
         image: '',
         title: '我的资产',
-        url: '/',
+        url: '/myassets',
         isReady: true
     },
     {
@@ -62,7 +62,7 @@ const features = [
     },
     {
         image: '',
-        title: '资产和成',
+        title: '资产合成',
         url: '/',
         isReady: false
     },
