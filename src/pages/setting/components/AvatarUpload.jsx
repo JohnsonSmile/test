@@ -53,15 +53,10 @@ const AvatarUpload = ({
             <Box sx={{position: 'relative'}}>
               <Avatar
                 sx={{
-                  p: '2px 24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   width: 100,
                   height: 100,
                   borderRadius: 50,
                   boxSizing: 'border-box',
-                  marginTop: '20px',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
                   cursor: 'pointer', 
                 }}
@@ -81,7 +76,6 @@ const AvatarUpload = ({
                 height: 100,
                 borderRadius: 50,
                 boxSizing: 'border-box',
-                marginTop: '20px',
                 cursor: 'pointer'
               }}
             />

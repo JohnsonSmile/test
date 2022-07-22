@@ -1,5 +1,4 @@
-import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, Box, Card, Divider, Typography } from "@mui/material"
+import { Avatar, Box, Card,  Typography } from "@mui/material"
 import { ReactComponent as EditIcon } from "../../../assets/icon/profile/edit.svg"
 import { useNavigate } from 'react-router-dom';
 
