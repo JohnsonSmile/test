@@ -58,6 +58,8 @@ const TopAppBar = () => {
       setHeaderColor('#FFF')
     } else if (location.pathname === '/myassets') {
       setTitle('我的资产')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     }
   }, [location])
   
