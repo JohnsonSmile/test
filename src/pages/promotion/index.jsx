@@ -22,12 +22,15 @@ const PromotionDetailPage = () => {
     const handlePromotionClick = () => {
         navigate('/invite')
     }
+    const handlePromotionRecordClick = () => {
+        navigate('/promotion/record')
+    }
     return (
         <Box sx={{ px: 2, backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)', mb: 4 }}>
             <Box sx={{pt: 1}}>
                 <PromotionCard promtionInfo={promtionInfo} onPromotionClick={handlePromotionClick} />
             </Box>
-            <PromotionRecordCard promotionGainRecord={promotionGainRecord} />
+            <PromotionRecordCard promotionGainRecord={promotionGainRecord} onRecordListClick={handlePromotionRecordClick} />
         </Box>
     )
 }

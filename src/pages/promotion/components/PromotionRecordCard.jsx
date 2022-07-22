@@ -1,11 +1,12 @@
 import { Box, Card, Divider, Typography } from "@mui/material"
 
 const PromotionRecordCard = (props) => {
-    const { promotionGainRecord } = props
+    const { promotionGainRecord, onRecordListClick } = props
     return (
         <Card sx={{ mt: 1.5, px: 2, py: 2.5, boxShadow: '0px 0px 10px rgba(66, 61, 247, 0.08)', borderRadius: '12px' }}> 
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
                 <Typography sx={{ color: '#333', fontSize: 16, fontWeight: 600 }}>推广收益记录</Typography>
+                <Typography sx={{ color: '#4263EB', fontSize: 12, fontWeight: 500, cursor: 'pointer' }} onClick={onRecordListClick}>{'查看记录>'}</Typography>
             </Box>
             <Box sx={{mt: 3}}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>

@@ -60,8 +60,12 @@ const TopAppBar = () => {
       setTitle('我的资产')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
-    } else if (location.pathname === '/promotionDetail') {
+    } else if (location.pathname === '/promotion/detail') {
       setTitle('推广详情')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
+    } else if (location.pathname === '/promotion/record') {
+      setTitle('直推情况')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
     }

@@ -17,7 +17,7 @@ const ProfilePage = () => {
         navigate('/sign')
     }
     const handlePromotionDetailClick = () => {
-        navigate('/promotionDetail')
+        navigate('/promotion/detail')
     }
 
     return (
