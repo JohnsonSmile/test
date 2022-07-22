@@ -12,6 +12,7 @@ import MyAssetsPage from './pages/myassets';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
 import ProfilePage from './pages/profile';
+import PromotionDetailPage from './pages/promotion';
 import SettingPage from './pages/setting';
 import SignPage from './pages/sign';
 import StakePage from './pages/stake';
@@ -37,6 +38,7 @@ const App = () => {
           <Route index path="/profile" element={<ProfilePage />}/>
           <Route index path="/setting" element={<SettingPage />}/>
           <Route index path="/myassets" element={<MyAssetsPage />}/>
+          <Route index path="/promotionDetail" element={<PromotionDetailPage />}/>
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>

@@ -13,6 +13,12 @@ const ProfilePage = () => {
     const handleMyAssetsClick = () => {
         navigate('/myassets')
     }
+    const handleSignClick = () => {
+        navigate('/sign')
+    }
+    const handlePromotionDetailClick = () => {
+        navigate('/promotionDetail')
+    }
 
     return (
         <Box sx={{backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)'}}>
@@ -28,7 +34,7 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="我的资产" />
                 </ListItem>
-                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
+                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handleSignClick}>
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <SignIcon />
@@ -36,7 +42,7 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="每日签到" />
                 </ListItem>
-                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />}>
+                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handlePromotionDetailClick}>
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <PromotionIcon />

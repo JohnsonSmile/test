@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AvatarUpload from "./components/AvatarUpload"
 
-const { Box, Avatar, Typography, TextField, Button, InputBase } = require("@mui/material")
+const { Box, Button, InputBase } = require("@mui/material")
 
 const SettingPage = () => {
     const [username, setUsername] = useState('船中八策')
