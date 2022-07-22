@@ -78,7 +78,7 @@ const SideDrawer = () => {
         navigate('/profile')
     }
     return (
-        <Box sx={{backgroundColor: '#1976d2', flex: 1, justifyContent: 'flex-start', display: 'flex'}}>
+        <Box sx={{backgroundColor: 'transparent', flex: 1, justifyContent: 'flex-start', display: 'flex'}}>
             <IconButton
             size="large"
             edge="start"

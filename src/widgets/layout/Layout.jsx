@@ -17,7 +17,7 @@ const Layout = (props) => {
     
     return (
         <>
-            <Box sx={{backgroundColor: '#1976d2'}}>
+            <Box sx={{backgroundColor: '#4263EB'}}>
                 <TopAppBar/>
                 <div id="back-to-top-anchor" />
                 <Outlet />

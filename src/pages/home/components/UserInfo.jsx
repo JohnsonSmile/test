@@ -1,7 +1,7 @@
 import { Avatar, Typography, Box } from "@mui/material"
 import { makeStyles } from '@mui/styles'
-import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { ellipsisAccount } from "../../../utils/utils";
 
 
 const stringAvatar = (name) => {
@@ -12,12 +12,7 @@ const stringAvatar = (name) => {
 
 const useStyles = makeStyles({
     'userinfo-login-container': {
-        minHeight: 140,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        padding: '0 30px'
+        
     },
     'login-button': {
         backgroundColor: 'transparent',
@@ -47,10 +42,9 @@ const useStyles = makeStyles({
     }
 });
 
-export const UserInfo = () => {
-    const [isLogin, setIsLogin] = useState(false)
+export const UserInfo = (props) => {
     const navigate = useNavigate()
-
+    const { accountInfo } = props
     const handleLoginClick = () => {
         // jump to login page
         navigate('/login')
@@ -61,51 +55,45 @@ export const UserInfo = () => {
     const classes = useStyles()
     return (
         <>
-            {!isLogin && <Box className={classes['userinfo-login-container']}>
+            {!accountInfo.account && <Box sx={{
+                minHeight: 140,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                padding: '0 30px',
+                backgroundColor: '#4263EB'}}>
                 <Typography variant="h6">请登录后查看收益</Typography>
                 <button className={classes['login-button']} onClick={handleLoginClick} >
                     去登录
                 </button> 
             </Box>}
-            {isLogin && <Box className={classes['userinfo-container']}>
-                <Box sx={{
-                    flex: 1,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}>
-                    <Avatar {...stringAvatar('船中八策')} sx={{ width: 56, height: 56 }} />
-                    <Typography sx={{mt: 1}}>船中八策</Typography>
-                </Box>
-                <Box sx={{
-                    flex: 2,
-                    py: 1
-                }}>
-                    <Box sx={{
-                        display: 'flex',
-                    }}>
-                        <Typography className={classes['userinfo-title']}>昨日收益：</Typography>
-                        <Typography className={classes['userinfo-data']}>234.23VSD</Typography>
+            {accountInfo.account && <Box sx={{px: 2, backgroundColor: '#4263EB'}}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', pt: 2, pb: 1, px: 2 }}>
+                        <Avatar {...stringAvatar('船中八策')} sx={{ width: 40, height: 40 }} />
+                        <Box sx={{ ml: 1 }}>
+                            <Typography sx={{ fontSize: 14, fontWeight: 500, textAlign: 'left'}}>船中八策</Typography>
+                            <Typography sx={{ fontSize: 12, textAlign: 'left', opacity: 0.8 }}>{ellipsisAccount(accountInfo.account)}</Typography>
+                        </Box>
                     </Box>
-                    <Box sx={{
-                        display: 'flex',
-                    }}>
-                        <Typography className={classes['userinfo-title']}>今日签到:</Typography>
-                        <Typography className={classes['userinfo-data']}>已签到</Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', py: 2}}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>昨日收益</Typography>
+                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.yesterdayGain} VSD</Typography>
+                        </Box>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>今日签到</Typography>
+                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.isSigned ? '已签到' : '未签到'}</Typography>
+                        </Box>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>持有NFT</Typography>
+                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.nftAmount}</Typography>
+                        </Box>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>推广人数</Typography>
+                            <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.promotionCount}</Typography>
+                        </Box>
                     </Box>
-                    <Box sx={{
-                        display: 'flex',
-                    }}>
-                        <Typography className={classes['userinfo-title']}>持有NFT:</Typography>
-                        <Typography className={classes['userinfo-data']}>1000</Typography>
-                    </Box>
-                    <Box sx={{
-                        display: 'flex',
-                    }}>
-                        <Typography className={classes['userinfo-title']}>推广人数:</Typography>
-                        <Typography className={classes['userinfo-data']}>121</Typography>
-                    </Box>
-                </Box>
                 </Box>}
         </>
     )

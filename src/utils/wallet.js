@@ -1,8 +1,6 @@
 
 // wallet
 
-import { fixedEncodeURIComponent } from "./utils";
-
 // IM Token
 const isIMTokenAvailable = () => {
     if (typeof window.ethereum === 'undefined') {

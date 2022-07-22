@@ -1,67 +1,81 @@
 import {Box} from '@mui/material';
 import { UserInfo } from "./components/UserInfo";
 import Features from "./components/Features";
-import GlobalData from "./components/GlobalData";
+import { useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
+import SocialNFTBoard from './components/SocialNFTBoard';
+import VSDBoard from './components/VSDBoard';
+import VSDUSDTBoard from './components/VSDUSDTBoard';
+import { ReactComponent as NFTBuildIcon } from "../../assets/icon/home/nft.svg"
+import { ReactComponent as NFTMarketIcon } from "../../assets/icon/home/market.svg"
+import { ReactComponent as LPTradeIcon } from "../../assets/icon/home/lptrade.svg"
+import { ReactComponent as SignIcon } from "../../assets/icon/home/sign.svg"
+import { ReactComponent as ProfileIcon } from "../../assets/icon/home/profile.svg"
+import { ReactComponent as PromotionIcon } from "../../assets/icon/home/promotion.svg"
+import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
+import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
+import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
+import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
 
 
 // FIXME: should be set
 const features = [
     {
-        image: '',
+        image: <NFTBuildIcon />,
         title: 'NFT铸造',
         url: '/build',
         isReady: true
     },
     {
-        image: '',
+        image: <NFTMarketIcon />,
         title: 'NFT市场',
         url: '/market',
         isReady: true
     },
     {
-        image: '',
+        image: <LPTradeIcon />,
         title: '代币交易',
         url: '/lpmarket',
         isReady: true
     },
     {
-        image: '',
+        image: <SignIcon />,
         title: '每日签到',
         url: '/sign',
         isReady: true
     },
     {
-        image: '',
+        image: <ProfileIcon />,
         title: '个人中心',
         url: '/profile',
         isReady: true
     },
     {
-        image: '',
+        image: <PromotionIcon />,
         title: '邀请推广',
         url: '/invite',
         isReady: true
     },
     {
-        image: '',
+        image: <AssetsIcon />,
         title: '我的资产',
         url: '/myassets',
         isReady: true
     },
     {
-        image: '',
+        image: <ChatIcon />,
         title: '聊天应用',
         url: '/',
-        isReady: true
+        isReady: false
     },
     {
-        image: '',
+        image: <RankIcon />,
         title: '排行榜',
         url: '/',
         isReady: false
     },
     {
-        image: '',
+        image: <CompoundIcon />,
         title: '资产合成',
         url: '/',
         isReady: false
@@ -109,18 +123,43 @@ const vsdUsdtData = {
     usdtEndorsement: 23000000.12
 }
 
-const HomePage = (props) => {
+
+const HomePage = () => {
+    const { account } = useWeb3React()
+    const [accountInfo, setAccountInfo] = useState({
+        account: '',
+        username: '船中八策',
+        avatar: '',
+        yesterdayGain: 4500,
+        isSigned: false,
+        nftAmount: 10,
+        promotionCount: 3
+    })
+
+    useEffect(() => {
+        if (account) {
+            // TODO: get all information from backend and set infos
+            // get username, avatar, etc
+            const avatar = 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500'
+            setAccountInfo(prev => {
+                return { ...prev, account, avatar }
+            })
+        }
+    }, [account])
     return (
         <>
-            <Box>
-                <UserInfo />
+            <Box sx={{ backgroundColor: '#FFF', mb: 4}}>
+                <UserInfo accountInfo={accountInfo} />
+                <Features features={features} informations={informations} />
                 <Box sx={{
-                    backgroundColor: '#eee', 
+                    backgroundColor: '#FFF', 
                     borderRadius: '30px 30px 0 0',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    px: 2
                 }}>
-                    <Features features={features} informations={informations} />
-                    <GlobalData socialData={socialData} vsdData={vsdData} vsdUsdtData={vsdUsdtData} />
+                    <SocialNFTBoard socialData={socialData} />
+                    <VSDBoard vsdData={vsdData} />
+                    <VSDUSDTBoard vsdUsdtData={vsdUsdtData} />
                 </Box>
             </Box>
         </>
