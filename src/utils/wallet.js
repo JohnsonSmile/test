@@ -1,5 +1,8 @@
 
 // wallet
+
+import { fixedEncodeURIComponent } from "./utils";
+
 // IM Token
 const isIMTokenAvailable = () => {
     if (typeof window.ethereum === 'undefined') {
@@ -44,9 +47,9 @@ const isTokenPocketAvailable = () => {
     return (typeof window.ethereum.isTokenPocket !== 'undefined')
 }
 const openInTokenPocketExplorer = () => {
-    const params = encodeURIComponent({
+    const params = encodeURIComponent(JSON.stringify({
         "url": window.location.origin
-    })
+    }))
     const urlScheme = 'tpdapp://open?params=' + params
     const downloadUrl = 'https://www.tokenpocket.pro/zh/download/app'
     if(navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
