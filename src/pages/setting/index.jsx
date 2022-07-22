@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AvatarUpload from "./components/AvatarUpload"
 
-const { Box, Avatar, Typography, TextField, Button } = require("@mui/material")
+const { Box, Avatar, Typography, TextField, Button, InputBase } = require("@mui/material")
 
 const SettingPage = () => {
     const [username, setUsername] = useState('船中八策')
@@ -26,7 +26,7 @@ const SettingPage = () => {
             <Box sx={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <Box sx={{flex: 1}}></Box>
                 <AvatarUpload />
-                <TextField sx={{ color: '#333', mt: 6, borderRadius: 50}} value={username} onChange={handleUsernameChange} placeholder="请输入昵称" />
+                <InputBase sx={{ color: '#333', mt: 4, borderRadius: 50, backgroundColor: '#F2F2F5', px: 3, py: 0.5, width: '150px', fontSize: '20px', fontWeight: 700 }} value={username} onChange={handleUsernameChange} placeholder="请输入昵称" />
             </Box>
             <Box sx={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', px: 4, width: '100vw', boxSizing: 'border-box'}}>
                 <Button variant="contained" size="large" fullWidth onClick={handleSaveClick} sx={{mb: 2, height: 56, borderRadius: '28px', backgroundColor: '#423DF7'}}>保存修改</Button>

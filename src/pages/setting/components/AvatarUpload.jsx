@@ -1,6 +1,7 @@
 import { Avatar, Box, CardMedia, Typography } from "@mui/material"
 import { useCallback, useMemo, useState } from "react"
 import http from "../../../utils/http"
+import { ReactComponent as CameraIcon } from "../../../assets/icon/profile/camera.svg"
 
 const AvatarUpload = ({
     action = '/upload/image',
@@ -49,21 +50,26 @@ const AvatarUpload = ({
         />
         <label htmlFor="icon-button-file">
           {!avatarImg && (
-            <Avatar
-              sx={{
-                p: '2px 24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 100,
-                height: 100,
-                borderRadius: 50,
-                boxSizing: 'border-box',
-                marginTop: '20px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                cursor: 'pointer'
-              }}
-            />
+            <Box sx={{position: 'relative'}}>
+              <Avatar
+                sx={{
+                  p: '2px 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                  boxSizing: 'border-box',
+                  marginTop: '20px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  cursor: 'pointer', 
+                }}
+              /> 
+              <Box sx={{position: 'absolute', bottom: 0, right: 0}}>
+                <CameraIcon  />
+              </Box>
+            </Box>
           )}
           {avatarImg && (
             <CardMedia
