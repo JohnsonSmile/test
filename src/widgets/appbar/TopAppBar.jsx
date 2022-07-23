@@ -24,10 +24,16 @@ const TopAppBar = () => {
       setTitle('VBank Value')
     } else if (location.pathname === '/build') {
       setTitle('铸造')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/mynft') {
       setTitle('我的NFT')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/mynft/list') {
       setTitle('NFT列表')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
       // const type = location.state.type
       // if (type === 1) {
       //   setTitle('铜')
@@ -42,12 +48,20 @@ const TopAppBar = () => {
       setTitle('质押')
     } else if (location.pathname === '/market') {
       setTitle('NFT交易市场')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/sign') {
       setTitle('签到')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/lpmarket') {
       setTitle('代币交易市场')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/invite') {
       setTitle('推广联盟')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/profile') {
       setTitle('个人中心')
       setShouldBackShow(true)
