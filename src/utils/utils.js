@@ -11,6 +11,11 @@ const getBigNumber = (uint256Value) => {
   return uint256Value.toNumber();
 };
 
+const formatNumber = (number) => {
+  return number.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 const ellipsisAccount = (account) => {
   if (!account) {
     return account;
@@ -81,6 +86,7 @@ const formatISO8601Time = (timeStr) => {
 
 export {
   formatBigNumber,
+  formatNumber,
   getBigNumber,
   ellipsisAccount,
   formatUniteNumber,

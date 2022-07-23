@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { formatNumber } from '../../../utils/utils';
 
 const SocialNFTBoard = (props) => {
     const { socialData } = props;
@@ -34,7 +35,7 @@ const SocialNFTBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >总市值</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{socialData.totalPrice.toFixed(2)} USDT</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(socialData.totalPrice.toFixed(2))} USDT</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -47,7 +48,7 @@ const SocialNFTBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >地板价</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{socialData.floorPrice.toFixed(2)} USDT</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(socialData.floorPrice.toFixed(2))} USDT</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -60,7 +61,7 @@ const SocialNFTBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >流通量/总量</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{socialData.transferAmount}/{socialData.totalAmount}</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(socialData.transferAmount)}/{formatNumber(socialData.totalAmount)}</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -73,7 +74,7 @@ const SocialNFTBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >24H交易量</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{socialData.transferPrice.toFixed(2)} USDT</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(socialData.transferPrice.toFixed(2))} USDT</Typography>
                     </Box>
                 </Grid>
             </Grid>

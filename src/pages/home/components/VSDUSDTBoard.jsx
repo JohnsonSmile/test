@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Divider, Grid } from '@mui/material';
+import { formatNumber } from '../../../utils/utils';
 
 const VSDUSDTBoard = (props) => {
     const { vsdUsdtData } = props;
@@ -28,7 +29,7 @@ const VSDUSDTBoard = (props) => {
                             gap: 1
                             }}>
                             <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >LP token总量</Typography>
-                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdUsdtData.tokenTotalAmount.toFixed(2)} USDT</Typography>
+                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdUsdtData.tokenTotalAmount.toFixed(2))} USDT</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3} >
@@ -41,7 +42,7 @@ const VSDUSDTBoard = (props) => {
                             gap: 1
                             }}>
                             <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >年化收益率</Typography>
-                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdUsdtData.annualizedReturnRateCent.toFixed(2)}%</Typography>
+                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdUsdtData.annualizedReturnRateCent.toFixed(2))}%</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3} >
@@ -54,7 +55,7 @@ const VSDUSDTBoard = (props) => {
                             gap: 1
                             }}>
                             <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >池中USDT</Typography>
-                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdUsdtData.usdtInPool.toFixed(2)}</Typography>
+                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdUsdtData.usdtInPool.toFixed(2))}</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={3} >
@@ -67,7 +68,7 @@ const VSDUSDTBoard = (props) => {
                             gap: 1
                             }}>
                             <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >USDT背书</Typography>
-                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdUsdtData.usdtEndorsement.toFixed(2)} VSD</Typography>
+                            <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdUsdtData.usdtEndorsement.toFixed(2))} VSD</Typography>
                         </Box>
                     </Grid>
                 </Grid>

@@ -7,6 +7,7 @@ import NFT01Img from "../../assets/images/profile/template/nft01.png"
 import NFT02Img from "../../assets/images/profile/template/nft02.png"
 import NFT03Img from "../../assets/images/profile/template/nft03.png"
 import MyVSDCard from "./components/MyVSDCard"
+import { useNavigate } from "react-router-dom"
 
 
 const MyAssetsPage = () => {
@@ -38,6 +39,7 @@ const MyAssetsPage = () => {
         lpToken: 230,
         vsdCanBeAcheived: 840
     })
+    const navigate = useNavigate()
     useEffect(() => {
         if (animationRef.current == null) {
             animationRef.current = anime({
@@ -84,12 +86,26 @@ const MyAssetsPage = () => {
         // TODO: liquid manage
     }
 
+    // TODO: if user already login
+    const handleBuildClick = () => {
+        navigate('/build')
+    }
+
+    const handleBuyClick = () => {
+        navigate('/market')
+    }
+
     return (
         <Box sx={{ px: 2, backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)', pb: 5 }}>
             <Box sx={{ pt: 1.5 }}>
                 <AssetsCard assetsDetail={assetsDetail}/> 
             </Box>
-            <MyNftCard myNftInfos={myNftInfos} onNftClick={handleNftClick} onMoreClick={handleMoreNftClick} />
+            <MyNftCard 
+                myNftInfos={myNftInfos} 
+                onNftClick={handleNftClick} 
+                onMoreClick={handleMoreNftClick} 
+                onBuildClick={handleBuildClick}
+                onBuyClick={handleBuyClick} />
             <MyVSDCard myVsdInfos={myVsdInfos} onGainVsdClick={handleGainVSDClick} onLiquidManageClick={handleLiquidManageClick} />
         </Box>
     )

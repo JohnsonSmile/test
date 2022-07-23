@@ -1,4 +1,4 @@
-import { Box, CardMedia, Grid, Typography } from "@mui/material"
+import { Box, Grid, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 
 const FeaturesGridView = (props) => {

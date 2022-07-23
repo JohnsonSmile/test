@@ -6,6 +6,7 @@ import { Divider, Grid } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import VSDChartView from './VSDChartView';
+import { formatNumber } from '../../../utils/utils';
 
 
 const dayData = [820, 932, 901, 934, 1290, 1330, 1320];
@@ -44,7 +45,7 @@ const VSDBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >总市值</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdData.totalPrice.toFixed(2)} USDT</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdData.totalPrice.toFixed(2))} USDT</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -57,7 +58,7 @@ const VSDBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >单价</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdData.singlePrice.toFixed(2)} USDT</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdData.singlePrice.toFixed(2))} USDT</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -70,7 +71,7 @@ const VSDBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >24H价格变化</Typography>
-                        <Typography sx={{ fontSize: 16, color: vsdData.changeRateCent > 0 ? '#00C209' : '#FF0000', fontWeight: 700 }}>{vsdData.changeRateCent > 0 ? '+' : '-'}{vsdData.changeRateCent.toFixed(2)}%</Typography>
+                        <Typography sx={{ fontSize: 16, color: vsdData.changeRateCent > 0 ? '#00C209' : '#FF0000', fontWeight: 700 }}>{vsdData.changeRateCent > 0 ? '+' : '-'}{formatNumber(vsdData.changeRateCent.toFixed(2))}%</Typography>
                     </Box>
                 </Grid>
                 <Grid item xs={3} >
@@ -83,7 +84,7 @@ const VSDBoard = (props) => {
                         gap: 1
                         }}>
                         <Typography sx={{ fontSize: 12, color: '#000', opacity: 0.5 }} >USDT背书</Typography>
-                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{vsdData.usdtEndorsement.toFixed(2)} VSD</Typography>
+                        <Typography sx={{ fontSize: 16, color: '#000', fontWeight: 700 }}>{formatNumber(vsdData.usdtEndorsement.toFixed(2))} VSD</Typography>
                     </Box>
                 </Grid>
             </Grid>

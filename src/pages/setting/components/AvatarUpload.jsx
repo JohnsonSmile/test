@@ -1,5 +1,5 @@
-import { Avatar, Box, CardMedia, Typography } from "@mui/material"
-import { useCallback, useMemo, useState } from "react"
+import { Avatar, Box, CardMedia } from "@mui/material"
+import { useState } from "react"
 import http from "../../../utils/http"
 import { ReactComponent as CameraIcon } from "../../../assets/icon/profile/camera.svg"
 
