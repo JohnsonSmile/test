@@ -25,19 +25,29 @@ const initialize = (provider) => {
   window.provider = provider;
   const library = new ethers.providers.Web3Provider(prov);
   // contracts
-  window.ERC20Contract = new ethers.Contract(
-    contracts.apesToken,
-    contracts.APESABI,
+  window.usdtContract = new ethers.Contract(
+    contracts.usdtContract,
+    contracts.usdtABI,
     library
   );
-  window.ERC721Contract = new ethers.Contract(
-    contracts.nftContract,
-    contracts.NFTABI,
+  window.VSDContract = new ethers.Contract(
+    contracts.vsd,
+    contracts.vsdABI,
     library
   );
-  window.MineContract = new ethers.Contract(
-    contracts.mineContract,
-    contracts.MineABI,
+  window.valueContract = new ethers.Contract(
+    contracts.value,
+    contracts.valueABI,
+    library
+  );
+  window.socialNFTContract = new ethers.Contract(
+    contracts.socialNFT,
+    contracts.socialNFTABI,
+    library
+  );
+  window.listContract = new ethers.Contract(
+    contracts.list,
+    contracts.listABI,
     library
   );
 
@@ -46,66 +56,57 @@ const initialize = (provider) => {
   window.Signer = library.getSigner();
 
   // listener
-  // 721
-  window.ERC721Contract.on(
-    "NewSurvivor",
-    (recipient, survivorID, timestamp) => {
-      console.log(recipient, survivorID);
+  // socialnft
+  window.socialNFTContract.on(
+    "SafeMint",
+    (owner, amount, tokenIds, safeMintAt) => {
+      console.log(owner, amount, tokenIds, safeMintAt);
       const account = localStorage.getItem("account");
-      if (account === recipient) {
-        NoticeEmitter.emit("mint success", survivorID);
+      if (account === owner) {
+        NoticeEmitter.emit("mint success", tokenIds);
       }
     }
   );
-  window.ERC721Contract.on(
-    "Stolen",
-    (msgSender, recipient, survivorID, timestamp) => {
+  window.socialNFTContract.on(
+    "Stake",
+    (owner, tokenId, newStatu, stakeAt) => {
       // TODO: toast something!
-      console.log(msgSender, recipient, survivorID, timestamp);
+      console.log(owner, tokenId, newStatu, stakeAt);
       const accountLocal = localStorage.getItem("account");
-      if (accountLocal === msgSender) {
-        toast.warn(
-          `You have stolen a warrior: ${survivorID.toString()} from ${ellipsisAccount(
-            recipient.toString()
-          )}!`
+      if (accountLocal === owner && newStatu) {
+        toast.info(
+          `You have stake your nft, tokenId is: ${tokenId.toString()}!`
         );
-      } else if (accountLocal === recipient) {
-        toast.warn(
-          `${ellipsisAccount(
-            msgSender.toString()
-          )} have stolen a warrior: ${survivorID.toString()} from you! `
-        );
-      } else {
-        toast.warn(
-          `${ellipsisAccount(
-            msgSender.toString()
-          )} have stolen a warrior: ${survivorID.toString()} from ${ellipsisAccount(
-            recipient.toString()
-          )}! `
+      } else if (accountLocal === owner && !newStatu) {
+        toast.info(
+          `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
         );
       }
     }
   );
-  // mine
-  window.MineContract.on(
-    "HoldersClaimed",
-    (msgSender, tokenId, owed, unstake) => {
+
+  // list
+  window.listContract.on(
+    "List",
+    (owner, tokenId, price, operation, opreateAt) => {
       const accountLocal = localStorage.getItem("account");
-      if (accountLocal === msgSender) {
-        if (unstake) {
-          NoticeEmitter.emit("rescue success", tokenId, true);
+      if (accountLocal === owner) {
+        if (operation) {
+          NoticeEmitter.emit("list success", tokenId, price, true);
         } else {
-          NoticeEmitter.emit("claim success", tokenId, false);
+          NoticeEmitter.emit("unlist success", tokenId, false);
         }
       }
     }
   );
-  window.MineContract.on("NFTStaked", (account, tokenId, timestamp) => {
-    const accountLocal = localStorage.getItem("account");
-    if (accountLocal === account) {
-      NoticeEmitter.emit("stake success", tokenId);
-    }
-  });
+  window.listContract.on(
+    "Buy",
+    (buyer, tokenId, price, buyAt) => {
+      const accountLocal = localStorage.getItem("account");
+      if (accountLocal === buyer) {
+        NoticeEmitter.emit("buy success", tokenId, price);
+      }
+    });
 };
 
 const injected = new InjectedConnector({
