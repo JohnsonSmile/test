@@ -26,7 +26,7 @@ const initialize = (provider) => {
   const library = new ethers.providers.Web3Provider(prov);
   // contracts
   window.usdtContract = new ethers.Contract(
-    contracts.usdtContract,
+    contracts.usdt,
     contracts.usdtABI,
     library
   );
