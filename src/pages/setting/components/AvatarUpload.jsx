@@ -1,6 +1,6 @@
 import { Avatar, Box, CardMedia } from "@mui/material"
 import { useState } from "react"
-import http from "../../../utils/http"
+import http from "../../../http/http"
 import { ReactComponent as CameraIcon } from "../../../assets/icon/profile/camera.svg"
 
 const AvatarUpload = ({

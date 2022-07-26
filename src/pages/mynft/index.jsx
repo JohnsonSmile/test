@@ -1,24 +1,25 @@
-import { Button, Card, CardMedia, Grid, Typography } from "@mui/material"
+import { Box, Card, CardMedia, Grid, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
+import NFTCardImge from "../../assets/images/mynft/nftcard.png"
 
 const nftInfos = [
     {
-        image: 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500',
+        image: NFTCardImge,
         amount: 1234,
         type: 1,
         title: '铜'
     },{
-        image: 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500',
+        image: NFTCardImge,
         amount: 1234,
         type: 2,
         title: '银'
     },{
-        image: 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500',
+        image: NFTCardImge,
         amount: 1234,
         type: 3,
         title: '金'
     },{
-        image: 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500',
+        image: NFTCardImge,
         amount: 1234,
         type: 4,
         title: '钻'
@@ -39,31 +40,35 @@ const MyNFTPage = () => {
 
     return (
         <Grid container columns={12} sx={{
-            px: 2,
             py: 4,
             background: '#fff',
         }}>
         {nftInfos.map((nftinfo, index) => (
-            <Grid item xs={6} key={index} sx={{alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2, py: 2}}>
+            <Grid item xs={6} key={index} sx={{alignItems: 'center', display: 'flex', flexDirection: 'column', gap: 2, py: 1}}>
                 <Card sx={{
-                    display: "flex",
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: 180,
-                    width: 150,
+                        display: "flex",
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        height: {xs: 225,sm:250},
+                        width: {xs:162,sm:180},
+                        border: '1px solid #F2F2F2',
+                        boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)', 
+                        borderRadius: '20px',
+                        gap: 0.5
                     }}>
                     <CardMedia 
                         component={'img'}
                         sx={{
                             display: 'inline-block',
                             objectFit: 'cover',
-                            height: 180,
-                            width: 150,
+                            height: {xs: 162, sm: 180},
+                            width: {xs: 162, sm:180},
                         }}
                         image={nftinfo.image } />
+                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >{nftinfo.title} {nftinfo.amount}个</Typography>
+                    <Box sx={{ cursor: 'pointer', color: '#7E8186', fontSize: '12px'}} onClick={() => { handleDetailClick(nftinfo) }}>{'查看详情 >'}</Box>
                 </Card>
-                <Typography variant={'subtitle2'} color='InfoText' sx={{mt: 1}} >{nftinfo.title}{nftinfo.amount}个</Typography>
-                <Button variant='contained' onClick={() => { handleDetailClick(nftinfo) }}>查看详情</Button>
             </Grid>
         ))}
         </Grid>

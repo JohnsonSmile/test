@@ -3,8 +3,12 @@ import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { injected } from "../../clients/client"
+import { asyncSetAccount, asyncSetSignInfo, getAccount, getSigInfo } from "../../redux/reducers/wallet"
 import { isIMTokenAvailable, isTokenPocketAvailable } from "../../utils/wallet"
 import LoginDialog from "./components/LoginDialog"
+import { useSelector, useDispatch } from "react-redux"
+import http from "../../http/http"
+import { apiPostCreateUser, apiPostLogin } from "../../http"
 
 // const stringAvatar = (name) => {
 //     return {
@@ -14,19 +18,15 @@ import LoginDialog from "./components/LoginDialog"
 
 const LoginPage = () => {
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
+    const [inviteCode, setInviteCode] = useState("")
     const { activate, account } = useWeb3React();
     const [errMsg, setErrMsg] = useState('')
     const navigate = useNavigate()
+    const sigInfo = useSelector(getSigInfo)
+    const signAccount = useSelector(getAccount)
+    const dispatch = useDispatch()
     const handleWalletConnectClick = async () => {
-        if (isIMTokenAvailable()) {
-            // connect to ethereum directly
-            // toast.success('connect to im token ..')
-            await activate(injected)
-        } else if (isTokenPocketAvailable()) {
-            // connect to ethereum directly
-            await activate(injected)
-            // toast.success('connect to token pocket..')
-        } else if (typeof window.ethereum !== 'undefined') {
+        if (isIMTokenAvailable() || isTokenPocketAvailable() || typeof window.ethereum !== 'undefined') {
             // connect to ethereum directly
             await activate(injected)
         } else {
@@ -35,8 +35,16 @@ const LoginPage = () => {
     }
 
     const handleStartBankClick = () => {
+        console.log(inviteCode)
+        apiPostCreateUser(account, inviteCode).then(res => {
+            console.log(res)
+        })
         // validate invite code
-        navigate('/')
+        // navigate('/')
+    }
+
+    const handleInviteCodeChange = (e) => {
+        setInviteCode(e.target.value)
     }
 
     useEffect(() => {
@@ -44,8 +52,21 @@ const LoginPage = () => {
             // TODO: fetch is user has already been verified with an invite code, 
             // if dont have an invite code and is the first time for the account to open the session show dialog
             // const res = await http.post(xxxxx), get user infos
+        } else {
+            if (account !== signAccount) {
+                window.Library.getSigner(account).signMessage("hello").then((sigHex) => {
+                    console.log("account==", account)
+                    console.log("sig==", sigHex)
+                    // save message info local
+                    dispatch(asyncSetSignInfo({ account, sigHex }))
+                    dispatch(asyncSetAccount(account))
+                    apiPostLogin(account, sigHex, "hello").then(res => {
+                        console.log('res===', res)
+                    })
+                })
+            }
         }
-    }, [account])
+    }, [account, signAccount, dispatch])
     
 
     return (
@@ -80,7 +101,7 @@ const LoginPage = () => {
                     <Typography variant='subtitle1' sx={{color: '#333'}}>开始前,请绑定邀请码</Typography>
 
                     <FormControl sx={{ width: '25ch' }}>
-                        <TextField placeholder="请输入邀请码" variant="outlined" fullWidth/>
+                        <TextField placeholder="请输入邀请码" variant="outlined" onChange={handleInviteCodeChange} fullWidth/>
                         {errMsg && <Typography variant='subtitle1' sx={{fontSize: '12px'}}>{ errMsg }</Typography>}
                     </FormControl>
                     <Button variant='contained' size='large' sx={{textTransform: 'capitalize', mt: 2}} onClick={handleStartBankClick}>开启 Value Bank</Button>
