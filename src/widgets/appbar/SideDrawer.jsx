@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Drawer, IconButton, List, ListItemButton, ListSubheader, Typography } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListSubheader, Typography } from "@mui/material"
 import { useState } from "react";
 import { ReactComponent as MenuIcon } from '../../assets/icon/menu.svg'
 import { ReactComponent as AvatarIcon } from '../../assets/icon/home/avatar.svg'

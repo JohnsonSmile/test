@@ -187,7 +187,7 @@ const MyNFTListPage = () => {
                         onSelectClick={handleTypeSelectClick} />
                 </Box>
                 <Divider orientation={"vertical"}/>
-                <Box sx={{flex:1, display: 'flex', flexDirection: 'row',}}>
+                <Box sx={{flex:1, display: 'flex', flexDirection: 'row'}}>
                     <StatusSelect 
                         title={'状态:'}
                         open={statusOpen}

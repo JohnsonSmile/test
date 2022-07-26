@@ -82,6 +82,10 @@ const TopAppBar = () => {
       setTitle('直推情况')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
+    } else if (location.pathname === '/nft/detail') {
+      setTitle('NFT详情')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     }
   }, [location])
   
