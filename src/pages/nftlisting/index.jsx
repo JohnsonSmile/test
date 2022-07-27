@@ -78,16 +78,14 @@ const NFTListingPage = () => {
                     onChange={handleTypeChange}
                     fullWidth
                     >
-                    <Box sx={{ maxHeight: '280px'}}>
-                        {nftTypes.map((type) => (
-                            <MenuItem key={type.value} value={type.value} sx={{ display: 'flex', flexDirection: 'row',}}>
-                                <CardMedia component="img" image={NFTImage} sx={{ width: 25, height: 25 }}/>
-                                <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
-                                    {type.label}
-                                </Typography>
-                            </MenuItem>
-                        ))}
-                    </Box>
+                    {nftTypes.map((type) => (
+                        <MenuItem key={type.value} value={type.value} sx={{ display: 'flex', flexDirection: 'row',}}>
+                            <CardMedia component="img" image={NFTImage} sx={{ width: 25, height: 25 }}/>
+                            <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
+                                {type.label}
+                            </Typography>
+                        </MenuItem>
+                    ))}
                 </BootstrapTextField>
             </Box>
             <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3 }}>
@@ -109,18 +107,21 @@ const NFTListingPage = () => {
                             return (<Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
                                         {selected}
                                     </Typography>)
+                        },
+                        MenuProps: {
+                            sx: {
+                                maxHeight: '280px'
+                            }
                         }
                     }}
                     >
-                    <Box sx={{ maxHeight: '280px'}}>
-                        {nftIDs.map((id) => (
-                            <MenuItem key={id} value={id} sx={{ display: 'flex', flexDirection: 'row',}}>
-                                <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
-                                    {id}
-                                </Typography>
-                            </MenuItem>
-                        ))}
-                    </Box>
+                    {nftIDs.map((id) => (
+                        <MenuItem key={id} value={id} sx={{ display: 'flex', flexDirection: 'row',}}>
+                            <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
+                                {id}
+                            </Typography>
+                        </MenuItem>
+                    ))}
                 </BootstrapTextField>
             </Box>
             <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3 }}>
