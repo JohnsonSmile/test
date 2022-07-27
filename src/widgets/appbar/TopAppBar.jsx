@@ -69,7 +69,6 @@ const TopAppBar = () => {
     } else if (location.pathname === '/invite') {
       setTitle('推广联盟')
       setShouldBackShow(true)
-      setHeaderColor('#FFF')
     } else if (location.pathname === '/profile') {
       setTitle('个人中心')
       setShouldBackShow(true)
