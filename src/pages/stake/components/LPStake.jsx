@@ -60,7 +60,6 @@ const LPStake = () => {
                 <Box sx={{ lineHeight: '48px', backgroundColor: '#F5F5F7', width: '100%', borderRadius: '12px', color: '#333', fontSize: '14px', textAlign: 'left', px: 2, boxSizing: 'border-box'}}>1234.12%</Box>
             </Box>
             <Box sx={{ mx: 2, mt: 4, backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', color: '#FFF', cursor: 'pointer', width: '100%' }} onClick={handleStakeClick}>质押</Box>
-            
             <Box sx={{ mt: 2, py: 1, width: '100%' }}>
                 <Box sx={{ border: '1px solid #EDEEF2', borderRadius: '12px', px: 2, py: 2 }} >
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%'}}>

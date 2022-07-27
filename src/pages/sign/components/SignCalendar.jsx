@@ -10,7 +10,7 @@ const SignCalendar = (props) => {
     return (
         <Calendar 
             defaultView='month' 
-            maxDate={new Date()} 
+            view='month'
             minDetail='month'
             tileClassName={({date, view}) => {
                 console.log(moment(date).format("DD-MM-YYYY"))

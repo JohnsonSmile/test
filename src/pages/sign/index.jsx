@@ -28,15 +28,16 @@ const SignPage = () => {
 
     return (
         <Box sx={{ backgroundColor: '#fff', minHeight: 'calc(100vh - 56px)', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <Card sx={{ height: '100%', m: 3 }}>
-                <SignCalendar markers={markers} />
-            </Card>
-            <Box>
-                <Button size='large' variant={isSigned ? 'outlined' : 'contained'} sx={{ minWidth: 120 }} onClick={handleSignClick}>{isSigned ? '已签到' : '签到'}</Button>
+            <SignCalendar markers={markers} />
+            <Box sx={{ mt: 4, width: '100%'}}>
+                <Box sx={{ backgroundColor: isSigned ? '#FFF' : '#4263EB', borderRadius: '12px', lineHeight: '44px', color: isSigned ? '#4263EB' :'#FFF', cursor: 'pointer', mx: 2, fontWeight: 700, border: '1px solid #4263EB' }} 
+                    onClick={handleSignClick}>{isSigned ? '已签到' : '签到'}</Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', mt: 5, width: '100%'}}>
-                <Typography variant='inherit' sx={{ px: 3 }}>规则:</Typography>
-                <Typography variant='inherit' sx={{ px: 3 }}>需要每日登录签到,否则当日无收益</Typography>
+            <Box sx={{ mt: 1.5, py: 1, width: '100%' }}>
+                <Box sx={{ border: '1px solid #EDEEF2', borderRadius: '12px', mx: 2, py: 2 }} >
+                    <Box sx={{ fontSize: '12px', color: '#333', textAlign: 'left', fontWeight: 500, mx: 2 }}>规则：</Box>
+                    <Box sx={{ fontSize: '12px', color: '#333', textAlign: 'left', fontWeight: 400, pt: 0.8 , mx: 2}}>需要每日登录签到,否则当日无收益</Box>
+                </Box>
             </Box>
         </Box>
     )
