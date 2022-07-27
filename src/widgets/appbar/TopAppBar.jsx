@@ -13,13 +13,18 @@ const TopAppBar = () => {
   const [title, setTitle] = useState('')
   const [shouldBackShow, setShouldBackShow] = useState(false)
   const [headerColor, setHeaderColor] = useState('transparent')
+  const [listItemVisible, setListItemVisible] = useState(false)
   const navigate = useNavigate()
   const handleBackClick = () => {
     navigate(-1)
   }
+  const handleNavToListItemClick = () => {
+    navigate('/nft/listing')
+  }
   useEffect(() => {
     setShouldBackShow(false)
     setHeaderColor('transparent')
+    setListItemVisible(false)
     if (location.pathname === '/home') {
       setTitle('VBank Value')
     } else if (location.pathname === '/build') {
@@ -50,6 +55,7 @@ const TopAppBar = () => {
       setTitle('NFT交易市场')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
+      setListItemVisible(true)
     } else if (location.pathname === '/sign') {
       setTitle('签到')
       setShouldBackShow(true)
@@ -84,6 +90,10 @@ const TopAppBar = () => {
       setHeaderColor('#FFF')
     } else if (location.pathname === '/nft/detail') {
       setTitle('NFT详情')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
+    } else if (location.pathname === '/nft/listing') {
+      setTitle('上架NFT')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
     }
@@ -123,6 +133,11 @@ const TopAppBar = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
+            {listItemVisible && <Box 
+              sx={{ fontSize: '14px', fontWeight: 500, cursor: 'pointer', color: '#333' }}
+              onClick={handleNavToListItemClick}>
+                上架NFT
+              </Box>}
           </Box>
         </Toolbar>
       </AppBar>

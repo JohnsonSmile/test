@@ -12,6 +12,7 @@ import MyAssetsPage from './pages/myassets';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
 import NFTDetailPage from './pages/nftdetail';
+import NFTListingPage from './pages/nftlisting';
 import ProfilePage from './pages/profile';
 import PromotionDetailPage from './pages/promotion';
 import PromotionRecordPage from './pages/promotionrecord';
@@ -43,6 +44,7 @@ const App = () => {
           <Route path="/promotion/detail" element={<PromotionDetailPage />}/>
           <Route path="/promotion/record" element={<PromotionRecordPage />}/>
           <Route path="/nft/detail" element={<NFTDetailPage />} />
+          <Route path="/nft/listing" element={<NFTListingPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>
