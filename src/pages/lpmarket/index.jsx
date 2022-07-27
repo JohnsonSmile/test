@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom"
 import PropTypes from 'prop-types';
 import LiquidityCard from "./components/LiquidityCard";
 import SwapCard from "./components/SwapCard";
+import BootstrapTabs from "../../widgets/tabs/BootstrapTabs";
 
 
 const TabPanel = (props) => {
@@ -49,11 +50,11 @@ const LPMarketPage = () => {
     
     return (
         <Box sx={{ width: '100%', backgroundColor: '#FFF'}}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange}>
+            <Box sx={{ pt: 3 }}>
+                <BootstrapTabs value={value} onChange={handleChange}>
                     <Tab label="SWAP" />
                     <Tab label="Liquidity" />
-                </Tabs>
+                </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
                 <SwapCard />
