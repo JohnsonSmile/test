@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom"
 import PropTypes from 'prop-types';
 import NFTStake from "./components/NFTStake";
 import LPStake from "./components/LPStake";
+import styled from "@emotion/styled";
 
 
 const TabPanel = (props) => {
@@ -14,7 +15,6 @@ const TabPanel = (props) => {
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
             {value === index && (
@@ -31,6 +31,32 @@ TabPanel.propTypes = {
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
 };
+
+const BootstrapTabs = styled(Tabs)(({ theme }) => ({
+    '& .MuiTabs-flexContainer': {
+        justifyContent: 'center',
+        backgroundColor: '#F2F2F5',
+        margin: '0 15px',
+        borderRadius: '22px',
+        boxSizing: 'border-box',
+    },
+    '& .MuiButtonBase-root': {
+        flex: 1,
+        minHeight: '32px',
+        height: '32px',
+        margin: '5px',
+        boxSizing: 'border-box',
+        color: '#7E8186'
+    },
+    '& .Mui-selected': {
+        backgroundColor: '#FFF',
+        borderRadius: '16px',
+        color: '#333'
+    },
+    '& .MuiTabs-indicator': {
+        backgroundColor: 'transparent'
+    }
+}));
 
 const StakePage = () => {
     const location = useLocation()
@@ -49,11 +75,11 @@ const StakePage = () => {
     
     return (
         <Box sx={{ width: '100%', backgroundColor: '#FFF'}}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange}>
+            <Box sx={{ pt: 3 }}>
+                <BootstrapTabs value={value} onChange={handleChange}>
                     <Tab label="质押NFT" />
                     <Tab label="质押LP" />
-                </Tabs>
+                </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
                 <NFTStake />

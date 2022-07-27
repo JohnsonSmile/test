@@ -27,8 +27,8 @@ const StatusSelect = (props) => {
                         <Box sx={{backgroundColor: '#FFF', borderRadius: '20px', boxShadow: '0px 6px 20px rgba(20, 24, 28, 0.1)'}}>
                             <Grid container columns={12} sx={{ pb: 1.5 }}>
                                 {statuses.map(s => {
-                                    return <Grid item xs={12}>
-                                        <Box key={s.value}>
+                                    return <Grid key={s.value} item xs={12}>
+                                        <Box>
                                             <Box sx={{ cursor: 'pointer', mx: 1, mt: 1.5, height: '45px', lineHeight: '45px',
                                                 display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 0.5}}
                                                 onClick={() => handleStatusChange(s.value)}>

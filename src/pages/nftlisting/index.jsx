@@ -1,5 +1,5 @@
 import { Box, CardMedia, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
-import { styled } from "@mui/styles";
+import BootstrapTextField from '../../widgets/textfield/BootstrapTextField'
 import { useState } from "react"
 import NFTImage from "../../assets/images/nftlist/nft.png"
 
@@ -27,16 +27,6 @@ const nftIDs = [
     11009,
 ];
 
-const BootstrapTextField = styled(TextField)(({ theme }) => ({
-    '& .MuiOutlinedInput-root': {
-        borderRadius: '12px',
-        fontSize: '14px',
-    },
-    '& .MuiSelect-select': {
-        display: 'flex',
-        alignItems: 'center',
-    },
-}));
 
 
 const NFTListingPage = () => {

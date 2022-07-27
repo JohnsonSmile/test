@@ -51,6 +51,8 @@ const TopAppBar = () => {
       // }
     } else if (location.pathname === '/stake') {
       setTitle('质押')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/market') {
       setTitle('NFT交易市场')
       setShouldBackShow(true)

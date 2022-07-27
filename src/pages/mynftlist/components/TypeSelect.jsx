@@ -33,8 +33,8 @@ const TypeSelect = (props) => {
                         <Box sx={{backgroundColor: '#FFF', borderRadius: '20px', boxShadow: '0px 6px 20px rgba(20, 24, 28, 0.1)'}}>
                             <Grid container columns={12} sx={{ p: 2 }}>
                                 {types.filter(value => value.value !== 0).map(t => {
-                                    return <Grid item xs={6} sx={{ p: 0.5 }}>
-                                        <Box key={t.value}>
+                                    return <Grid key={t.value} item xs={6} sx={{ p: 0.5 }}>
+                                        <Box>
                                             <Box sx={{ cursor: 'pointer', border: type === t.value ? '1px solid rgba(66, 99, 235, 0.5)' : '1px solid #F2F2F2', borderRadius: '20px', height: '50px', lineHeight: '50px',
                                                 display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 0.5,
                                                 background: type === t.value ? 'rgba(66, 99, 235, 0.06)' : '#FFF', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}

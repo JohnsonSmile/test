@@ -145,14 +145,31 @@ const MyNFTListPage = () => {
     }
 
     useEffect(() => {
-        if (location && location.state && location.state.type) {
+        if (location && location.state && location.state.type >= 0) {
             setType(location.state.type)
             if (location.state.type === 0) {
                 // filter status
-                if (location && location.state && location.state.status) {
+                if (location && location.state && location.state.status >= 0) {
                     setStatus(location.state.status)
                     if (location.state.status === 0) {
                         setFillteredNFTInfos(nftInfos)
+                    } else {
+                        setFillteredNFTInfos(_ => {
+                            return nftInfos
+                            .filter(nftInfo => nftInfo.status === location.state.status)
+                        })
+                    }
+                } else {
+                    setFillteredNFTInfos(nftInfos)
+                }
+            } else {
+                // filter status
+                if (location && location.state && location.state.status >= 0) {
+                    setStatus(location.state.status)
+                    if (location.state.status === 0) {
+                        setFillteredNFTInfos(_ => {
+                            return nftInfos.filter(nftInfo => nftInfo.type === location.state.type)
+                        })
                     } else {
                         setFillteredNFTInfos(_ => {
                             return nftInfos
@@ -161,12 +178,10 @@ const MyNFTListPage = () => {
                         })
                     }
                 } else {
-                    setFillteredNFTInfos(nftInfos)
+                    setFillteredNFTInfos(_ => {
+                        return nftInfos.filter(nftInfo => nftInfo.type === location.state.type)
+                    })
                 }
-            } else {
-                setFillteredNFTInfos(_ => {
-                    return nftInfos.filter(nftInfo => nftInfo.type === location.state.type)
-                })
             }
         } else {
             // TODO: should get from contracts

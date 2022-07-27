@@ -16,7 +16,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogActions-root': {
         padding: theme.spacing(2),
     },
-  }));
+}));
   
 const BootstrapDialogTitle = (props) => {
     const { children, onClose, ...other } = props;
