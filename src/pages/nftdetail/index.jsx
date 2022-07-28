@@ -1,6 +1,11 @@
 import { Box, CardMedia, Typography } from "@mui/material"
 import { useLocation } from "react-router-dom"
-import NFTCardImage from "../../assets/images/mynft/nftcard.png"
+import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
+
+const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
 
 const NFTDetailPage = () => {
@@ -21,10 +26,10 @@ const NFTDetailPage = () => {
                         sx={{
                             display: 'inline-block',
                             objectFit: 'cover',
-                            height: 240,
-                            width: 240,
+                            height: 200,
+                            width: 200,
                         }}
-                        image={NFTCardImage} />
+                        image={NFTImages[location.state.nftInfo.type - 1]} />
                 </Box>
             </Box>
             <Typography sx={{ color: '#333', fontSize: '21px', fontWeight: 700, mt: 1 }}>NFT#{location.state.nftInfo.id}</Typography>

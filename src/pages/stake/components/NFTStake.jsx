@@ -1,10 +1,14 @@
-import { Box, Button, Card, CardMedia, Chip, MenuItem, Typography } from "@mui/material"
+import { Box, CardMedia, Chip, MenuItem, Typography } from "@mui/material"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import MultipleSelection from "./MultipleSelection"
 import BootstrapTextField from '../../../widgets/textfield/BootstrapTextField'
-import NFTCardImage from "../../../assets/images/mynft/nftcard.png"
-import NFTImage from "../../../assets/images/nftlist/nft.png"
+import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../../assets/images/mynft/copper_nft.png"
+
+const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
 
 
@@ -66,10 +70,10 @@ const NFTStake = () => {
                     sx={{
                         display: 'inline-block',
                         objectFit: 'cover',
-                        height: 240,
-                        width: 240,
+                        height: 200,
+                        width: 200,
                     }}
-                    image={NFTCardImage} />
+                    image={NFTImages[selectedType - 1]} />
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
                 <Box component={'label'} forid="staking-type-select" sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>NFT类型</Box>
@@ -82,7 +86,7 @@ const NFTStake = () => {
                     >
                     {nftTypes.map((type) => (
                         <MenuItem key={type.value} value={type.value} sx={{ display: 'flex', flexDirection: 'row',}}>
-                            <CardMedia component="img" image={NFTImage} sx={{ width: 25, height: 25 }}/>
+                            <CardMedia component="img" image={NFTImages[type.value - 1]} sx={{ width: 25, height: 25 }}/>
                             <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
                                 {type.label}
                             </Typography>

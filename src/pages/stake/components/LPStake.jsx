@@ -1,7 +1,6 @@
-import { Box, Button, CardMedia, TextField, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import NFTCardImage from "../../../assets/images/mynft/nftcard.png"
 import BootstrapTextField from "../../../widgets/textfield/BootstrapTextField"
 
 
@@ -28,18 +27,7 @@ const LPStake = () => {
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', px: 1}}>
-            <Box>
-                <CardMedia 
-                    component={'img'}
-                    sx={{
-                        display: 'inline-block',
-                        objectFit: 'cover',
-                        height: 240,
-                        width: 240,
-                    }}
-                    image={NFTCardImage} />
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, width: '100%' }}>
                 <Box component={'label'} forid="staking-type-select" sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>质押数量</Box>
                 <BootstrapTextField type="number"
                     InputLabelProps={{

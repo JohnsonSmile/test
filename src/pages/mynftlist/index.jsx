@@ -2,9 +2,13 @@ import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import StatusSelect from "./components/StatusSelect"
 import TypeSelect from "./components/TypeSelect"
-import NFTImage from "../../assets/images/nftlist/nft.png"
 import { Box, Card, Typography, Divider, CardMedia } from "@mui/material"
+import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 
+const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 const types = [
     {
         label: '全部', 
@@ -217,7 +221,7 @@ const MyNFTListPage = () => {
                         <Card key={nftinfo.id} sx={{ border: '1px solid #F2F2F2', borderRadius: '20px', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', py: 2}}>
                                 <Box sx={{flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                    <CardMedia component={"img"} src={NFTImage} sx={{ width: '35px', height: '35px' }} />
+                                    <CardMedia component={"img"} src={NFTImages[nftinfo.type - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />
                                     <Typography variant="inherit" sx={{fontSize: '16px', fontWeight: 700 }}>
                                         {nftinfo.type === 1 && '铜#'+ nftinfo.id}
                                         {nftinfo.type === 2 && '银#'+ nftinfo.id}

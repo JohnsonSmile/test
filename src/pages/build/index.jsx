@@ -88,7 +88,8 @@ const BuildPage = () => {
                     <CardMedia 
                         component={'img'}
                         sx={{
-                            height: 160,
+                            width: 180,
+                            py: 3
                         }}
                         image={BoxImg} />
                 </Box>

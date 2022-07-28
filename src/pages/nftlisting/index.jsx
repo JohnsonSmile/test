@@ -1,8 +1,12 @@
 import { Box, CardMedia,  MenuItem,  Typography } from "@mui/material"
 import BootstrapTextField from '../../widgets/textfield/BootstrapTextField'
 import { useState } from "react"
-import NFTImage from "../../assets/images/nftlist/nft.png"
+import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 
+const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
 
 const nftTypes = [
@@ -70,7 +74,7 @@ const NFTListingPage = () => {
                     >
                     {nftTypes.map((type) => (
                         <MenuItem key={type.value} value={type.value} sx={{ display: 'flex', flexDirection: 'row',}}>
-                            <CardMedia component="img" image={NFTImage} sx={{ width: 25, height: 25 }}/>
+                            <CardMedia component="img" image={NFTImages[type.value - 1]} sx={{ width: "20px", height: "20px" }}/>
                             <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
                                 {type.label}
                             </Typography>

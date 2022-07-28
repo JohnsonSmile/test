@@ -1,7 +1,11 @@
 import { Box, CardMedia, Fade, Grid, Typography } from "@mui/material"
 import { ReactComponent as ArrowIcon } from "../../../assets/icon/mynft/arrow.svg"
-import NFTImage from "../../../assets/images/nftlist/nft.png"
+import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../../assets/images/mynft/copper_nft.png"
 
+const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
 const TypeSelect = (props) => {
     const {title, type, setType, types, open, onTypeChange, onSelectClick } = props
@@ -39,7 +43,7 @@ const TypeSelect = (props) => {
                                                 display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 0.5,
                                                 background: type === t.value ? 'rgba(66, 99, 235, 0.06)' : '#FFF', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}
                                                 onClick={() => handleTypeChange(t.value)}>
-                                                <CardMedia component={"img"} src={NFTImage} sx={{ width: '35px', height: '35px' }} />
+                                                <CardMedia component={"img"} src={NFTImages[t.value - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />
                                                 <Box sx={{ color: '#333', fontSize: '16px', fontWeight: 700 }}>{ t.label }</Box>
                                             </Box>
                                         </Box>

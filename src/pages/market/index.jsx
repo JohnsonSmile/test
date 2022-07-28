@@ -2,7 +2,11 @@ import { Box, Card, CardMedia, Grid, InputBase, Typography } from "@mui/material
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as SearchIcon} from '../../assets/icon/market/search.svg';
-import NFTCardImage from "../../assets/images/mynft/nftcard.png"
+import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
+import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
+import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
+import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
+
 import TypeSelect from "../mynftlist/components/TypeSelect";
 import AlphaSelect from "./components/AlphaSelect";
 
@@ -51,49 +55,49 @@ const types = [
 
 const nftInfos = [
     {
-        image: NFTCardImage,
+        image: CopperNFTImage,
         id: 2234,
         price: 0.03,
         type: 1,
         title: '铜',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: SilverNFTImage,
         id: 1234,
         price: 0.03,
         type: 2,
         title: '银',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: GoldNFTImage,
         id: 1234,
         price: 0.03,
         type: 3,
         title: '金',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: DiamondNFTImage,
         id: 1234,
         price: 0.03,
         type: 4,
         title: '钻',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: DiamondNFTImage,
         id: 1234,
         price: 0.03,
         type: 4,
         title: '钻',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: DiamondNFTImage,
         id: 1234,
         price: 0.03,
         type: 4,
         title: '钻',
         time: '11:34:22'
     },{
-        image: NFTCardImage,
+        image: DiamondNFTImage,
         id: 1234,
         price: 0.03,
         type: 4,
@@ -239,15 +243,23 @@ const MarketPage = () => {
                         cursor: 'pointer'
                     }} onClick={() => { handleDetailClick(nftinfo) }}>
                         <Box sx={{ position: 'absolute', right: '10px', top: '10px', borderRadius: '12px', border: '1px solid #F2F2F5', py: 0.5, px: 1, fontSize: '12px', color: '#7E8186'}}>{nftinfo.time}</Box>
-                        <CardMedia 
-                            component={'img'}
-                            sx={{
-                                display: 'inline-block',
-                                objectFit: 'cover',
-                                height: {xs: 170, sm: 180},
-                                width: {xs: 170, sm:180},
-                            }}
-                            image={nftinfo.image } />
+                        <Box sx={{ 
+                            height: {xs: 170, sm: 180},
+                            width: {xs: 170, sm:180},
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                            <CardMedia 
+                                component={'img'}
+                                sx={{
+                                    display: 'inline-block',
+                                    objectFit: 'cover',
+                                    height: 120,
+                                    width: 120,
+                                }}
+                                image={nftinfo.image } />
+                        </Box>
                         <Typography sx={{ px: 1.8, color: '#333', fontSize: '16px', fontWeight: 700, lineHeight: '20px' }} >NFT#{nftinfo.id}</Typography>
                         <Typography sx={{ px: 1.8, color: '#8C8C8C', fontSize: '12px', fontWeight: 400, lineHeight: '18px' }} >价格</Typography>
                         <Typography sx={{ px: 1.8, color: '#333', fontSize: '14px', fontWeight: 500, lineHeight: '18px' }} >{nftinfo.price} BNB</Typography>
