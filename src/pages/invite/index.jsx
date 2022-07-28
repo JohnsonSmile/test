@@ -1,6 +1,5 @@
 import { Avatar, Box, CardMedia, Typography } from "@mui/material"
 import QRCode from 'qrcode.react';
-import DownloadIcon from '@mui/icons-material/Download';
 import { useEffect, useState } from "react";
 import domtoimage from 'dom-to-image';
 import InviteBgTopImage from "../../assets/images/invite/background_top.png";
@@ -34,7 +33,6 @@ const InvitePage = () => {
         <Box sx={{px: 2, pb: 5, backgroundColor: 'transparent', position: 'relative'}}>
             <CardMedia component={"img"} image={InviteBgTopImage} sx={{ width: '100vw', height: '100vw', position: 'absolute', top: '-56px', left: 0, zIndex: 1 }} />
             <CardMedia component={"img"} image={InviteBgBottomImage} sx={{ width: '100vw', height: '100vw', position: 'absolute', bottom: 0, left: 0, zIndex: 1 }} />
-
             <Box id="invite-card-render" sx={{ pt: '40px' }}>
                 <Box sx={{cursor: 'pointer', 
                         backgroundColor: '#FFF', 

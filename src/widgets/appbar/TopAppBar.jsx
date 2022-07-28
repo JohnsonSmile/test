@@ -39,16 +39,6 @@ const TopAppBar = () => {
       setTitle('NFT列表')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
-      // const type = location.state.type
-      // if (type === 1) {
-      //   setTitle('铜')
-      // } else if (type === 2) {
-      //   setTitle('银')
-      // } else if (type === 3) {
-      //   setTitle('金')
-      // } else if (type === 4) {
-      //   setTitle('钻')
-      // }
     } else if (location.pathname === '/stake') {
       setTitle('质押')
       setShouldBackShow(true)
