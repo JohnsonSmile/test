@@ -1,29 +1,43 @@
-const initialUser = {
+import { createSlice } from '@reduxjs/toolkit'
+
+export const userSlice = createSlice({
+  name: 'user',
+  initialState: {
     userInfo: {
-      Following: false
-    },
-    // token: null,
-    token: '',
-    DIDMeta: {}
-  }
-  
-  const UserReducer = (state = initialUser, action) => {
-    switch (action.type) {
-      case 'USER_INFO':
-        return { ...state, userInfo: { ...action.value } }
-      case 'SET_USER_TOKEN':
-        return { ...state, token: action.value }
-      case 'SET_FOLLOW':
-        return {
-          ...state,
-          userInfo: { ...state.userInfo, Following: action.value }
-        }
-      case 'DID_META':
-        return { ...state, DIDMeta: { ...action.value } }
-      default:
-        return state
+      account: '', 
+      id :'', 
+      invitationCode: '', 
+      inviter: '',
+      avatar: '',
+      token: ''
+    }
+  },
+  reducers: {
+    setUserInfo:(state, action) => {
+      console.log(action.payload)
+      const userInfo = state.userInfo
+      state.userInfo = {
+        ...userInfo,
+        ...action.payload
+      }
     }
   }
-  
-  export default UserReducer
+})
+
+export const { setUserInfo } = userSlice.actions
+
+// async function
+const asyncSetUserInfo = (userInfo) => (dispatch) => {
+  dispatch(setUserInfo(userInfo))
+}
+
+export { asyncSetUserInfo }
+
+
+// state selector
+const getUserInfo = (state) => state.userReducer.userInfo
+
+export { getUserInfo }
+
+export default userSlice.reducer
   

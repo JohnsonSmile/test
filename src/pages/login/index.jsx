@@ -1,7 +1,7 @@
 import { Box, CardMedia, Typography } from "@mui/material"
 import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useMatch, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { injected } from "../../clients/client"
 import { asyncSetAccount, asyncSetSignInfo, getAccount, getSigInfo } from "../../redux/reducers/wallet"
 import { isIMTokenAvailable, isTokenPocketAvailable } from "../../utils/wallet"
@@ -13,6 +13,9 @@ import InviteBgBottomImage from "../../assets/images/invite/background_bottom.pn
 import { ReactComponent as BNBIcon } from "../../assets/icon/login/bnb.svg";
 import InviteTextField from "./components/InviteTextField";
 import InviteCodeDialog from "./components/InviteCodeDialog"
+import { asyncSetLoading, getDescription, getIsLoading, getTitle } from "../../redux/reducers/status"
+import LoadingDialog from "../../widgets/loading/LoadingDialog"
+import { asyncSetUserInfo } from "../../redux/reducers/user"
 
 
 // const stringAvatar = (name) => {
@@ -22,10 +25,12 @@ import InviteCodeDialog from "./components/InviteCodeDialog"
 // }
 
 const LoginPage = () => {
+    const param = useLocation()
     const [isLoginDialogOpen, setIsLoginDialogOpen] = useState(false)
     const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false)
     const [inviteCode, setInviteCode] = useState("")
     const { activate, account } = useWeb3React();
+    const signInfo = useSelector(getSigInfo)
     const [errMsg, setErrMsg] = useState('')
     const navigate = useNavigate()
     const sigInfo = useSelector(getSigInfo)
@@ -40,13 +45,33 @@ const LoginPage = () => {
         }
     }
 
-    const handleStartBankClick = () => {
+    const handleStartBankClick = async () => {
         console.log(inviteCode)
-        apiPostCreateUser(account, inviteCode).then(res => {
-            console.log(res)
-        })
-        // validate invite code
-        // navigate('/')
+        dispatch(asyncSetLoading(true, "开启 Value Bank", "正在开启 Value Bank", 10000))
+        const resp = await apiPostCreateUser(account, inviteCode)
+        const { code , result } = resp
+        const resultCreate = result
+        if (code === 200) {
+            const { account, id, invitationCode, inviter } = resultCreate
+            // save account info to redux
+            dispatch(asyncSetUserInfo({ account, id, invitationCode, inviter }))
+            dispatch(asyncSetLoading(true, "开启 Value Bank", "正在登录...", 10000))
+            // after create user login again, cause already has sig info
+            const resp = await apiPostLogin(account, sigInfo.sigHex, "hello")
+            console.log(resp)
+            const { code, result } = resp
+            if (code === 200) {
+                const { JWTToken, User } = result
+                dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                // go to home
+                navigate('/')
+            }
+            dispatch(asyncSetLoading(false))
+        } else {
+            // TODO: 请求错误
+            console.log(resp)
+            dispatch(asyncSetLoading(false))
+        }
     }
 
     const handleInviteCodeChange = (e) => {
@@ -67,12 +92,34 @@ const LoginPage = () => {
                     dispatch(asyncSetSignInfo({ account, sigHex }))
                     dispatch(asyncSetAccount(account))
                     apiPostLogin(account, sigHex, "hello").then(res => {
-                        console.log('res===', res)
+                        const { code, result } = res
+                        if (code === 200) {
+                            const { JWTToken, User } = result
+                            dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                        }
                     })
                 })
             }
         }
     }, [account, signAccount, dispatch])
+
+    useEffect(() => {
+        if (param.search.length > 0) {
+            const query = param.search.substring(1)
+            var vars = query.split("&");
+            console.log(vars)
+            for (var i = 0 ; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                console.log(pair)
+                if (pair.length === 2 && pair[0] === "inviteCode") {
+                    console.log(pair[1])
+                    setInviteCode(pair[1])
+                }  
+            }
+        
+        }
+    }, [param])
+    
     
 
     return (
@@ -102,7 +149,7 @@ const LoginPage = () => {
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', position: 'relative', zIndex: 2}}>
                 <BNBIcon sx={{ height: 56, width: 56, mb: 3 }}/>
                 {!account && <Box sx={{ lineHeight: '44px', mt: 3, width: '240px', borderRadius: '12px', backgroundColor: '#FFF', color: '#4263EB', fontSize: '16px', fontWeight: 600, cursor: 'pointer'}} onClick={handleWalletConnectClick}>连接钱包</Box>}
-                {account && <InviteTextField placeholder="请输入邀请码" variant="outlined" onChange={handleInviteCodeChange} sx={{ mt: 3 }} fullWidth/>}
+                {account && <InviteTextField placeholder="请输入邀请码" variant="outlined" value={inviteCode} onChange={handleInviteCodeChange} sx={{ mt: 3 }} fullWidth/>}
                 {!errMsg && <Box sx={{fontSize: '12px', color: 'red', lineHeight: '15px', mt: 0, visibility: account ? 'visible' : 'hidden', height: '12px' }}>{ errMsg }</Box>}
                 <Box sx={{ lineHeight: '44px', mt: 2, width: '240px', borderRadius: '12px', backgroundColor: '#FFF', color: '#4263EB', fontSize: '16px', fontWeight: 600, cursor: 'pointer', visibility: account ? 'visible' : 'hidden'}} onClick={handleStartBankClick}>开启 Value Bank</Box>
             </Box>
@@ -112,6 +159,7 @@ const LoginPage = () => {
             </Box>
             <LoginDialog isOpen={isLoginDialogOpen} setIsOpen={setIsLoginDialogOpen}/>
             <InviteCodeDialog isOpen={isInviteDialogOpen} setIsOpen={setIsInviteDialogOpen}/>
+            <LoadingDialog />
         </Box>
     )
 }

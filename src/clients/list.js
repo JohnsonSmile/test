@@ -114,6 +114,6 @@ const buy = async (tokenId) => {
 export {
     getListItems,
     listing,
-    unlist,
-    buy
+    unlist, // 通过map退回给原地址
+    buy // 查看
 };

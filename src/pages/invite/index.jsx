@@ -10,7 +10,7 @@ import { ReactComponent as AppIcon } from "../../assets/icon/invite/app.svg"
 
 const InvitePage = () => {
     
-    const [url, setUrl] = useState('http://www.aaagroup.io?share=12JOIH')
+    const [url, setUrl] = useState(window.location.origin + "/login?inviteCode=1234")
     const [open, setOpen] = useState(false)
 
     const handleDownloadClick = () => {

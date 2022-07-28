@@ -10,7 +10,7 @@ const isIMTokenAvailable = () => {
 }
 
 const openInIMTokenExplorer = () => {
-    const urlScheme = 'imtokenv2://navigate/DappView?url=' + window.location.origin
+    const urlScheme = 'imtokenv2://navigate/DappView?url=' + window.location.href
     const downloadUrl = 'https://token.im/download'
     if(navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
         var loadDateTime = new Date();
@@ -46,7 +46,7 @@ const isTokenPocketAvailable = () => {
 }
 const openInTokenPocketExplorer = () => {
     const params = encodeURIComponent(JSON.stringify({
-        "url": window.location.origin
+        "url": window.location.href
     }))
     const urlScheme = 'tpdapp://open?params=' + params
     const downloadUrl = 'https://www.tokenpocket.pro/zh/download/app'

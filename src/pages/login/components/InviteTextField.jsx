@@ -13,6 +13,9 @@ const InviteTextField = styled(TextField)(({ theme }) => ({
         textAlign: 'center',
         width: '240px',
     },
+    '& .MuiOutlinedInput-input': {
+        textAlign: 'center',
+    }
 }));
 
 

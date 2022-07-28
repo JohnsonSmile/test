@@ -11,8 +11,6 @@ import { contracts } from "./contracts";
 import { ellipsisAccount } from "../utils/utils";
 import { toast } from "react-toastify";
 import { NoticeEmitter } from "../utils";
-import { asyncSetLibray } from "../redux/reducers/wallet"
-import store from "../redux/store"
 
 // web3 library
 const getLibrary = (provider) => {
