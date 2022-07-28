@@ -1,0 +1,61 @@
+import { getBigNumber, NoticeEmitter } from "../utils";
+import { initialize } from "./client";
+
+// ------get function------
+const getVSDBalance = async (account) => {
+    if (!window.VSDContract) {
+        console.warn("in vsd geVSDBalance");
+        initialize();
+    }
+    return window.VSDContract.balanceOf(account);
+};
+
+const getVSDAllowance = async (fromAddress, toAddress) => {
+    if (!window.usdtContract) {
+        console.warn("in vsd getVSDAllowance ");
+        initialize();
+    }
+    return window.VSDContract.allowance(fromAddress, toAddress);
+};
+
+// ------post function-----
+const VSDApprove = async (spender, account) => {
+    if (!window.Signer || !window.VSDContract) {
+        console.warn("in vsd VSDApprove ");
+        initialize();
+    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const tx = await window.VSDContract.connect(window.Signer).approve(
+                spender,
+                account
+                // {
+                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
+                // }
+            );
+
+            window.Library.once(tx.hash, (transaction) => {
+                if (transaction.status !== 1) {
+                    window.Library.call(tx)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            reject(err);
+                        });
+                }
+            });
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+};
+
+
+export {
+    getVSDBalance,
+    getVSDAllowance,
+    VSDApprove
+};
