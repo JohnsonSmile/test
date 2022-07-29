@@ -1,5 +1,4 @@
-import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
-import { ethers } from "ethers";
+import { getBigNumber, NoticeEmitter } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
@@ -8,11 +7,11 @@ const getTotalPrice = async (amount) => {
         console.warn("in getPrice ");
         initialize();
     }
-    const totalPrice = await window.socialNFTContract.getTotalPrice(amount);
+    const totalPrice = window.socialNFTContract.getTotalPrice(amount);
     return {
-        totalUsdtPrice: getBigNumber(totalPrice.totalUsdtPrice),
-        totalValuePrice: getBigNumber(totalPrice.totalValuePrice),
-        totalVsdPrice: getBigNumber(totalPrice.totalVsdPrice)
+        totalUsdtPrice: totalPrice.totalUsdtPrice,
+        totalValuePrice: totalPrice.totalValuePrice,
+        totalVsdPrice: totalPrice.totalVsdPrice
     }
 };
 
@@ -21,8 +20,7 @@ const getUserStakedNum = async (account) => {
         console.warn("in getUserStakedNum ");
         initialize();
     }
-    const userStake = await window.socialNFTContract.getUserStakedNum(account);
-    return formatNumber(userStake)
+    return window.socialNFTContract.getUserStakedNum(account);
 };
 
 const getBalance = async (account) => {
@@ -30,8 +28,7 @@ const getBalance = async (account) => {
         console.warn("in socialNFT getBalance ");
         initialize();
     }
-    const userBalance = await window.socialNFTContract.balanceOf(account);
-    return formatNumber(userBalance);
+    return window.socialNFTContract.balanceOf(account);
 }
 
 const getUserStakedTokenIDsByPage = async (account, startIndex, pageNum) => {
@@ -39,7 +36,7 @@ const getUserStakedTokenIDsByPage = async (account, startIndex, pageNum) => {
         console.warn("in socialNFT getgetUserStakedTokenIDsByPageBalance ");
         initialize();
     }
-    return await window.socialNFTContract.getUserStakedTokenIDsByPage(account, startIndex, pageNum);
+    return window.socialNFTContract.getUserStakedTokenIDsByPage(account, startIndex, pageNum);
 }
 
 const getAllStakedNum = async () => {
@@ -47,8 +44,7 @@ const getAllStakedNum = async () => {
         console.warn("in getAllStakedNum ");
         initialize();
     }
-    const allStakeNum = await window.socialNFTContract.getAllStakedNum();
-    return formatNumber(allStakeNum)
+    return window.socialNFTContract.getAllStakedNum();
 };
 
 const getTotalSupply = async () => {
@@ -56,8 +52,7 @@ const getTotalSupply = async () => {
         console.warn("in getTotalSupply ");
         initialize();
     }
-    const total = await window.socialNFTContract.totalSupply()
-    return getBigNumber(total);
+    return window.socialNFTContract.totalSupply();
 }
 
 const getAllStakedTokenIDs = async (startIndex, pageNum) => {
@@ -65,7 +60,7 @@ const getAllStakedTokenIDs = async (startIndex, pageNum) => {
         console.warn("in socialNFT getAllStakedTokenIDs ");
         initialize();
     }
-    return await window.socialNFTContract.getAllStakedTokenIDs(startIndex, pageNum);
+    return window.socialNFTContract.getAllStakedTokenIDs(startIndex, pageNum);
 }
 
 const isStake = async (tokenId) => {
@@ -73,7 +68,7 @@ const isStake = async (tokenId) => {
         console.warn("in socialNFT isStake ");
         initialize();
     }
-    return await window.socialNFTContract.isStake(tokenId);
+    return window.socialNFTContract.isStake(tokenId);
 }
 
 const getTokenURI = async (tokenId) => {
@@ -81,7 +76,7 @@ const getTokenURI = async (tokenId) => {
         console.warn("in socialNFT getTokenURI ");
         initialize();
     }
-    return await window.socialNFTContract.tokenURI(tokenId);
+    return window.socialNFTContract.tokenURI(tokenId);
 };
 
 const getApproved = async (tokenId) => {
@@ -89,7 +84,7 @@ const getApproved = async (tokenId) => {
         console.warn("in socialNFT getApproved ");
         initialize();
     }
-    return await window.socialNFTContract.getApproved(tokenId);
+    return window.socialNFTContract.getApproved(tokenId);
 };
 
 // ------post function-----
@@ -207,10 +202,10 @@ const approve = async (to, tokenId) => {
 
 
 export {
-    getTotalPrice, // 得到铸造的总的价格，传递数量amount -> getAllowce(看有无授权) -> approve (usdt, vsd 等) -> safeMint
-    getUserStakedNum, // 用户质押的数量。
-    getBalance, // list 合约地址，上架的NFT 总个数。
-    getUserStakedTokenIDsByPage, // 获取用户NFT的ID分页，不一定是质押的
+    getTotalPrice,
+    getUserStakedNum,
+    getBalance,
+    getUserStakedTokenIDsByPage,
     getAllStakedNum,
     getTotalSupply,
     getAllStakedTokenIDs,
@@ -219,5 +214,5 @@ export {
     getApproved,
     safeMint,
     stakeNFT,
-    approve // list上架流程需要， approve list to 为 list的合约地址,
+    approve
 };

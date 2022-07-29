@@ -7,7 +7,7 @@ const getUsdtBalance = async (account) => {
         console.warn("in usdt getUsdtBalance");
         initialize();
     }
-    return window.usdtContract.balanceOf(account);
+    return await window.usdtContract.balanceOf(account);
 };
 
 const getUsdtAllowance = async (fromAddress, toAddress) => {
@@ -15,7 +15,8 @@ const getUsdtAllowance = async (fromAddress, toAddress) => {
         console.warn("in usdt getUsdtAllowance ");
         initialize();
     }
-    return window.usdtContract.allowance(fromAddress, toAddress);
+    const resp = await window.usdtContract.allowance(fromAddress, toAddress)
+    return resp;
 };
 
 // ------post function-----

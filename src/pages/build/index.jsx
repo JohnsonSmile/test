@@ -1,7 +1,13 @@
 import { Box, CardMedia, InputBase, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material"
+import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
+import { contracts } from "../../clients/contracts"
+import { getTotalPrice, getTotalSupply } from "../../clients/socialNFT"
+import { getUsdtAllowance } from "../../clients/usdt"
+import { getValueAllowance } from "../../clients/value"
+import { getVSDAllowance } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
 
 
@@ -38,8 +44,10 @@ const rows = [
 ];
 
 const BuildPage = () => {
+    const { account } = useWeb3React()
     const [count, setCount] = useState(1)
     const [totalPrice, setTotalPrice] = useState('')
+    const [buildCount, setBuildCount] = useState(0)
     const [open, setOpen] = useState(false)
     // TODO: should be got from contract mint 
     // result of build: eg: {gold:10, sliver: 1, copper: 0, diamond: 1}
@@ -60,6 +68,7 @@ const BuildPage = () => {
             return
         }
         // TODO: call contract to build nft.
+        buildNFT()
         // ...
         setOpen(true)
         const timer = setTimeout(function () {
@@ -70,8 +79,40 @@ const BuildPage = () => {
             clearTimeout(timer)
         }, 2000)
     }
+
+    // ===============contract apis================
+    const getTotalSupplyCount = async () => {
+        try {
+            const res = await getTotalSupply()
+            setBuildCount(res)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const getPrice = async (count) => {
+        try {
+            const res = await getTotalPrice(count)
+            // TODO: 
+            console.log(res)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    const buildNFT = async () => {
+        try {
+            const usdtResp = await getUsdtAllowance(account, contracts.usdt)
+            const valueResp = await getValueAllowance(account, contracts.value)
+            const vsdResp = await getVSDAllowance(account, contracts.vsd)
+            console.log(usdtResp)
+            console.log(valueResp)
+            console.log(vsdResp)
+        } catch (e) {
+            console.log(e)
+        }
+    }
     useEffect(() => {
         if (count) {
+            getPrice(count)
             const usdt = price.usdt * count
             const v6 = price.v6 *count
             setTotalPrice(`${usdt} USDT + ${v6} V6`)
@@ -79,11 +120,20 @@ const BuildPage = () => {
             setTotalPrice('数量不能为空')
         }
     }, [count])
+
+
+    useEffect(() => {
+        // 1. get now build count
+        getTotalSupplyCount()
+        // 2. get build default count 1 price
+        getPrice(count ?? 1)
+
+    }, [])
     
     return (
         <>
             <Box sx={{ backgroundColor: '#FFF', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Typography variant={'inherit'} sx={{ color: '#7E8186', fontSize: '14px' }}>已经铸造的总数:1234</Typography>
+                <Typography variant={'inherit'} sx={{ color: '#7E8186', fontSize: '14px' }}>已经铸造的总数:{buildCount}</Typography>
                 <Box>
                     <CardMedia 
                         component={'img'}

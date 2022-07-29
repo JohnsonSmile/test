@@ -7,7 +7,7 @@ const getListItems = async (startIndex, pageNum) => {
         console.warn("in list getListItems ");
         initialize();
     }
-    return window.listContract.getListItems(startIndex, pageNum);
+    return await window.listContract.getListItems(startIndex, pageNum);
 };
 
 // ------post function-----
