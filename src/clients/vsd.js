@@ -1,4 +1,4 @@
-import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
+import { getBigNumber, NoticeEmitter, formatNumber, getFormatBigNumber } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
@@ -8,7 +8,7 @@ const getVSDBalance = async (account) => {
         initialize();
     }
     const balance = await window.VSDContract.balanceOf(account)
-    return formatNumber(balance);
+    return balance;
 };
 
 const getVSDAllowance = async (fromAddress, toAddress) => {
@@ -17,7 +17,7 @@ const getVSDAllowance = async (fromAddress, toAddress) => {
         initialize();
     }
     const allowanceValue = await window.VSDContract.allowance(fromAddress, toAddress);
-    return formatNumber(allowanceValue)
+    return allowanceValue
 };
 
 // ------post function-----

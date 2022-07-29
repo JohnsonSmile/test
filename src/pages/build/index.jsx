@@ -4,12 +4,13 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
 import { contracts } from "../../clients/contracts"
-import { getTotalPrice, getTotalSupply } from "../../clients/socialNFT"
-import { getUsdtAllowance, usdtApprove } from "../../clients/usdt"
-import { getValueAllowance } from "../../clients/value"
-import { getVSDAllowance } from "../../clients/vsd"
+import { getTotalPrice, getTotalSupply, safeMint } from "../../clients/socialNFT"
+import { getUsdtAllowance, getUsdtBalance, usdtApprove } from "../../clients/usdt"
+import { getValueAllowance, getValueBalance, valueApprove } from "../../clients/value"
+import { getVSDAllowance, getVSDBalance, VSDApprove } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
 import { ethers } from "ethers";
+import { getFormatBigNumber } from "../../utils"
 
 
 // FIXME: price, should set properly
@@ -96,14 +97,14 @@ const BuildPage = () => {
             const res = await getTotalPrice(count)
             setPriceInfo(res)
             const prices = []
-            if (res.totalUsdtPrice !== '0.0') {
-                prices.push(res.totalUsdtPrice + ' USDT')
+            if (res.totalUsdtPrice.gt(ethers.BigNumber.from(0))) {
+                prices.push(getFormatBigNumber(res.totalUsdtPrice) + ' USDT')
             }
-            if (res.totalValuePrice !== '0.0') {
-                prices.push(res.totalValuePrice + ' V6')
+            if (res.totalValuePrice.gt(ethers.BigNumber.from(0))) {
+                prices.push(getFormatBigNumber(res.totalValuePrice) + ' V6')
             }
-            if (res.totalVsdPrice !== '0.0') {
-                prices.push(res.totalVsdPrice + ' VSD')
+            if (res.totalVsdPrice.gt(ethers.BigNumber.from(0))) {
+                prices.push(getFormatBigNumber(res.totalVsdPrice) + ' VSD')
             }
             const price = prices.join(' + ')
             setTotalPrice(price)
@@ -115,27 +116,80 @@ const BuildPage = () => {
     }
     const buildNFT = async () => {
         try {
-            if (priceInfo.totalUsdtPrice !== "0.0") {
-                const usdtResp = await getUsdtAllowance(account, contracts.usdt)
-                console.log(usdtResp)
-                if (usdtResp.toString() === '0') {
-                    const amount = ethers.utils.parseEther(priceInfo.totalUsdtPrice)
-                    const approveUsdtResp = await usdtApprove(contracts.usdt, amount)
+            if (priceInfo.totalUsdtPrice.gt(ethers.BigNumber.from(0))) {
+                // get balance
+                const usdtBalance = await getUsdtBalance(account)
+                console.log('usdtBalance===', getFormatBigNumber(usdtBalance))
+                if (usdtBalance.lt( priceInfo.totalUsdtPrice)) {
+                    toast.warn('USDT 余额不足!')
+                    return
+                }
+                // get approved usdt
+                const usdtApproved = await getUsdtAllowance(account, contracts.usdt)
+                console.log(getFormatBigNumber(usdtApproved))
+                if (usdtApproved.lt(priceInfo.totalUsdtPrice)) {
+                    // approve usdt
+                    const approveUsdtResp = await usdtApprove(contracts.usdt, priceInfo.totalUsdtPrice)
                     console.log(approveUsdtResp)
+                    if (!approveUsdtResp || !approveUsdtResp.success) {
+                        toast.warn('获取USDT授权失败!')
+                        return
+                    }
                 }
             }
-            if (priceInfo.totalValuePrice !== "0.0") {
-                const valueResp = await getValueAllowance(account, contracts.value)
-                console.log(valueResp)
+            if (priceInfo.totalValuePrice.gt(ethers.BigNumber.from(0))) {
+                // get balance
+                const valueBalance = await getValueBalance(account)
+                console.log('valueBalance===', getFormatBigNumber(valueBalance))
+                if (valueBalance.lt(priceInfo.totalValuePrice)) {
+                    toast.warn('V6 余额不足!')
+                    return
+                }
+                // get approved value
+                const valueApproved = await getValueAllowance(account, contracts.value)
+                console.log(getFormatBigNumber(valueApproved))
+                if (valueApproved.lt(priceInfo.totalValuePrice)) {
+                    // approve value
+                    const approveValueResp = await valueApprove(contracts.value, priceInfo.totalValuePrice)
+                    console.log(approveValueResp)
+                    if (!approveValueResp || !approveValueResp.success) {
+                        toast.warn('获取Value授权失败!')
+                        return
+                    }
+                }
             }
-            if (priceInfo.totalVsdPrice !== "0.0") {
-                const vsdResp = await getVSDAllowance(account, contracts.vsd)
-                console.log(vsdResp)
+            if (priceInfo.totalVsdPrice.gt(ethers.BigNumber.from(0))) {
+                // get balance
+                const vsdBalance = await getVSDBalance(account)
+                console.log('vsdBalance===', getFormatBigNumber(vsdBalance))
+                if (vsdBalance.lt(priceInfo.totalVsdPrice)) {
+                    toast.warn('VSD 余额不足!')
+                    return
+                }
+                // get approved vsd
+                const vsdApproved = await getVSDAllowance(account, contracts.vsd)
+                console.log(getFormatBigNumber(vsdApproved))
+                if (vsdApproved.lt(priceInfo.totalVsdPrice)) {
+                    // approved vsd
+                    const approveVsdResp = await VSDApprove(contracts.value, priceInfo.totalVsdPrice)
+                    console.log(approveVsdResp)
+                    if (!approveVsdResp || !approveVsdResp.success) {
+                        toast.warn('获取VSD授权失败!')
+                        return
+                    }
+                }
+                
             }
+            // safe mint
+            const res = await safeMint(count)
+            console.log(res)
         } catch (e) {
             console.log(e)
+            toast.error("铸造失败，请稍后重试！")
         }
     }
+
+    
     useEffect(() => {
         if (count) {
             getPrice(count)

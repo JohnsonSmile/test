@@ -1,5 +1,4 @@
 import { getBigNumber, NoticeEmitter, formatNumber, getFormatBigNumber } from "../utils";
-import { ethers } from "ethers";
 import { initialize } from "./client";
 
 // ------get function------
@@ -9,11 +8,7 @@ const getTotalPrice = async (amount) => {
         initialize();
     }
     const totalPrice = await window.socialNFTContract.getTotalPrice(amount);
-    return {
-        totalUsdtPrice: getFormatBigNumber(totalPrice.totalUsdtPrice),
-        totalValuePrice: getFormatBigNumber(totalPrice.totalValuePrice),
-        totalVsdPrice: getFormatBigNumber(totalPrice.totalVsdPrice)
-    }
+    return totalPrice;
 };
 
 const getUserStakedNum = async (account) => {
@@ -126,6 +121,7 @@ const safeMint = async (amount) => {
                             reject(err);
                         });
                 }
+                console.log(transaction)
             });
         } catch (e) {
             console.log(e);
