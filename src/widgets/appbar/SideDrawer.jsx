@@ -1,6 +1,7 @@
-import { Avatar, Box, Button, Drawer, IconButton, List, ListItemButton, ListSubheader, Typography } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, List, ListItemButton, ListSubheader, Typography } from "@mui/material"
 import { useState } from "react";
 import { ReactComponent as MenuIcon } from '../../assets/icon/menu.svg'
+import { ReactComponent as AvatarIcon } from '../../assets/icon/home/avatar.svg'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
 
@@ -92,70 +93,67 @@ const SideDrawer = () => {
                 anchor='left'
                 open={isDrawerOpen}
                 onClose={() => {toggleDrawer(false)}}>
-                <Box sx={{width: '70vw', height: '100vh'}}>
+                <Box sx={{width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column'}}>
                     <List
-                    component="nav"
-                    subheader={
-                        <ListSubheader
-                        component="div"
-                        style={{
-                            background: "#1976d2",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            height: "75px",
-                        }}
-                    >
-                        <Box paddingTop={"10px"}>
-                            {/* <img src={Logo} alt="logo" height={"40"} /> */}
-                            <Typography variant="h6">VBank</Typography>
-                        </Box>
-                        <IconButton
-                            onClick={() => { toggleDrawer(false) }}
-                            sx={{
-                            color: "#FFF",
+                        component="nav"
+                        alignItems={'center'}
+                        subheader={
+                            <ListSubheader
+                            component="div"
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "75px",
+                                width: "100%",
+                                flex: 1
                             }}
-                        >
-                            <CloseIcon />
-                        </IconButton>
+                    >
+                        <Box sx={{flex:1}}></Box>
+                        <Typography variant="h6" sx={{ color: '#333', fontSize: '16px', fontWeight: 700}}>Value Bank</Typography>
+                        <Box sx={{flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                            <IconButton
+                                onClick={() => { toggleDrawer(false) }}
+                                sx={{
+                                    color: '#333',
+                                }}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                        </Box>
                         </ListSubheader>
                     }
                     >
-                    {listItems.map(item => {
-                        return (
-                            <ListItemButton
-                                key={item.title}
-                                onClick={() => {handleListItemClick(item)}}
-                                sx={{ pl: 3 }}
-                            >
-                                <Typography fontSize={14} color={'#333'}>
-                                    {item.title}
-                                    {!item.isReady && <Typography component="span" sx={{ color: 'red', fontSize:12, ml:1 }}>即将上线</Typography>}
-                                </Typography>
-                            </ListItemButton>
-                        )
-                    })}
+
+                        {listItems.map(item => {
+                            return (
+                                <ListItemButton
+                                    key={item.title}
+                                    onClick={() => {handleListItemClick(item)}}
+                                    sx={{width: '100%', display: 'flex', justifyContent: 'center'}}
+                                >
+                                    <Typography fontSize={14} color={item.isReady ? '#333' : '#7E8186' } fontWeight={500}>
+                                        {item.title}
+                                        {!item.isReady && <Typography component="span" sx={{ color: '#423DF7', fontSize:'12px', ml:1 }}>即将上线!</Typography>}
+                                    </Typography>
+                                </ListItemButton>
+                            )
+                        })}
                     </List>
+                    <Divider sx={{mx:2, my: 1}} />
                     <Box 
-                    style={{
-                        position: "absolute",
-                        bottom: 0,
-                        paddingBottom: 30,
-                        width: "100%",
-                    }}>
-                        <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap:1}}>
-                            <Box>
-                                <Button>参与流程</Button>
-                                <Button>规则说明</Button>
-                            </Box>
-                            <Box>
-                                <Button variant="contained" 
-                                    startIcon={<Avatar sx={{width: 35, height: 35}}/>}
-                                    sx={{ px: 4, py: 1 }}
-                                    onClick={handleProfileClick}
-                                >个人中心</Button>
-                            </Box>
+                        style={{
+                            width: "100%",
+                            flex: 1,
+                            display: 'flex', flexDirection: 'column', alignItems: 'center' 
+                        }}>
+                            
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, cursor: 'pointer', width: '100%', py: 1}} onClick={handleProfileClick} >
+                            <AvatarIcon />
+                            <Typography sx={{color: '#333', fontSize: '14px'}}>个人中心</Typography>
                         </Box>
+                        <Box sx={{width: '100%', textAlign: 'center', cursor: 'pointer', py: 1, fontSize: '14px'}}>参与流程</Box>
+                        <Box sx={{width: '100%', textAlign: 'center', cursor: 'pointer', py: 1, fontSize: '14px'}}>规则说明</Box>
                     </Box>
                     
                 </Box>    

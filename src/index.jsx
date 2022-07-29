@@ -10,21 +10,25 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from './theme';
 import { getLibrary } from './clients';
 import { Web3ReactProvider } from '@web3-react/core';
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <>
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ThemeProvider theme={theme}>
-              <App />
-          </ThemeProvider>
-        </Suspense>
-      </BrowserRouter>
-      <ToastContainer />
-    </Web3ReactProvider>
+    <Provider store={store}>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <BrowserRouter>
+          <Suspense fallback={<div>Loading...</div>}>
+            <ThemeProvider theme={theme}>
+                <App />
+            </ThemeProvider>
+          </Suspense>
+        </BrowserRouter>
+        <ToastContainer />
+      </Web3ReactProvider>
+    </Provider>
   </>
 );
 

@@ -206,10 +206,10 @@ const approve = async (to, tokenId) => {
 
 
 export {
-    getTotalPrice,
-    getUserStakedNum,
-    getBalance,
-    getUserStakedTokenIDsByPage,
+    getTotalPrice, // 得到铸造的总的价格，传递数量amount -> getAllowce(看有无授权) -> approve (usdt, vsd 等) -> safeMint
+    getUserStakedNum, // 用户质押的数量。
+    getBalance, // list 合约地址，上架的NFT 总个数。
+    getUserStakedTokenIDsByPage, // 获取用户NFT的ID分页，不一定是质押的
     getAllStakedNum,
     getTotalSupply,
     getAllStakedTokenIDs,
@@ -218,5 +218,5 @@ export {
     getApproved,
     safeMint,
     stakeNFT,
-    approve
+    approve // list上架流程需要， approve list to 为 list的合约地址,
 };

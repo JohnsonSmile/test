@@ -3,12 +3,17 @@ import TopAppBar from "../appbar/TopAppBar"
 import ScrollTop from "../scrolltop/ScrollTop"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LoadingDialog from "../loading/LoadingDialog";
+import { useSelector } from "react-redux";
+import { getIsLoading, getTitle } from "../../redux/reducers/status";
 
 
 const Layout = (props) => {
     const location = useLocation()
     const navigate = useNavigate()
+    const isLoading = useSelector(getIsLoading)
+    const title = useSelector(getTitle)
     useEffect(() => {
         if (location.pathname === '/') {
             navigate('/home')
@@ -37,6 +42,7 @@ const Layout = (props) => {
                         <KeyboardArrowUpIcon />
                     </Fab>
                 </ScrollTop>
+                <LoadingDialog isOpen={isLoading} title={title} />
             </Box>
         </>
     )

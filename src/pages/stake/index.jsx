@@ -1,9 +1,10 @@
-import { Box, Tab, Tabs, Typography } from "@mui/material"
+import { Box, Tab,  Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import PropTypes from 'prop-types';
 import NFTStake from "./components/NFTStake";
 import LPStake from "./components/LPStake";
+import BootstrapTabs from "../../widgets/tabs/BootstrapTabs";
 
 
 const TabPanel = (props) => {
@@ -14,7 +15,6 @@ const TabPanel = (props) => {
             role="tabpanel"
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
             {...other}
         >
             {value === index && (
@@ -31,6 +31,7 @@ TabPanel.propTypes = {
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
 };
+
 
 const StakePage = () => {
     const location = useLocation()
@@ -49,11 +50,11 @@ const StakePage = () => {
     
     return (
         <Box sx={{ width: '100%', backgroundColor: '#FFF'}}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange}>
+            <Box sx={{ pt: 3 }}>
+                <BootstrapTabs value={value} onChange={handleChange}>
                     <Tab label="质押NFT" />
                     <Tab label="质押LP" />
-                </Tabs>
+                </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
                 <NFTStake />

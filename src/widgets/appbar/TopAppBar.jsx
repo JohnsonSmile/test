@@ -13,13 +13,18 @@ const TopAppBar = () => {
   const [title, setTitle] = useState('')
   const [shouldBackShow, setShouldBackShow] = useState(false)
   const [headerColor, setHeaderColor] = useState('transparent')
+  const [listItemVisible, setListItemVisible] = useState(false)
   const navigate = useNavigate()
   const handleBackClick = () => {
     navigate(-1)
   }
+  const handleNavToListItemClick = () => {
+    navigate('/nft/listing')
+  }
   useEffect(() => {
     setShouldBackShow(false)
     setHeaderColor('transparent')
+    setListItemVisible(false)
     if (location.pathname === '/home') {
       setTitle('VBank Value')
     } else if (location.pathname === '/build') {
@@ -34,22 +39,15 @@ const TopAppBar = () => {
       setTitle('NFT列表')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
-      // const type = location.state.type
-      // if (type === 1) {
-      //   setTitle('铜')
-      // } else if (type === 2) {
-      //   setTitle('银')
-      // } else if (type === 3) {
-      //   setTitle('金')
-      // } else if (type === 4) {
-      //   setTitle('钻')
-      // }
     } else if (location.pathname === '/stake') {
       setTitle('质押')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
     } else if (location.pathname === '/market') {
       setTitle('NFT交易市场')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
+      setListItemVisible(true)
     } else if (location.pathname === '/sign') {
       setTitle('签到')
       setShouldBackShow(true)
@@ -61,7 +59,6 @@ const TopAppBar = () => {
     } else if (location.pathname === '/invite') {
       setTitle('推广联盟')
       setShouldBackShow(true)
-      setHeaderColor('#FFF')
     } else if (location.pathname === '/profile') {
       setTitle('个人中心')
       setShouldBackShow(true)
@@ -80,6 +77,14 @@ const TopAppBar = () => {
       setHeaderColor('#FFF')
     } else if (location.pathname === '/promotion/record') {
       setTitle('直推情况')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
+    } else if (location.pathname === '/nft/detail') {
+      setTitle('NFT详情')
+      setShouldBackShow(true)
+      setHeaderColor('#FFF')
+    } else if (location.pathname === '/nft/listing') {
+      setTitle('上架NFT')
       setShouldBackShow(true)
       setHeaderColor('#FFF')
     }
@@ -119,6 +124,11 @@ const TopAppBar = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton> */}
+            {listItemVisible && <Box 
+              sx={{ fontSize: '14px', fontWeight: 500, cursor: 'pointer', color: '#333' }}
+              onClick={handleNavToListItemClick}>
+                上架NFT
+              </Box>}
           </Box>
         </Toolbar>
       </AppBar>

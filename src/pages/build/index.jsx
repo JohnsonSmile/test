@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardMedia, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material"
+import { Box, CardMedia, InputBase, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
@@ -82,54 +82,71 @@ const BuildPage = () => {
     
     return (
         <>
-            <Box sx={{ backgroundColor: '#EEE', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <Typography variant={'inherit'} sx={{ py: 3 }}>已经铸造的总数:1234</Typography>
+            <Box sx={{ backgroundColor: '#FFF', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <Typography variant={'inherit'} sx={{ color: '#7E8186', fontSize: '14px' }}>已经铸造的总数:1234</Typography>
                 <Box>
                     <CardMedia 
                         component={'img'}
                         sx={{
-                            height: 160,
+                            width: 180,
+                            py: 3
                         }}
                         image={BoxImg} />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2}}>
-                    <Typography variant={'inherit'} sx={{ mr: 1 }}>输入铸造数量:</Typography>
-                    <TextField type="number"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+                    <InputBase type="number"
+                        placeholder="输入铸造数量"
                         value={count}
                         onChange={handleCountChange}
-                        size={'small'}
                         sx={{ 
-                            width: '80px',
-                            textAlign: 'center'
+                            width: '180px',
+                            textAlign: 'center', 
+                            fontSize: '14px',
+                            height: '40px',
+                            borderRadius: '20px',
+                            backgroundColor: '#F2F2F5',
+                            px: 2.5,
+                            pt: 0.5,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
                         }}
                     />
                 </Box>
                 <Box sx={{display: 'flex', justifyContent: 'center', gap: 1, mt: 2}}>
                     {countBtns.map(btn => {
-                        return <Button key={btn.value} variant='outlined' size={'small'} onClick={() => { handleCountBtnClick(btn) }}>{btn.title}</Button>
+                        return <Box key={btn.value} sx={{
+                            borderRadius: '20px',
+                            backgroundColor: '#F2F2F5',
+                            px: 2,
+                            py:1,
+                            cursor: 'pointer',
+                            color: '#7E8186', 
+                            fontSize: '16px'
+                        }} onClick={() => { handleCountBtnClick(btn) }}>{btn.title}</Box>
                     })}
                 </Box>
-                <Box sx={{ mt: 2 }}>
-                    <Button variant='contained' size='large' sx={{ width: 150 }} onClick={handleBuildBtnClick}>铸造</Button>
-                </Box>
                 <Box>
-                    <Typography variant={'inherit'} sx={{mt:1}} >消耗:{totalPrice}</Typography>
+                    <Typography variant={'inherit'} sx={{mt:2, color: '#7E8186', fontSize: '14px'}} >消耗:{totalPrice}</Typography>
                 </Box>
-                <Box sx={{ mt: 4, px: 3, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 0.5}}>
-                    <Typography variant={'inherit'} >规则:</Typography>
-                    <Typography variant={'inherit'} >1. 前1000个铸造的NFT,消耗200USDT+10V6</Typography>
-                    <Typography variant={'inherit'} >2. 前1001~2000个铸造的NFT,消耗200USDT+30V6</Typography>
-                    <Typography variant={'inherit'} >3. 2001个后,消耗1000VSD</Typography>
+                <Box sx={{ mt: 2, width: '100%' }}>
+                    <Box sx={{ background: '#4263EB', borderRadius: '20px', height: '56px', lineHeight: '56px', mx: 3, cursor: 'pointer', fontSize: '16px', fontWeight: 600, color: '#FFF'}}
+                        onClick={handleBuildBtnClick}>铸造</Box>
                 </Box>
-                <Card sx={{ px: 1, my: 4 }}>
-                    <Table sx={{minWidth: 280}}>
+                <Box sx={{ mt: 4, width: '100%'}}>
+                    <Box sx={{ px: 3, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >规则:</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >1. 前1000个铸造的NFT,消耗200USDT+10V6</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >2. 前1001~2000个铸造的NFT,消耗200USDT+30V6</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >3. 2001个后,消耗1000VSD</Typography>
+                    </Box>
+                </Box>
+                <Box sx={{ my: 4, borderRadius: '12px', border: '1px solid #EDEEF2' }}>
+                    <Table sx={{minWidth: 'calc(100vw - 60px)'}}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>品质</TableCell>
-                                <TableCell align="center">概率</TableCell>
+                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>品质</TableCell>
+                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>概率</TableCell>
                                 <TableCell align="center">VSD日产出</TableCell>
                             </TableRow>
                         </TableHead>
@@ -137,18 +154,18 @@ const BuildPage = () => {
                         {rows.map((row) => (
                             <TableRow
                             key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            sx={{ '&:last-child td, &:last-child th': { borderBottom: 0 } }}
                             >
-                            <TableCell component="th" scope="row">
+                            <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>
                                 {row.name}
                             </TableCell>
-                            <TableCell align="center">{row.rate}</TableCell>
+                            <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>{row.rate}</TableCell>
                             <TableCell align="center">{row.gain}</TableCell>
                             </TableRow>
                         ))}
                         </TableBody>
                     </Table>
-                    </Card>
+                    </Box>
                     <BuildDialog isOpen={open} setIsOpen={setOpen} result={result} setResult={setResult} />
             </Box>
         </>

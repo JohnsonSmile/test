@@ -4,7 +4,7 @@ import axios from 'axios'
 const http = axios.create({})
 
 http.interceptors.request.use((config) => {
-  console.log('config:', config)
+  console.log('config:', config.url)
   if (config.upload) {
     config.headers['Content-Type'] = 'multipart/form-data'
   }
@@ -14,5 +14,8 @@ http.interceptors.request.use((config) => {
   return config
 })
 
+http.interceptors.response.use((response) => {
+  return response
+})
 
-export default http
+export { http }

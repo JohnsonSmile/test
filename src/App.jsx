@@ -11,6 +11,8 @@ import MarketPage from './pages/market';
 import MyAssetsPage from './pages/myassets';
 import MyNFTPage from './pages/mynft';
 import MyNFTListPage from './pages/mynftlist';
+import NFTDetailPage from './pages/nftdetail';
+import NFTListingPage from './pages/nftlisting';
 import ProfilePage from './pages/profile';
 import PromotionDetailPage from './pages/promotion';
 import PromotionRecordPage from './pages/promotionrecord';
@@ -27,20 +29,22 @@ const App = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />} >
-          <Route index path="/home" element={<HomePage />}/>
-          <Route index path="/build" element={<BuildPage />}/>
-          <Route index path="/mynft" element={<MyNFTPage />}/>
-          <Route index path="/mynft/list" element={<MyNFTListPage />}/>
-          <Route index path="/stake" element={<StakePage />}/>
-          <Route index path="/market" element={<MarketPage />}/>
-          <Route index path="/sign" element={<SignPage />}/>
-          <Route index path="/lpmarket" element={<LPMarketPage />}/>
-          <Route index path="/invite" element={<InvitePage />}/>
-          <Route index path="/profile" element={<ProfilePage />}/>
-          <Route index path="/setting" element={<SettingPage />}/>
-          <Route index path="/myassets" element={<MyAssetsPage />}/>
-          <Route index path="/promotion/detail" element={<PromotionDetailPage />}/>
-          <Route index path="/promotion/record" element={<PromotionRecordPage />}/>
+          <Route path="/home" element={<HomePage />}/>
+          <Route path="/build" element={<BuildPage />}/>
+          <Route path="/mynft" element={<MyNFTPage />}/>
+          <Route path="/mynft/list" element={<MyNFTListPage />}/>
+          <Route path="/stake" element={<StakePage />}/>
+          <Route path="/market" element={<MarketPage />}/>
+          <Route path="/sign" element={<SignPage />}/>
+          <Route path="/lpmarket" element={<LPMarketPage />}/>
+          <Route path="/invite" element={<InvitePage />}/>
+          <Route path="/profile" element={<ProfilePage />}/>
+          <Route path="/setting" element={<SettingPage />}/>
+          <Route path="/myassets" element={<MyAssetsPage />}/>
+          <Route path="/promotion/detail" element={<PromotionDetailPage />}/>
+          <Route path="/promotion/record" element={<PromotionRecordPage />}/>
+          <Route path="/nft/detail" element={<NFTDetailPage />} />
+          <Route path="/nft/listing" element={<NFTListingPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
       </Routes>
