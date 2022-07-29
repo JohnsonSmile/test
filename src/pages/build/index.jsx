@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
 import { contracts } from "../../clients/contracts"
 import { getTotalPrice, getTotalSupply } from "../../clients/socialNFT"
-import { getUsdtAllowance } from "../../clients/usdt"
+import { getUsdtAllowance, usdtApprove } from "../../clients/usdt"
 import { getValueAllowance } from "../../clients/value"
 import { getVSDAllowance } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
@@ -47,6 +47,7 @@ const BuildPage = () => {
     const { account } = useWeb3React()
     const [count, setCount] = useState(1)
     const [totalPrice, setTotalPrice] = useState('')
+    const [priceInfo, setPriceInfo ] = useState({})
     const [buildCount, setBuildCount] = useState(0)
     const [open, setOpen] = useState(false)
     // TODO: should be got from contract mint 
@@ -70,14 +71,14 @@ const BuildPage = () => {
         // TODO: call contract to build nft.
         buildNFT()
         // ...
-        setOpen(true)
-        const timer = setTimeout(function () {
-            console.log('result changed')
-            setResult({
-                gold:10, sliver: 1, copper: 0, diamond: 1
-            })
-            clearTimeout(timer)
-        }, 2000)
+        // setOpen(true)
+        // const timer = setTimeout(function () {
+        //     console.log('result changed')
+        //     setResult({
+        //         gold:10, sliver: 1, copper: 0, diamond: 1
+        //     })
+        //     clearTimeout(timer)
+        // }, 2000)
     }
 
     // ===============contract apis================
@@ -92,6 +93,19 @@ const BuildPage = () => {
     const getPrice = async (count) => {
         try {
             const res = await getTotalPrice(count)
+            setPriceInfo(res)
+            const prices = []
+            if (res.totalUsdtPrice !== '0.0') {
+                prices.push(res.totalUsdtPrice + ' USDT')
+            }
+            if (res.totalValuePrice !== '0.0') {
+                prices.push(res.totalValuePrice + ' V6')
+            }
+            if (res.totalVsdPrice !== '0.0') {
+                prices.push(res.totalVsdPrice + ' VSD')
+            }
+            const price = prices.join(' + ')
+            setTotalPrice(price)
             // TODO: 
             console.log(res)
         } catch (e) {
@@ -100,12 +114,22 @@ const BuildPage = () => {
     }
     const buildNFT = async () => {
         try {
-            const usdtResp = await getUsdtAllowance(account, contracts.usdt)
-            const valueResp = await getValueAllowance(account, contracts.value)
-            const vsdResp = await getVSDAllowance(account, contracts.vsd)
-            console.log(usdtResp)
-            console.log(valueResp)
-            console.log(vsdResp)
+            if (priceInfo.totalUsdtPrice !== "0.0") {
+                const usdtResp = await getUsdtAllowance(account, contracts.usdt)
+                console.log(usdtResp)
+                if (usdtResp.toString() === '0') {
+                    const approveUsdtResp = await usdtApprove(account, contracts.usdt)
+                    console.log(approveUsdtResp)
+                }
+            }
+            if (priceInfo.totalValuePrice !== "0.0") {
+                const valueResp = await getValueAllowance(account, contracts.value)
+                console.log(valueResp)
+            }
+            if (priceInfo.totalVsdPrice !== "0.0") {
+                const vsdResp = await getVSDAllowance(account, contracts.vsd)
+                console.log(vsdResp)
+            }
         } catch (e) {
             console.log(e)
         }
@@ -113,9 +137,9 @@ const BuildPage = () => {
     useEffect(() => {
         if (count) {
             getPrice(count)
-            const usdt = price.usdt * count
-            const v6 = price.v6 *count
-            setTotalPrice(`${usdt} USDT + ${v6} V6`)
+            // const usdt = price.usdt * count
+            // const v6 = price.v6 *count
+            // setTotalPrice(`${usdt} USDT + ${v6} V6`)
         } else {
             setTotalPrice('数量不能为空')
         }

@@ -1,32 +1,34 @@
-import { getBigNumber, NoticeEmitter } from "../utils";
+import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
 const getValueBalance = async (account) => {
-    if (!window.VSDContract) {
+    if (!window.valueContract) {
         console.warn("in value getValueBalance");
         initialize();
     }
-    return await window.VSDContract.balanceOf(account);
+    const balance = await window.valueContract.balanceOf(account)
+    return formatNumber(balance);
 };
 
 const getValueAllowance = async (fromAddress, toAddress) => {
-    if (!window.VSDContract) {
+    if (!window.valueContract) {
         console.warn("in value getValueAllowance ");
         initialize();
     }
-    return await window.VSDContract.allowance(fromAddress, toAddress);
+    const allowanceValue = await window.valueContract.allowance(fromAddress, toAddress);
+    return formatNumber(allowanceValue)
 };
 
 // ------post function-----
 const valueApprove = async (spender, account) => {
-    if (!window.Signer || !window.VSDContract) {
+    if (!window.Signer || !window.valueContract) {
         console.warn("in value valueApprove ");
         initialize();
     }
     return new Promise(async (resolve, reject) => {
         try {
-            const tx = await window.VSDContract.connect(window.Signer).approve(
+            const tx = await window.valueContract.connect(window.Signer).approve(
                 spender,
                 account
                 // {
@@ -39,12 +41,14 @@ const valueApprove = async (spender, account) => {
                     window.Library.call(tx)
                         .then((res) => {
                             console.log(res);
+                            resolve(res)
                         })
                         .catch((err) => {
                             console.log(err);
                             reject(err);
                         });
                 }
+                console.log(transaction)
             });
         } catch (e) {
             console.log(e);

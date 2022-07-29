@@ -11,6 +11,11 @@ const getBigNumber = (uint256Value) => {
   return uint256Value.toNumber();
 };
 
+const getFormatBigNumber = (uint256Value) => {
+  return ethers.utils
+    .formatEther(uint256Value)
+}
+
 const formatNumber = (number) => {
   return number.toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -91,4 +96,5 @@ export {
   ellipsisAccount,
   formatUniteNumber,
   formatISO8601Time,
+  getFormatBigNumber
 };

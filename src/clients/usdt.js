@@ -1,4 +1,4 @@
-import { getBigNumber, NoticeEmitter } from "../utils";
+import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
@@ -7,7 +7,8 @@ const getUsdtBalance = async (account) => {
         console.warn("in usdt getUsdtBalance");
         initialize();
     }
-    return await window.usdtContract.balanceOf(account);
+    const balance = await window.usdtContract.balanceOf(account)
+    return formatNumber(balance);
 };
 
 const getUsdtAllowance = async (fromAddress, toAddress) => {
@@ -15,8 +16,8 @@ const getUsdtAllowance = async (fromAddress, toAddress) => {
         console.warn("in usdt getUsdtAllowance ");
         initialize();
     }
-    const resp = await window.usdtContract.allowance(fromAddress, toAddress)
-    return resp;
+    const allowanceValue = await window.usdtContract.allowance(fromAddress, toAddress);
+    return formatNumber(allowanceValue)
 };
 
 // ------post function-----
@@ -39,13 +40,14 @@ const usdtApprove = async (spender, account) => {
                 if (transaction.status !== 1) {
                     window.Library.call(tx)
                         .then((res) => {
-                            console.log(res);
+                            resolve(res)
                         })
                         .catch((err) => {
                             console.log(err);
                             reject(err);
                         });
                 }
+                console.log(transaction)
             });
         } catch (e) {
             console.log(e);

@@ -1,4 +1,4 @@
-import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
+import { getBigNumber, NoticeEmitter, formatNumber, getFormatBigNumber } from "../utils";
 import { ethers } from "ethers";
 import { initialize } from "./client";
 
@@ -10,9 +10,9 @@ const getTotalPrice = async (amount) => {
     }
     const totalPrice = await window.socialNFTContract.getTotalPrice(amount);
     return {
-        totalUsdtPrice: getBigNumber(totalPrice.totalUsdtPrice),
-        totalValuePrice: getBigNumber(totalPrice.totalValuePrice),
-        totalVsdPrice: getBigNumber(totalPrice.totalVsdPrice)
+        totalUsdtPrice: getFormatBigNumber(totalPrice.totalUsdtPrice),
+        totalValuePrice: getFormatBigNumber(totalPrice.totalValuePrice),
+        totalVsdPrice: getFormatBigNumber(totalPrice.totalVsdPrice)
     }
 };
 
