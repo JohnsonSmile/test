@@ -21,7 +21,7 @@ const getValueAllowance = async (fromAddress, toAddress) => {
 };
 
 // ------post function-----
-const valueApprove = async (spender, account) => {
+const valueApprove = async (spender, amount) => {
     if (!window.Signer || !window.valueContract) {
         console.warn("in value valueApprove ");
         initialize();
@@ -30,7 +30,7 @@ const valueApprove = async (spender, account) => {
         try {
             const tx = await window.valueContract.connect(window.Signer).approve(
                 spender,
-                account
+                amount
                 // {
                 //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
                 // }

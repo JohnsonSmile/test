@@ -21,7 +21,7 @@ const getVSDAllowance = async (fromAddress, toAddress) => {
 };
 
 // ------post function-----
-const VSDApprove = async (spender, account) => {
+const VSDApprove = async (spender, amount) => {
     if (!window.Signer || !window.VSDContract) {
         console.warn("in vsd VSDApprove ");
         initialize();
@@ -30,7 +30,7 @@ const VSDApprove = async (spender, account) => {
         try {
             const tx = await window.VSDContract.connect(window.Signer).approve(
                 spender,
-                account
+                amount
                 // {
                 //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
                 // }

@@ -3063,7 +3063,8 @@ const contracts = {
   vsdABI: VSDABI,
   valueABI: ERC20ABI,
   socialNFTABI: SocialNFTABI,
-  listABI: ListABI
+  listABI: ListABI,
+  swapABI: SwapABI
 };
 
 export { contracts };
