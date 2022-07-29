@@ -120,16 +120,16 @@ const BuildPage = () => {
                 // get balance
                 const usdtBalance = await getUsdtBalance(account)
                 console.log('usdtBalance===', getFormatBigNumber(usdtBalance))
-                if (usdtBalance.lt( priceInfo.totalUsdtPrice)) {
+                if (usdtBalance.lt(priceInfo.totalUsdtPrice)) {
                     toast.warn('USDT 余额不足!')
                     return
                 }
                 // get approved usdt
-                const usdtApproved = await getUsdtAllowance(account, contracts.usdt)
+                const usdtApproved = await getUsdtAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(usdtApproved))
                 if (usdtApproved.lt(priceInfo.totalUsdtPrice)) {
                     // approve usdt
-                    const approveUsdtResp = await usdtApprove(contracts.usdt, priceInfo.totalUsdtPrice)
+                    const approveUsdtResp = await usdtApprove(contracts.socialNFT, priceInfo.totalUsdtPrice)
                     console.log(approveUsdtResp)
                     if (!approveUsdtResp || !approveUsdtResp.success) {
                         toast.warn('获取USDT授权失败!')
@@ -146,11 +146,11 @@ const BuildPage = () => {
                     return
                 }
                 // get approved value
-                const valueApproved = await getValueAllowance(account, contracts.value)
+                const valueApproved = await getValueAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(valueApproved))
                 if (valueApproved.lt(priceInfo.totalValuePrice)) {
                     // approve value
-                    const approveValueResp = await valueApprove(contracts.value, priceInfo.totalValuePrice)
+                    const approveValueResp = await valueApprove(contracts.socialNFT, priceInfo.totalValuePrice)
                     console.log(approveValueResp)
                     if (!approveValueResp || !approveValueResp.success) {
                         toast.warn('获取Value授权失败!')
@@ -167,18 +167,18 @@ const BuildPage = () => {
                     return
                 }
                 // get approved vsd
-                const vsdApproved = await getVSDAllowance(account, contracts.vsd)
+                const vsdApproved = await getVSDAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(vsdApproved))
                 if (vsdApproved.lt(priceInfo.totalVsdPrice)) {
                     // approved vsd
-                    const approveVsdResp = await VSDApprove(contracts.value, priceInfo.totalVsdPrice)
+                    const approveVsdResp = await VSDApprove(contracts.socialNFT, priceInfo.totalVsdPrice)
                     console.log(approveVsdResp)
                     if (!approveVsdResp || !approveVsdResp.success) {
                         toast.warn('获取VSD授权失败!')
                         return
                     }
                 }
-                
+
             }
             // safe mint
             const res = await safeMint(count)
@@ -189,7 +189,7 @@ const BuildPage = () => {
         }
     }
 
-    
+
     useEffect(() => {
         if (count) {
             getPrice(count)
