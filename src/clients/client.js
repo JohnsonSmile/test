@@ -51,11 +51,11 @@ const initialize = (provider) => {
     library
   );
 
-  // window.swapContract = new ethers.Contract(
-  //   contracts.swap,
-  //   contracts.swapABI,
-  //   library
-  // );
+  window.swapContract = new ethers.Contract(
+    contracts.swap,
+    contracts.swapABI,
+    library
+  );
 
   window.Library = library;
 

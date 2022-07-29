@@ -9,25 +9,26 @@ import { getUsdtAllowance, usdtApprove } from "../../clients/usdt"
 import { getValueAllowance } from "../../clients/value"
 import { getVSDAllowance } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
+import { ethers } from "ethers";
 
 
 // FIXME: price, should set properly
-const price = {usdt: 200, v6: 10}
+const price = { usdt: 200, v6: 10 }
 
 const countBtns = [
     {
         title: 'X3',
         value: 3,
-    },{
+    }, {
         title: 'X10',
         value: 10,
-    },{
+    }, {
         title: 'X30',
         value: 30,
-    },{
+    }, {
         title: 'X50',
         value: 50,
-    },{
+    }, {
         title: 'X100',
         value: 100,
     },
@@ -47,7 +48,7 @@ const BuildPage = () => {
     const { account } = useWeb3React()
     const [count, setCount] = useState(1)
     const [totalPrice, setTotalPrice] = useState('')
-    const [priceInfo, setPriceInfo ] = useState({})
+    const [priceInfo, setPriceInfo] = useState({})
     const [buildCount, setBuildCount] = useState(0)
     const [open, setOpen] = useState(false)
     // TODO: should be got from contract mint 
@@ -118,7 +119,8 @@ const BuildPage = () => {
                 const usdtResp = await getUsdtAllowance(account, contracts.usdt)
                 console.log(usdtResp)
                 if (usdtResp.toString() === '0') {
-                    const approveUsdtResp = await usdtApprove(account, contracts.usdt)
+                    const amount = ethers.utils.parseEther(priceInfo.totalUsdtPrice)
+                    const approveUsdtResp = await usdtApprove(contracts.usdt, amount)
                     console.log(approveUsdtResp)
                 }
             }
@@ -153,13 +155,13 @@ const BuildPage = () => {
         getPrice(count ?? 1)
 
     }, [])
-    
+
     return (
         <>
-            <Box sx={{ backgroundColor: '#FFF', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Box sx={{ backgroundColor: '#FFF', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography variant={'inherit'} sx={{ color: '#7E8186', fontSize: '14px' }}>已经铸造的总数:{buildCount}</Typography>
                 <Box>
-                    <CardMedia 
+                    <CardMedia
                         component={'img'}
                         sx={{
                             width: 180,
@@ -167,14 +169,14 @@ const BuildPage = () => {
                         }}
                         image={BoxImg} />
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
                     <InputBase type="number"
                         placeholder="输入铸造数量"
                         value={count}
                         onChange={handleCountChange}
-                        sx={{ 
+                        sx={{
                             width: '180px',
-                            textAlign: 'center', 
+                            textAlign: 'center',
                             fontSize: '14px',
                             height: '40px',
                             borderRadius: '20px',
@@ -187,27 +189,27 @@ const BuildPage = () => {
                         }}
                     />
                 </Box>
-                <Box sx={{display: 'flex', justifyContent: 'center', gap: 1, mt: 2}}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mt: 2 }}>
                     {countBtns.map(btn => {
                         return <Box key={btn.value} sx={{
                             borderRadius: '20px',
                             backgroundColor: '#F2F2F5',
                             px: 2,
-                            py:1,
+                            py: 1,
                             cursor: 'pointer',
-                            color: '#7E8186', 
+                            color: '#7E8186',
                             fontSize: '16px'
                         }} onClick={() => { handleCountBtnClick(btn) }}>{btn.title}</Box>
                     })}
                 </Box>
                 <Box>
-                    <Typography variant={'inherit'} sx={{mt:2, color: '#7E8186', fontSize: '14px'}} >消耗:{totalPrice}</Typography>
+                    <Typography variant={'inherit'} sx={{ mt: 2, color: '#7E8186', fontSize: '14px' }} >消耗:{totalPrice}</Typography>
                 </Box>
                 <Box sx={{ mt: 2, width: '100%' }}>
-                    <Box sx={{ background: '#4263EB', borderRadius: '20px', height: '56px', lineHeight: '56px', mx: 3, cursor: 'pointer', fontSize: '16px', fontWeight: 600, color: '#FFF'}}
+                    <Box sx={{ background: '#4263EB', borderRadius: '20px', height: '56px', lineHeight: '56px', mx: 3, cursor: 'pointer', fontSize: '16px', fontWeight: 600, color: '#FFF' }}
                         onClick={handleBuildBtnClick}>铸造</Box>
                 </Box>
-                <Box sx={{ mt: 4, width: '100%'}}>
+                <Box sx={{ mt: 4, width: '100%' }}>
                     <Box sx={{ px: 3, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >规则:</Typography>
                         <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >1. 前1000个铸造的NFT,消耗200USDT+10V6</Typography>
@@ -216,31 +218,31 @@ const BuildPage = () => {
                     </Box>
                 </Box>
                 <Box sx={{ my: 4, borderRadius: '12px', border: '1px solid #EDEEF2' }}>
-                    <Table sx={{minWidth: 'calc(100vw - 60px)'}}>
+                    <Table sx={{ minWidth: 'calc(100vw - 60px)' }}>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>品质</TableCell>
-                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>概率</TableCell>
+                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2' }}>品质</TableCell>
+                                <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2' }}>概率</TableCell>
                                 <TableCell align="center">VSD日产出</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { borderBottom: 0 } }}
-                            >
-                            <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2'}}>{row.rate}</TableCell>
-                            <TableCell align="center">{row.gain}</TableCell>
-                            </TableRow>
-                        ))}
+                            {rows.map((row) => (
+                                <TableRow
+                                    key={row.name}
+                                    sx={{ '&:last-child td, &:last-child th': { borderBottom: 0 } }}
+                                >
+                                    <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2' }}>
+                                        {row.name}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ borderRight: '1px solid #EDEEF2' }}>{row.rate}</TableCell>
+                                    <TableCell align="center">{row.gain}</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
-                    </Box>
-                    <BuildDialog isOpen={open} setIsOpen={setOpen} result={result} setResult={setResult} />
+                </Box>
+                <BuildDialog isOpen={open} setIsOpen={setOpen} result={result} setResult={setResult} />
             </Box>
         </>
     )
