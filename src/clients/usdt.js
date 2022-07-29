@@ -21,7 +21,7 @@ const getUsdtAllowance = async (fromAddress, toAddress) => {
 };
 
 // ------post function-----
-const usdtApprove = async (spender, account) => {
+const usdtApprove = async (spender, amount) => {
     if (!window.Signer || !window.usdtContract) {
         console.warn("in usdt usdtApprove ");
         initialize();
@@ -30,7 +30,7 @@ const usdtApprove = async (spender, account) => {
         try {
             const tx = await window.usdtContract.connect(window.Signer).approve(
                 spender,
-                account
+                amount
                 // {
                 //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
                 // }
