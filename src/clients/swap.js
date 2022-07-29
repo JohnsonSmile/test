@@ -1,4 +1,4 @@
-import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
+import { getBigNumber, NoticeEmitter } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
@@ -7,11 +7,11 @@ const getTotalPrice = async (amount) => {
         console.warn("in getPrice ");
         initialize();
     }
-    const totalPrice = await window.socialNFTContract.getTotalPrice(amount);
+    const totalPrice = window.socialNFTContract.getTotalPrice(amount);
     return {
-        totalUsdtPrice: formatNumber(totalPrice.totalUsdtPrice),
-        totalValuePrice: formatNumber(totalPrice.totalValuePrice),
-        totalVsdPrice: formatNumber(totalPrice.totalVsdPrice)
+        totalUsdtPrice: totalPrice.totalUsdtPrice,
+        totalValuePrice: totalPrice.totalValuePrice,
+        totalVsdPrice: totalPrice.totalVsdPrice
     }
 };
 
@@ -20,8 +20,7 @@ const getUserStakedNum = async (account) => {
         console.warn("in getUserStakedNum ");
         initialize();
     }
-    const userStake = await window.socialNFTContract.getUserStakedNum(account);
-    return formatNumber(userStake)
+    return window.socialNFTContract.getUserStakedNum(account);
 };
 
 const getBalance = async (account) => {
@@ -29,8 +28,7 @@ const getBalance = async (account) => {
         console.warn("in socialNFT getBalance ");
         initialize();
     }
-    const userBalance = await window.socialNFTContract.balanceOf(account);
-    return formatNumber(userBalance);
+    return window.socialNFTContract.balanceOf(account);
 }
 
 const getUserStakedTokenIDsByPage = async (account, startIndex, pageNum) => {
@@ -38,7 +36,7 @@ const getUserStakedTokenIDsByPage = async (account, startIndex, pageNum) => {
         console.warn("in socialNFT getgetUserStakedTokenIDsByPageBalance ");
         initialize();
     }
-    return await window.socialNFTContract.getUserStakedTokenIDsByPage(account, startIndex, pageNum);
+    return window.socialNFTContract.getUserStakedTokenIDsByPage(account, startIndex, pageNum);
 }
 
 const getAllStakedNum = async () => {
@@ -46,8 +44,7 @@ const getAllStakedNum = async () => {
         console.warn("in getAllStakedNum ");
         initialize();
     }
-    const allStakeNum = await window.socialNFTContract.getAllStakedNum();
-    return formatNumber(allStakeNum)
+    return window.socialNFTContract.getAllStakedNum();
 };
 
 const getTotalSupply = async () => {
@@ -55,8 +52,7 @@ const getTotalSupply = async () => {
         console.warn("in getTotalSupply ");
         initialize();
     }
-    const totalSupply = await window.socialNFTContract.totalSupply();
-    return formatNumber(totalSupply)
+    return window.socialNFTContract.totalSupply();
 }
 
 const getAllStakedTokenIDs = async (startIndex, pageNum) => {
@@ -64,7 +60,7 @@ const getAllStakedTokenIDs = async (startIndex, pageNum) => {
         console.warn("in socialNFT getAllStakedTokenIDs ");
         initialize();
     }
-    return await window.socialNFTContract.getAllStakedTokenIDs(startIndex, pageNum);
+    return window.socialNFTContract.getAllStakedTokenIDs(startIndex, pageNum);
 }
 
 const isStake = async (tokenId) => {
@@ -72,7 +68,7 @@ const isStake = async (tokenId) => {
         console.warn("in socialNFT isStake ");
         initialize();
     }
-    return await window.socialNFTContract.isStake(tokenId);
+    return window.socialNFTContract.isStake(tokenId);
 }
 
 const getTokenURI = async (tokenId) => {
@@ -80,7 +76,7 @@ const getTokenURI = async (tokenId) => {
         console.warn("in socialNFT getTokenURI ");
         initialize();
     }
-    return await window.socialNFTContract.tokenURI(tokenId);
+    return window.socialNFTContract.tokenURI(tokenId);
 };
 
 const getApproved = async (tokenId) => {
@@ -88,7 +84,7 @@ const getApproved = async (tokenId) => {
         console.warn("in socialNFT getApproved ");
         initialize();
     }
-    return await window.socialNFTContract.getApproved(tokenId);
+    return window.socialNFTContract.getApproved(tokenId);
 };
 
 // ------post function-----

@@ -7,7 +7,7 @@ const getValueBalance = async (account) => {
         console.warn("in value getValueBalance");
         initialize();
     }
-    return window.VSDContract.balanceOf(account);
+    return await window.VSDContract.balanceOf(account);
 };
 
 const getValueAllowance = async (fromAddress, toAddress) => {
@@ -15,7 +15,7 @@ const getValueAllowance = async (fromAddress, toAddress) => {
         console.warn("in value getValueAllowance ");
         initialize();
     }
-    return window.VSDContract.allowance(fromAddress, toAddress);
+    return await window.VSDContract.allowance(fromAddress, toAddress);
 };
 
 // ------post function-----
