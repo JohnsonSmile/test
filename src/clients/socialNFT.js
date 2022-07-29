@@ -84,6 +84,14 @@ const getTokenURI = async (tokenId) => {
     return await window.socialNFTContract.tokenURI(tokenId);
 };
 
+const getBaseURI = async () => {
+    if (!window.socialNFTContract) {
+        console.warn("in socialNFT getTokenURI ");
+        initialize();
+    }
+    return await window.socialNFTContract.baseURI();
+}
+
 const getApproved = async (tokenId) => {
     if (!window.socialNFTContract) {
         console.warn("in socialNFT getApproved ");
@@ -216,6 +224,7 @@ export {
     getAllStakedTokenIDs,
     isStake,
     getTokenURI,
+    getBaseURI,
     getApproved,
     safeMint,
     stakeNFT,

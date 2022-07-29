@@ -16,6 +16,7 @@ import InviteCodeDialog from "./components/InviteCodeDialog"
 import { asyncSetLoading, getDescription, getIsLoading, getTitle } from "../../redux/reducers/status"
 import LoadingDialog from "../../widgets/loading/LoadingDialog"
 import { asyncSetUserInfo } from "../../redux/reducers/user"
+import { getTokenURI } from "../../clients/socialNFT"
 
 
 // const stringAvatar = (name) => {

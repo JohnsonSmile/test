@@ -16,6 +16,9 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
+import { getBaseURI, getTokenURI } from '../../clients/socialNFT';
+import { setTokenURI } from '../../redux/reducers/contracts';
+import { useDispatch } from 'react-redux';
 
 
 // FIXME: should be set
@@ -135,6 +138,16 @@ const HomePage = () => {
         nftAmount: 10,
         promotionCount: 3
     })
+    const dispatch = useDispatch()
+    const initialContractGlobalInfo = async () => {
+            // initial contract global consts
+            // TODO: make this properly
+            const resp = await getBaseURI()
+            console.log(resp)
+            // TODO: just use this to dev
+            const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
+            dispatch(setTokenURI(tokenURI))
+    }
 
     useEffect(() => {
         if (account) {
@@ -144,6 +157,8 @@ const HomePage = () => {
             setAccountInfo(prev => {
                 return { ...prev, account, avatar }
             })
+            // iniital contract infos
+            initialContractGlobalInfo()
         }
     }, [account])
     return (

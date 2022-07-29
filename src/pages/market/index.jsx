@@ -1,5 +1,5 @@
 import { Box, Card, CardMedia, Grid, InputBase, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as SearchIcon} from '../../assets/icon/market/search.svg';
 import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
@@ -184,6 +184,10 @@ const MarketPage = () => {
             return !prev
         })
     }
+
+    useEffect(() => {
+        // get totalAmount of nft
+    }, [])
     
     return (
         <Box sx={{ backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)', pb: 5}}>

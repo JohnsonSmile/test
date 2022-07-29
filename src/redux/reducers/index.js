@@ -4,9 +4,11 @@ import { combineReducers } from "redux";
 import userReducer from "./user.js";
 import walletReducer from "./wallet.js";
 import statusReducer from "./status.js";
+import contractsReducer from "./contracts";
 
 export default combineReducers({
   userReducer,
   walletReducer,
   statusReducer,
+  contractsReducer,
 });
