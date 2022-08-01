@@ -1639,28 +1639,40 @@ const ListABI = [
       {
         "components": [
           {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
-          },
-          {
             "internalType": "uint256",
-            "name": "price",
+            "name": "tokenId",
             "type": "uint256"
           },
           {
-            "internalType": "address",
-            "name": "buyer",
-            "type": "address"
-          },
-          {
-            "internalType": "uint8",
-            "name": "listStatu",
-            "type": "uint8"
+            "components": [
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "buyer",
+                "type": "address"
+              },
+              {
+                "internalType": "uint8",
+                "name": "listStatu",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct ListUpgradeable.ListItem",
+            "name": "listItem",
+            "type": "tuple"
           }
         ],
-        "internalType": "struct ListUpgradeable.ListItem",
-        "name": "listItem",
+        "internalType": "struct ListUpgradeable.ListItemResponse",
+        "name": "listItemResponse",
         "type": "tuple"
       }
     ],
@@ -1685,27 +1697,39 @@ const ListABI = [
       {
         "components": [
           {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
-          },
-          {
             "internalType": "uint256",
-            "name": "price",
+            "name": "tokenId",
             "type": "uint256"
           },
           {
-            "internalType": "address",
-            "name": "buyer",
-            "type": "address"
-          },
-          {
-            "internalType": "uint8",
-            "name": "listStatu",
-            "type": "uint8"
+            "components": [
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "buyer",
+                "type": "address"
+              },
+              {
+                "internalType": "uint8",
+                "name": "listStatu",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct ListUpgradeable.ListItem",
+            "name": "listItem",
+            "type": "tuple"
           }
         ],
-        "internalType": "struct ListUpgradeable.ListItem[]",
+        "internalType": "struct ListUpgradeable.ListItemResponse[]",
         "name": "listItems",
         "type": "tuple[]"
       }
