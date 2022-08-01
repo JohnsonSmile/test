@@ -180,6 +180,7 @@ const BuildPage = () => {
                 }
 
             }
+            console.log('safe mint')
             // safe mint
             const res = await safeMint(count)
             console.log(res)

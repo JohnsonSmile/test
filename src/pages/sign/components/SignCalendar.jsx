@@ -13,8 +13,6 @@ const SignCalendar = (props) => {
             view='month'
             minDetail='month'
             tileClassName={({date, view}) => {
-                console.log(moment(date).format("DD-MM-YYYY"))
-                console.log(markers)
                 if (markers.find(x=>x===moment(date).format("DD-MM-YYYY"))) {
                     console.log('founded')
                     return "calendar-signed"

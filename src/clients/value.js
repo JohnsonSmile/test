@@ -37,16 +37,19 @@ const valueApprove = async (spender, amount) => {
             );
 
             window.Library.once(tx.hash, (transaction) => {
-                if (transaction.status !== 1) {
-                    window.Library.call(tx)
-                        .then((res) => {
-                            console.log(res);
-                            resolve(res)
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            reject(err);
-                        });
+                if (transaction.status === 1) {
+                    resolve({success: true})
+                    // window.Library.call(tx)
+                    //     .then((res) => {
+                    //         console.log(res)
+                    //         resolve(res)
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //         reject(err);
+                    //     });
+                } else {
+                    resolve({success: false})
                 }
                 console.log(transaction)
             });

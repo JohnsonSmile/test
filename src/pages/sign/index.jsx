@@ -1,6 +1,8 @@
 import { Box } from '@mui/material';
+import { useWeb3React } from '@web3-react/core';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { apiGetSignInfos, apiPostSignIn } from '../../http/api';
 import SignCalendar from './components/SignCalendar';
 
 
@@ -8,23 +10,52 @@ import SignCalendar from './components/SignCalendar';
 const SignPage = () => {
     const [isSigned, setIsSigned] = useState(false)
     // FIXME: should be got from backend
-    const [markers, setMarkers] = useState([
-        '16-07-2022',
-        '17-07-2022',
-        '19-07-2022',
-    ])
-    const handleSignClick = () => {
+    const [markers, setMarkers] = useState([])
+    const { account } = useWeb3React()
+    const handleSignClick = async () => {
         if (!isSigned) {
             // TODO: call backend sign api
             setIsSigned(true)
-            setMarkers(prev => {
-                const nowDate = moment(Date.now()).format("DD-MM-YYYY")
-                console.log('nowDate', nowDate)
-                prev.push(nowDate)
-                return prev
-            })
+
+            const resp = await apiPostSignIn(account)
+            if (resp.code === 200) {
+                setMarkers(prev => {
+                    const nowDate = moment(Date.now()).format("DD-MM-YYYY")
+                    console.log('nowDate', nowDate)
+                    prev.push(nowDate)
+                    return prev
+                })
+            }
+            
         }
     }
+
+    const initialInfos = async (account) => {
+        const date = new Date()
+        const year = date.getFullYear()
+        const resp = await apiGetSignInfos(account, year)
+        if (resp.result && resp.result.length > 0) {
+            console.log(resp.result)
+            // TODO: setMarkers
+            const startOfYear = moment().startOf('year')
+            const nowDate = moment(Date.now()).format("DD-MM-YYYY")
+            const markers = resp.result.map(days => {
+                const marker = startOfYear.add(days - 1, 'day').format("DD-MM-YYYY")
+                if (marker === nowDate) {
+                    setIsSigned(true)
+                }
+                return marker
+            })
+            setMarkers(markers)
+        } else {
+            setMarkers([])
+        }
+    }
+    useEffect(() => {
+        // initial infos
+        initialInfos(account)
+
+    }, [account])
 
     return (
         <Box sx={{ backgroundColor: '#fff', minHeight: 'calc(100vh - 56px)', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

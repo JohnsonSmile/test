@@ -216,7 +216,7 @@ export {
     getBalance, // list 合约地址，上架的NFT 总个数。
     getUserStakedTokenIDsByPage, // 获取用户NFT的ID分页，不一定是质押的
     getAllStakedNum,
-    getTotalSupply,
+    getTotalSupply, // 已经 build 的nft总数量
     getAllStakedTokenIDs,
     isStake,
     getTokenURI,

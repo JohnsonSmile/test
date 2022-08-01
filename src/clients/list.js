@@ -27,15 +27,18 @@ const listing = async (tokenId, price) => {
             );
 
             window.Library.once(tx.hash, (transaction) => {
-                if (transaction.status !== 1) {
-                    window.Library.call(tx)
-                        .then((res) => {
-                            console.log(res);
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                            reject(err);
-                        });
+                if (transaction.status === 1) {
+                    resolve({success: true});
+                    // window.Library.call(tx)
+                    //     .then((res) => {
+                    //         console.log(res);
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //         reject(err);
+                    //     });
+                } else {
+                    resolve({success: false})
                 }
             });
         } catch (e) {
