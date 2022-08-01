@@ -5,11 +5,13 @@ import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
-import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
+import { approve, getApproved, getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
 import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { listing } from "../../clients/list"
+import { contracts } from "../../clients/contracts"
+import { CheckBox } from "@mui/icons-material"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -26,7 +28,7 @@ const nftTypes = [
 
 const NFTListingPage = () => {
     const [currentQuality, setCurrentQuality] = useState(0)
-    const [currentNumber, setCurrentNumber] = useState(-1)
+    const [currentTokenId, setCurrentTokenId] = useState(-1)
     const [currentPrice, setCurrentPrice] = useState(0)
     const [saleTime, setSaleTime] = useState('')
     const [nftInfos, setNftInfos] = useState([])
@@ -37,7 +39,7 @@ const NFTListingPage = () => {
     }
 
     const handleNumberChange = (e) => {
-        setCurrentNumber(e.target.value)
+        setCurrentTokenId(e.target.value)
     }
 
     const handlePriceChange = (e) => {
@@ -50,11 +52,23 @@ const NFTListingPage = () => {
     }
 
     const handleListingClick = async () => {
+        // get is approved
+        const approvedAddr =  await getApproved(currentTokenId)
+        if (approvedAddr !== contracts.list) {
+            // approve nft to list
+            const res = await approve(contracts.list, currentTokenId)
+            console.log(res)
+            if (!res.success) {
+                // TODO: deal with failure
+                return
+            }
+        }
         // TODO: listing item
-        console.log('listing item')
-        console.log(currentNumber, currentPrice)
-        const res = await listing(currentNumber, currentPrice)
+        const res = await listing(currentTokenId, currentPrice)
         console.log(res)
+        if (res.success) {
+            setNftInfos(prev => prev.filter(prev.token_id !== currentTokenId))
+        }
     }
 
     const initialInfos = async (quality, account) => {
@@ -83,6 +97,7 @@ const NFTListingPage = () => {
         if (nftInfoResp.code === 200) {
             if (quality === 0) {
                 if (nftInfoResp.result && nftInfoResp.result.length > 0) {
+                    console.log(nftInfoResp.result)
                     setNftInfos(nftInfoResp.result)
                 } else {
                     setNftInfos([])
@@ -106,7 +121,7 @@ const NFTListingPage = () => {
     return (
         <Box sx={{backgroundColor: '#FFF'}}>
             <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3 }}>
-                <Box component={'label'} for="listing-type-select" sx={{fontSize: '14px', fontWeight: 600}}>NFT类型</Box>
+                <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600}}>NFT类型</Box>
                 <BootstrapTextField
                     id="listing-type-select"
                     select
@@ -116,7 +131,8 @@ const NFTListingPage = () => {
                     >
                     {nftTypes.map((type) => (
                         <MenuItem key={type.value} value={type.value} sx={{ display: 'flex', flexDirection: 'row',}}>
-                            <CardMedia component="img" image={NFTImages[type.value - 1]} sx={{ width: "20px", height: "20px" }}/>
+                            {type.value === 0 && <CheckBox checked sx={{ color: 'green' }}/>}
+                            {type.value !== 0 && <CardMedia component="img" image={NFTImages[type.value - 1]} sx={{ width: "20px", height: "20px" }}/>}
                             <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
                                 {type.label}
                             </Typography>
@@ -125,11 +141,11 @@ const NFTListingPage = () => {
                 </BootstrapTextField>
             </Box>
             <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3 }}>
-                <Box component={'label'} for="listing-number-select" sx={{fontSize: '14px', fontWeight: 600}}>NFT编号</Box>
+                <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600}}>NFT编号</Box>
                 <BootstrapTextField
                     id="listing-number-select"
                     select
-                    value={currentNumber}
+                    value={currentTokenId}
                     onChange={handleNumberChange}
                     fullWidth
                     SelectProps={{
@@ -152,16 +168,16 @@ const NFTListingPage = () => {
                     }}
                     >
                     {nftInfos && nftInfos.map((nftInfo) => (
-                        <MenuItem key={nftInfo.tokenId ?? 0 } value={nftInfo.tokenId ?? 0} sx={{ display: 'flex', flexDirection: 'row',}}>
+                        <MenuItem key={nftInfo.token_id ?? 0 } value={nftInfo.token_id ?? 0} sx={{ display: 'flex', flexDirection: 'row',}}>
                             <Typography component={'span'} sx={{ color: '#333', fontSize: '14px', ml: 0.5}}>
-                                {nftInfo.tokenId ?? 0}
+                                {nftInfo.token_id ?? 0}
                             </Typography>
                         </MenuItem>
                     ))}
                 </BootstrapTextField>
             </Box>
             <Box sx={{ px: 2, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3 }}>
-                <Box component={'label'} for="listing-price" sx={{fontSize: '14px', fontWeight: 600}}>卖出价格</Box>
+                <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600}}>卖出价格</Box>
                 <BootstrapTextField
                     id="listing-price"
                     type={'number'}

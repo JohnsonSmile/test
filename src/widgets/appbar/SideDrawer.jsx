@@ -96,7 +96,6 @@ const SideDrawer = () => {
                 <Box sx={{width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column'}}>
                     <List
                         component="nav"
-                        alignItems={'center'}
                         subheader={
                             <ListSubheader
                             component="div"
