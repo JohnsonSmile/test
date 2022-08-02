@@ -11,10 +11,9 @@ import { getVSDAllowance, getVSDBalance, VSDApprove } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
 import { ethers } from "ethers";
 import { getFormatBigNumber } from "../../utils"
+import { asyncSetLoading } from "../../redux/reducers/status"
+import { useDispatch } from "react-redux"
 
-
-// FIXME: price, should set properly
-const price = { usdt: 200, v6: 10 }
 
 const countBtns = [
     {
@@ -52,6 +51,7 @@ const BuildPage = () => {
     const [priceInfo, setPriceInfo] = useState({})
     const [buildCount, setBuildCount] = useState(0)
     const [open, setOpen] = useState(false)
+    const dispatch = useDispatch()
     // TODO: should be got from contract mint 
     // result of build: eg: {gold:10, sliver: 1, copper: 0, diamond: 1}
     const [result, setResult] = useState(null)
@@ -70,17 +70,8 @@ const BuildPage = () => {
             toast.error('数量不能为空!')
             return
         }
-        // TODO: call contract to build nft.
+        // call contract to build nft.
         buildNFT()
-        // ...
-        // setOpen(true)
-        // const timer = setTimeout(function () {
-        //     console.log('result changed')
-        //     setResult({
-        //         gold:10, sliver: 1, copper: 0, diamond: 1
-        //     })
-        //     clearTimeout(timer)
-        // }, 2000)
     }
 
     // ===============contract apis================
@@ -115,16 +106,19 @@ const BuildPage = () => {
         }
     }
     const buildNFT = async () => {
+        dispatch(asyncSetLoading(true, "铸造NFT", "正在铸造NFT"))
         try {
             if (priceInfo.totalUsdtPrice.gt(ethers.BigNumber.from(0))) {
+                dispatch(asyncSetLoading(true, "铸造NFT", "查看USDT余额..."))
                 // get balance
                 const usdtBalance = await getUsdtBalance(account)
                 console.log('usdtBalance===', getFormatBigNumber(usdtBalance))
                 if (usdtBalance.lt(priceInfo.totalUsdtPrice)) {
-                    toast.warn('USDT 余额不足!')
+                    dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "USDT余额不足"))
                     return
                 }
                 // get approved usdt
+                dispatch(asyncSetLoading(true, "铸造NFT", "获取USDT授权..."))
                 const usdtApproved = await getUsdtAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(usdtApproved))
                 if (usdtApproved.lt(priceInfo.totalUsdtPrice)) {
@@ -132,19 +126,21 @@ const BuildPage = () => {
                     const approveUsdtResp = await usdtApprove(contracts.socialNFT, priceInfo.totalUsdtPrice)
                     console.log(approveUsdtResp)
                     if (!approveUsdtResp || !approveUsdtResp.success) {
-                        toast.warn('获取USDT授权失败!')
+                        dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取USDT授权失败!"))
                         return
                     }
                 }
             }
             if (priceInfo.totalValuePrice.gt(ethers.BigNumber.from(0))) {
+                dispatch(asyncSetLoading(true, "铸造NFT", "查看Value余额..."))
                 // get balance
                 const valueBalance = await getValueBalance(account)
                 console.log('valueBalance===', getFormatBigNumber(valueBalance))
                 if (valueBalance.lt(priceInfo.totalValuePrice)) {
-                    toast.warn('V6 余额不足!')
+                    dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "Value余额不足"))
                     return
                 }
+                dispatch(asyncSetLoading(true, "铸造NFT", "获取Value授权..."))
                 // get approved value
                 const valueApproved = await getValueAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(valueApproved))
@@ -153,19 +149,21 @@ const BuildPage = () => {
                     const approveValueResp = await valueApprove(contracts.socialNFT, priceInfo.totalValuePrice)
                     console.log(approveValueResp)
                     if (!approveValueResp || !approveValueResp.success) {
-                        toast.warn('获取Value授权失败!')
+                        dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取Value授权失败!"))
                         return
                     }
                 }
             }
             if (priceInfo.totalVsdPrice.gt(ethers.BigNumber.from(0))) {
+                dispatch(asyncSetLoading(true, "铸造NFT", "查看VSD余额..."))
                 // get balance
                 const vsdBalance = await getVSDBalance(account)
                 console.log('vsdBalance===', getFormatBigNumber(vsdBalance))
                 if (vsdBalance.lt(priceInfo.totalVsdPrice)) {
-                    toast.warn('VSD 余额不足!')
+                    dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "VSD余额不足"))
                     return
                 }
+                dispatch(asyncSetLoading(true, "铸造NFT", "获取VSD授权..."))
                 // get approved vsd
                 const vsdApproved = await getVSDAllowance(account, contracts.socialNFT)
                 console.log(getFormatBigNumber(vsdApproved))
@@ -174,19 +172,25 @@ const BuildPage = () => {
                     const approveVsdResp = await VSDApprove(contracts.socialNFT, priceInfo.totalVsdPrice)
                     console.log(approveVsdResp)
                     if (!approveVsdResp || !approveVsdResp.success) {
-                        toast.warn('获取VSD授权失败!')
+                        dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取VSD授权失败!"))
                         return
                     }
                 }
 
             }
+            dispatch(asyncSetLoading(true, "铸造NFT", "Mint NFT..."))
             console.log('safe mint')
             // safe mint
             const res = await safeMint(count)
+            if (res.success) {
+                dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+            } else {
+                dispatch(asyncSetLoading(false, "铸造NFT",  "", 0, "铸造NFT失败"))
+            }
             console.log(res)
         } catch (e) {
             console.log(e)
-            toast.error("铸造失败，请稍后重试！")
+            dispatch(asyncSetLoading(false, "铸造NFT",  "", 0, "铸造NFT失败"))
         }
     }
 

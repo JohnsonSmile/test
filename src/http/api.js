@@ -27,6 +27,18 @@ const apiPostCreateUser = async (account, invitationCode) => {
     }
 }
 
+const apiPostGetUserInfo = async (account, sigHex, message) => {
+    const resp = await http.post('/api/user/info', { account, sigHex, message })
+    if (resp.status === 200) {
+        return resp.data
+    } else {
+        return {
+            code: resp.status,
+            message: resp.statusText
+        }
+    }
+}
+
 const apiGetSignInfos = async (account, year) => {
     const resp = await http.get('/api/signInInfo?account='+account+'&year='+year)
     if (resp.status === 200) {
@@ -82,6 +94,7 @@ const apiPostGetNFTInfosByIDs = async (ids) => {
 export {
     apiPostLogin,
     apiPostCreateUser,
+    apiPostGetUserInfo,
     apiPostGetNFTInfos,
     apiPostGetNFTInfosByIDs,
     apiGetSignInfos,

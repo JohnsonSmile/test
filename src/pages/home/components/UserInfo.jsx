@@ -70,9 +70,9 @@ export const UserInfo = (props) => {
             </Box>}
             {accountInfo.account && <Box sx={{px: 2, backgroundColor: '#4263EB'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', pt: 2, pb: 1, px: 2 }}>
-                        <Avatar {...stringAvatar('船中八策')} sx={{ width: 40, height: 40 }} />
+                        <Avatar {...stringAvatar(accountInfo.userName ? accountInfo.userName : 'AAA')} sx={{ width: 40, height: 40 }} />
                         <Box sx={{ ml: 1 }}>
-                            <Typography sx={{ fontSize: 14, fontWeight: 500, textAlign: 'left'}}>船中八策</Typography>
+                            <Typography sx={{ fontSize: 14, fontWeight: 500, textAlign: 'left'}}>{accountInfo.userName ? accountInfo.userName : 'AAA'}</Typography>
                             <Typography sx={{ fontSize: 12, textAlign: 'left', opacity: 0.8 }}>{ellipsisAccount(accountInfo.account)}</Typography>
                         </Box>
                     </Box>

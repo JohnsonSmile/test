@@ -3,23 +3,27 @@ import TopAppBar from "../appbar/TopAppBar"
 import ScrollTop from "../scrolltop/ScrollTop"
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import LoadingDialog from "../loading/LoadingDialog";
-import { useSelector } from "react-redux";
-import { getIsLoading, getTitle } from "../../redux/reducers/status";
+import { useWeb3React } from "@web3-react/core";
 
 
 const Layout = (props) => {
     const location = useLocation()
     const navigate = useNavigate()
-    const isLoading = useSelector(getIsLoading)
-    const title = useSelector(getTitle)
+    const { account } = useWeb3React()
     useEffect(() => {
         if (location.pathname === '/') {
             navigate('/home')
         }
     }, [location, navigate])
-    
+    useEffect(() => {
+        if (account) {
+          localStorage.setItem("account", account);
+        } else {
+          localStorage.setItem("account", "");
+        }
+    }, [account]);
     return (
         <>
             <Box sx={{backgroundColor: '#4263EB'}}>
@@ -42,7 +46,7 @@ const Layout = (props) => {
                         <KeyboardArrowUpIcon />
                     </Fab>
                 </ScrollTop>
-                <LoadingDialog isOpen={isLoading} title={title} />
+                <LoadingDialog />
             </Box>
         </>
     )

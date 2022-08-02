@@ -80,11 +80,7 @@ const LoginPage = () => {
     }
 
     useEffect(() => {
-        if (!account) {
-            // TODO: fetch is user has already been verified with an invite code, 
-            // if dont have an invite code and is the first time for the account to open the session show dialog
-            // const res = await http.post(xxxxx), get user infos
-        } else {
+        if (account) {
             if (account !== signAccount) {
                 window.Library.getSigner(account).signMessage("hello").then((sigHex) => {
                     console.log("account==", account)
@@ -97,9 +93,23 @@ const LoginPage = () => {
                         if (code === 200) {
                             const { JWTToken, User } = result
                             dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                            // go to home
+                            navigate('/')
                         }
                     })
                 })
+            } else {
+                if (signInfo) {
+                    apiPostLogin(account, signInfo.sigHex, "hello").then(res => {
+                        const { code, result } = res
+                        if (code === 200) {
+                            const { JWTToken, User } = result
+                            dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                            // go to home
+                            navigate('/')
+                        }
+                    })
+                } 
             }
         }
     }, [account, signAccount, dispatch])

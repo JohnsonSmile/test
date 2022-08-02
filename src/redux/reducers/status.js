@@ -6,7 +6,10 @@ export const statusSlice = createSlice({
     isLoading: false,
     title: '',
     description: '',
-    timeout: 15000,
+    timeout: 0,
+    errmessage: '',
+    successMessage: '',
+    hide: true
   },
   reducers: {
     setLoading: (state, action) => {
@@ -22,20 +25,42 @@ export const statusSlice = createSlice({
     setTimeoutDuration: (state, action) => {
       state.timeout = action.payload
     },
+    setHide: (state, action) => {
+      if (action.payload) {
+        state.isLoading = false
+        state.title = ''
+        state.description = ''
+        state.timeout = 0
+        state.errmessage = ''
+        state.successMessage = ''
+        state.hide = true
+      } else {
+        state.hide = false
+      }
+    },
+    setErrmessage: (state, action) => {
+      state.errmessage = action.payload
+    },
+    setSuccessmessage: (state, action) => {
+      state.successMessage = action.payload
+    },
   }
 })
 
-export const { setLoading, setTitle, setDescription, setTimeoutDuration } = statusSlice.actions
+export const { setLoading, setTitle, setDescription, setTimeoutDuration, setHide, setErrmessage, setSuccessmessage } = statusSlice.actions
 
 // async function
-const asyncSetLoading = (isLoading, title="", description="", timeout=10000) => (dispatch) => {
+const asyncSetLoading = (isLoading, title="", description="", timeout=0, errMessage="", successMessage="", hide=false,) => (dispatch) => {
     dispatch(setTitle(title))
     dispatch(setDescription(description))
     dispatch(setTimeoutDuration(timeout))
     dispatch(setLoading(isLoading))
-    if (!window.timer && isLoading) {
+    dispatch(setHide(hide))
+    dispatch(setErrmessage(errMessage))
+    dispatch(setSuccessmessage(successMessage))
+    if (!window.timer && isLoading && timeout !== 0) {
       window.timer = setTimeout(() => {
-        dispatch(setLoading(false))
+        dispatch(setHide(true))
         clearTimeout(window.timer)
         window.timer = null
       }, timeout)
@@ -55,9 +80,12 @@ const getIsLoading = (state) => state.statusReducer.isLoading
 const getTitle= (state) => state.statusReducer.title
 const getDescription = (state) => state.statusReducer.description
 const getTimeoutDuration = (state) => state.statusReducer.timeout
+const getHide = (state) => state.statusReducer.hide
+const getErrMessage = (state) => state.statusReducer.errmessage
+const getSuccessMessage = (state) => state.statusReducer.successMessage
 
 
-export { getIsLoading, getTitle, getDescription, getTimeoutDuration }
+export { getIsLoading, getTitle, getDescription, getTimeoutDuration, getHide, getErrMessage, getSuccessMessage }
 
 export default statusSlice.reducer
   

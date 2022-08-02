@@ -115,7 +115,9 @@ const NFTListingPage = () => {
     }
 
     useEffect(() => {
-        initialInfos(currentQuality, account)
+        if (account) {
+            initialInfos(currentQuality, account)
+        }
     }, [currentQuality, account])
 
     return (

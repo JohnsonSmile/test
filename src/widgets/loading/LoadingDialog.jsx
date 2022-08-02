@@ -2,9 +2,9 @@ import { Box, Dialog, DialogContent, DialogTitle  } from "@mui/material";
 import { styled } from "@mui/styles";
 import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as animationData from '../../assets/animes/loading.json'
-import { getDescription, getIsLoading, getTitle } from "../../redux/reducers/status";
+import { getDescription, getErrMessage, getHide, getIsLoading, getSuccessMessage, getTitle, setHide } from "../../redux/reducers/status";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -44,26 +44,43 @@ const defaultOptions = {
 
 const LoadingDialog = (props) => {
     
-    const isOpen = useSelector(getIsLoading)
+    const isLoading = useSelector(getIsLoading)
     const title = useSelector(getTitle)
     const description = useSelector(getDescription)
+    const hide = useSelector(getHide)
+    const errMsg = useSelector(getErrMessage)
+    const successMsg = useSelector(getSuccessMessage)
+    const dispatch = useDispatch()
+    const handleSureClick = () => {
+        dispatch(setHide(true))
+    }
 
     return (
         <div>
         <BootstrapDialog
-            open={isOpen}
+            open={!hide}
         >
             <BootstrapDialogTitle >
                 { title }
             </BootstrapDialogTitle>
             <DialogContent>
-                <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', }}>
-                    <Lottie options={defaultOptions}
+                <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+                    {isLoading && <Lottie options={defaultOptions}
                         height={60}
-                        width={60} />
-                    <Box sx={{ px: 6, textAlign: 'center', mt: 4, fontSize: '12px', color: '#7E8186' }}>
+                        width={60} />}
+                    {description && <Box sx={{ px: 6, textAlign: 'center', mt: 4, fontSize: '12px', color: '#7E8186' }}>
                         {description}
-                    </Box>
+                    </Box>}
+                    {errMsg && <Box sx={{ px: 6, textAlign: 'center', mt: 4, fontSize: '14px', color: 'red' }}>
+                        {errMsg}
+                    </Box>}
+                    {successMsg && <Box sx={{ px: 6, textAlign: 'center', mt: 4, fontSize: '14px', color: 'green' }}>
+                        {successMsg}
+                    </Box>}
+                    {(errMsg || successMsg) && <Box sx={{ textAlign: 'center', mt: 5, width: '100px', fontSize: '12px', color: '#FFF', background: '#4263EB', borderRadius: '15px', lineHeight: '30px', cursor: 'pointer'}}
+                        onClick={handleSureClick}>
+                        确定
+                    </Box>}
                 </Box>
             </DialogContent>
         </BootstrapDialog>

@@ -18,7 +18,9 @@ import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
 import { getBaseURI, getTokenURI } from '../../clients/socialNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { apiPostGetUserInfo } from '../../http';
+import { getSigInfo } from '../../redux/reducers/wallet';
 
 
 // FIXME: should be set
@@ -131,13 +133,16 @@ const HomePage = () => {
     const { account } = useWeb3React()
     const [accountInfo, setAccountInfo] = useState({
         account: '',
-        username: '船中八策',
+        userName: '船中八策',
         avatar: '',
         yesterdayGain: 4500,
         isSigned: false,
         nftAmount: 10,
-        promotionCount: 3
+        promotionCount: 3,
+        invitationCode: '',
+        inviter: ''
     })
+    const signInfo = useSelector(getSigInfo)
     const dispatch = useDispatch()
     const initialContractGlobalInfo = async () => {
             // initial contract global consts
@@ -147,6 +152,22 @@ const HomePage = () => {
             // TODO: just use this to dev
             const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
             dispatch(setTokenURI(tokenURI))
+
+            // get user info
+            if (signInfo && signInfo.sigHex) {
+                const res = await apiPostGetUserInfo(account, signInfo.sigHex, "hello")
+                console.log("res", res)
+                if (res.code === 200 && res.result) {
+                    setAccountInfo(prev => {
+                        return {
+                            ...prev,
+                            ...res.result.userInfo,
+                            isSigned: res.result.isSigned,
+                            promotionCount: res.result.promotionCount
+                        }
+                    })
+                }
+            }
     }
 
     useEffect(() => {
@@ -157,7 +178,7 @@ const HomePage = () => {
             setAccountInfo(prev => {
                 return { ...prev, account, avatar }
             })
-            // iniital contract infos
+            // initial contract infos
             initialContractGlobalInfo()
         }
     }, [account])
