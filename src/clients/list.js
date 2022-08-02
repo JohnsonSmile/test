@@ -1,4 +1,4 @@
-import { getBigNumber, NoticeEmitter } from "../utils";
+import { getBigNumber, NoticeEmitter, formatNumber } from "../utils";
 import { initialize } from "./client";
 
 // ------get function------
@@ -9,6 +9,28 @@ const getListItems = async (startIndex, pageNum) => {
     }
     return await window.listContract.getListItems(startIndex, pageNum);
 };
+
+const getUserListItemsNum = async (account) => {
+    if (!window.listContract) {
+        console.warn("in list getListItems ");
+        initialize();
+    }
+    const userListItemsNum = await window.listContract.getUserListItemsNum(account);
+    console.log('userListItemsNum', formatNumber(userListItemsNum))
+    return formatNumber(userListItemsNum);
+};
+
+const getUserListItems = async (account, startIndex, pageNum) => {
+    if (!window.listContract) {
+        console.warn("in list getListItems ");
+        initialize();
+    }
+    const userListItems = await window.listContract.getUserListItems(account, startIndex, pageNum);
+    console.log('userListItems', userListItems)
+    return userListItems;
+}
+
+
 
 // ------post function-----
 const listing = async (tokenId, price) => {
@@ -28,7 +50,7 @@ const listing = async (tokenId, price) => {
 
             window.Library.once(tx.hash, (transaction) => {
                 if (transaction.status === 1) {
-                    resolve({success: true});
+                    resolve({ success: true });
                     // window.Library.call(tx)
                     //     .then((res) => {
                     //         console.log(res);
@@ -38,7 +60,7 @@ const listing = async (tokenId, price) => {
                     //         reject(err);
                     //     });
                 } else {
-                    resolve({success: false})
+                    resolve({ success: false })
                 }
             });
         } catch (e) {
@@ -115,8 +137,10 @@ const buy = async (tokenId) => {
 };
 
 export {
-    getListItems,
+    getListItems,//所有上架的NFT
+    getUserListItemsNum,//得到用户listing的数量
+    getUserListItems,//得到用户listing的NFT的具体信息
     listing,
     unlist, // 通过map退回给原地址
-    buy // 查看
+    buy // 购买
 };

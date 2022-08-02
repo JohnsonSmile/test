@@ -1033,6 +1033,25 @@ const SocialNFTABI = [
     "inputs": [
       {
         "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      }
+    ],
+    "name": "getUserOwnNum",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "owner_",
         "type": "address"
       }
@@ -1271,6 +1290,34 @@ const SocialNFTABI = [
     "inputs": [
       {
         "internalType": "address",
+        "name": "usdt",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "value",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vsd",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "list",
+        "type": "address"
+      }
+    ],
+    "name": "setAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "operator",
         "type": "address"
       },
@@ -1330,6 +1377,24 @@ const SocialNFTABI = [
       }
     ],
     "name": "setURI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "num_",
+        "type": "uint256"
+      }
+    ],
+    "name": "setUserOwnNum",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1732,6 +1797,88 @@ const ListABI = [
         "internalType": "struct ListUpgradeable.ListItemResponse[]",
         "name": "listItems",
         "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startIndex_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageNum_",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserListItems",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "buyer",
+                "type": "address"
+              },
+              {
+                "internalType": "uint8",
+                "name": "listStatu",
+                "type": "uint8"
+              }
+            ],
+            "internalType": "struct ListUpgradeable.ListItem",
+            "name": "listItem",
+            "type": "tuple"
+          }
+        ],
+        "internalType": "struct ListUpgradeable.ListItemResponse[]",
+        "name": "listItems",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner_",
+        "type": "address"
+      }
+    ],
+    "name": "getUserListItemsNum",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "userListItemsNum",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
