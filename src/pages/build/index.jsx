@@ -11,7 +11,7 @@ import { getVSDAllowance, getVSDBalance, VSDApprove } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
 import { ethers } from "ethers";
 import { getFormatBigNumber } from "../../utils"
-import { asyncSetLoading } from "../../redux/reducers/status"
+import { asyncSetHide, asyncSetLoading } from "../../redux/reducers/status"
 import { useDispatch } from "react-redux"
 
 
@@ -197,6 +197,9 @@ const BuildPage = () => {
 
     useEffect(() => {
         if (count) {
+            dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
+            // 1. get now build count
+            getTotalSupplyCount()
             getPrice(count)
             // const usdt = price.usdt * count
             // const v6 = price.v6 *count
@@ -205,15 +208,6 @@ const BuildPage = () => {
             setTotalPrice('数量不能为空')
         }
     }, [count])
-
-
-    useEffect(() => {
-        // 1. get now build count
-        getTotalSupplyCount()
-        // 2. get build default count 1 price
-        getPrice(count ?? 1)
-
-    }, [])
 
     return (
         <>

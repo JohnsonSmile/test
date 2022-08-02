@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
 import { useDispatch, useSelector } from "react-redux";
 import * as animationData from '../../assets/animes/loading.json'
-import { getDescription, getErrMessage, getHide, getIsLoading, getSuccessMessage, getTitle, setHide } from "../../redux/reducers/status";
+import { asyncSetLoading, getDescription, getErrMessage, getHide, getIsLoading, getSuccessMessage, getTitle } from "../../redux/reducers/status";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiPaper-root': {
@@ -52,7 +52,7 @@ const LoadingDialog = (props) => {
     const successMsg = useSelector(getSuccessMessage)
     const dispatch = useDispatch()
     const handleSureClick = () => {
-        dispatch(setHide(true))
+        dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
     }
 
     return (

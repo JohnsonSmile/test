@@ -40,7 +40,7 @@ const MyAssetsPage = () => {
         vsdCanBeAcheived: 840
     })
     const navigate = useNavigate()
-    useEffect(() => {
+    const initialAnime = () => {
         if (animationRef.current == null) {
             animationRef.current = anime({
                 targets: '.wave-top ellipse',
@@ -62,6 +62,15 @@ const MyAssetsPage = () => {
             animationRef.current.restart()
             setIsAnimating(true)
         }
+    }
+
+    const initialInfos = () => {
+
+    }
+    useEffect(() => {
+
+        initialAnime()
+        initialInfos()
         return (() => {
             if (animationRef.current) {
                 anime.remove('.wave-top ellipse')

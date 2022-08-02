@@ -12,6 +12,8 @@ import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { listing } from "../../clients/list"
 import { contracts } from "../../clients/contracts"
 import { CheckBox } from "@mui/icons-material"
+import { asyncSetLoading } from "../../redux/reducers/status"
+import { useDispatch } from "react-redux"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -33,6 +35,7 @@ const NFTListingPage = () => {
     const [saleTime, setSaleTime] = useState('')
     const [nftInfos, setNftInfos] = useState([])
     const { account } = useWeb3React()
+    const dispatch = useDispatch()
 
     const handleTypeChange = (e) => {
         setCurrentQuality(e.target.value)
@@ -52,22 +55,34 @@ const NFTListingPage = () => {
     }
 
     const handleListingClick = async () => {
-        // get is approved
-        const approvedAddr =  await getApproved(currentTokenId)
-        if (approvedAddr !== contracts.list) {
-            // approve nft to list
-            const res = await approve(contracts.list, currentTokenId)
-            console.log(res)
-            if (!res.success) {
-                // TODO: deal with failure
-                return
+        try {
+            dispatch(asyncSetLoading(true, "上架NFT", "查看NFT是否已授权"))
+            // get is approved
+            const approvedAddr =  await getApproved(currentTokenId)
+            if (approvedAddr !== contracts.list) {
+                dispatch(asyncSetLoading(true, "上架NFT", "获取NFT授权中..."))
+                // approve nft to list
+                const res = await approve(contracts.list, currentTokenId)
+                console.log(res)
+                if (!res.success) {
+                    dispatch(asyncSetLoading(false, "上架NFT", "", 0, "获取授权失败!"))
+                    return
+                }
             }
-        }
-        // TODO: listing item
-        const res = await listing(currentTokenId, currentPrice)
-        console.log(res)
-        if (res.success) {
-            setNftInfos(prev => prev.filter(prev.token_id !== currentTokenId))
+            dispatch(asyncSetLoading(true, "上架NFT", "正在上架..."))
+            // TODO: listing item
+            const res = await listing(currentTokenId, currentPrice)
+            console.log(res)
+            if (res.success) {
+                dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "上架NFT成功!"))
+                setNftInfos(prev => prev.filter(nft =>nft.token_id !== currentTokenId))
+                setCurrentTokenId(-1)
+            } else {
+                dispatch(asyncSetLoading(false, "上架NFT", "", 0, "上架失败!"))
+            }
+        } catch (e) {
+            console.log(e)
+            dispatch(asyncSetLoading(false, "上架NFT", "", 0, "上架失败!"))
         }
     }
 
@@ -115,6 +130,7 @@ const NFTListingPage = () => {
     }
 
     useEffect(() => {
+        dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
         if (account) {
             initialInfos(currentQuality, account)
         }

@@ -16,11 +16,12 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getBaseURI, getTokenURI } from '../../clients/socialNFT';
+import { getBaseURI, getTokenURI, getUserOwnNum } from '../../clients/socialNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
+import { getUserInfo } from '../../redux/reducers/user';
 
 
 // FIXME: should be set
@@ -133,16 +134,17 @@ const HomePage = () => {
     const { account } = useWeb3React()
     const [accountInfo, setAccountInfo] = useState({
         account: '',
-        userName: '船中八策',
+        userName: '',
         avatar: '',
-        yesterdayGain: 4500,
+        yesterdayGain: 0,
         isSigned: false,
-        nftAmount: 10,
-        promotionCount: 3,
+        nftAmount: 0,
+        promotionCount: 0,
         invitationCode: '',
         inviter: ''
     })
     const signInfo = useSelector(getSigInfo)
+    const userInfo = useSelector(getUserInfo)
     const dispatch = useDispatch()
     const initialContractGlobalInfo = async () => {
             // initial contract global consts
@@ -152,7 +154,9 @@ const HomePage = () => {
             // TODO: just use this to dev
             const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
             dispatch(setTokenURI(tokenURI))
-
+            // get user own num
+            const amount = await getUserOwnNum(account)
+            console.log(amount)
             // get user info
             if (signInfo && signInfo.sigHex) {
                 const res = await apiPostGetUserInfo(account, signInfo.sigHex, "hello")
@@ -163,7 +167,8 @@ const HomePage = () => {
                             ...prev,
                             ...res.result.userInfo,
                             isSigned: res.result.isSigned,
-                            promotionCount: res.result.promotionCount
+                            promotionCount: res.result.promotionCount,
+                            nftAmount: amount ? amount : 0
                         }
                     })
                 }
@@ -172,6 +177,11 @@ const HomePage = () => {
 
     useEffect(() => {
         if (account) {
+            if (account === userInfo.account) {
+                setAccountInfo(prev => {
+                    return { ...prev, ...userInfo, }
+                })
+            }
             // TODO: get all information from backend and set infos
             // get username, avatar, etc
             const avatar = 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500'

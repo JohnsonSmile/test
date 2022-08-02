@@ -26,17 +26,7 @@ export const statusSlice = createSlice({
       state.timeout = action.payload
     },
     setHide: (state, action) => {
-      if (action.payload) {
-        state.isLoading = false
-        state.title = ''
-        state.description = ''
-        state.timeout = 0
-        state.errmessage = ''
-        state.successMessage = ''
-        state.hide = true
-      } else {
-        state.hide = false
-      }
+      state.hide = action.payload
     },
     setErrmessage: (state, action) => {
       state.errmessage = action.payload
@@ -61,6 +51,12 @@ const asyncSetLoading = (isLoading, title="", description="", timeout=0, errMess
     if (!window.timer && isLoading && timeout !== 0) {
       window.timer = setTimeout(() => {
         dispatch(setHide(true))
+        dispatch(setLoading(false))
+        dispatch(setTitle(''))
+        dispatch(setDescription(''))
+        dispatch(setTimeout(0))
+        dispatch(setErrmessage(''))
+        dispatch(setSuccessmessage(''))
         clearTimeout(window.timer)
         window.timer = null
       }, timeout)
@@ -72,7 +68,17 @@ const asyncSetLoading = (isLoading, title="", description="", timeout=0, errMess
     }
 }
 
-export { asyncSetLoading }
+const asyncSetHide = () => (dispatch) => {
+  dispatch(setHide(true))
+  dispatch(setLoading(false))
+  dispatch(setTitle(''))
+  dispatch(setDescription(''))
+  dispatch(setTimeout(0))
+  dispatch(setErrmessage(''))
+  dispatch(setSuccessmessage(''))
+}
+
+export { asyncSetLoading, asyncSetHide }
 
 
 // state selector

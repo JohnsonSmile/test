@@ -278,7 +278,7 @@ const MarketPage = () => {
     }, [quality, alpha, pageNum])
     
     return (
-        <Box sx={{ backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)' }}>
+        <Box sx={{ backgroundColor: '#FFF', height: 'calc(100vh - 56px)' }}>
             <Box sx={{ pt: 2, px: 2 }}>
                 <Box sx={{ 
                 display: 'flex', 
@@ -315,27 +315,13 @@ const MarketPage = () => {
                         onSelectClick={handleAlphaSelectClick}  />
                 </Box>
             </Box>
-                <InfiniteScroll
-                    dataLength={nftInfos.length} 
-                    next={handLoadMore}
-                    hasMore={hasMore}
-                    loader={<h4>Loading...</h4>}
-                    endMessage={
-                        <p style={{ textAlign: 'center' }}>
-                        <b>Yay! You have seen it all</b>
-                        </p>
-                    }
-                     // below props only if you need pull down functionality
-                    refreshFunction={reLoadData}
-                    pullDownToRefresh
-                    pullDownToRefreshThreshold={50}
-                    pullDownToRefreshContent={
-                        <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-                    }
-                    releaseToRefreshContent={
-                        <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-                    }
-                    >
+            <InfiniteScroll
+                dataLength={nftInfos.length} 
+                next={handLoadMore}
+                hasMore={hasMore}
+                refreshFunction={reLoadData}
+                pullDownToRefresh
+                pullDownToRefreshThreshold={50}>
                 <Grid container columns={12} sx={{ mt: 1 }}>
                     {filteredNFTs.map((nftinfo, index) => (
                         <Grid item xs={6} key={index} 
