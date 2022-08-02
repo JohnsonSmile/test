@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
 import { getUserInfo } from '../../redux/reducers/user';
+import { asyncSetLoading } from '../../redux/reducers/status';
 
 
 // FIXME: should be set

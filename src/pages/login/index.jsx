@@ -64,14 +64,16 @@ const LoginPage = () => {
             if (code === 200) {
                 const { JWTToken, User } = result
                 dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                dispatch(asyncSetLoading(false, "开启 Value Bank", "", 0, "", "登录成功！"))
                 // go to home
                 navigate('/')
+            } else {
+                dispatch(asyncSetLoading(false, "开启 Value Bank", "", 0, "登录失败..."))
             }
-            dispatch(asyncSetLoading(false))
         } else {
             // TODO: 请求错误
             console.log(resp)
-            dispatch(asyncSetLoading(false))
+            dispatch(asyncSetLoading(false, "开启 Value Bank", "", 0, "登录失败..."))
         }
     }
 
