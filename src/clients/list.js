@@ -16,7 +16,6 @@ const getUserListItemsNum = async (account) => {
         initialize();
     }
     const userListItemsNum = await window.listContract.getUserListItemsNum(account);
-    console.log('userListItemsNum', formatNumber(userListItemsNum))
     return formatNumber(userListItemsNum);
 };
 
@@ -26,7 +25,6 @@ const getUserListItems = async (account, startIndex, pageNum) => {
         initialize();
     }
     const userListItems = await window.listContract.getUserListItems(account, startIndex, pageNum);
-    console.log('userListItems', userListItems)
     return userListItems;
 }
 

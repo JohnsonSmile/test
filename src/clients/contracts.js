@@ -1033,7 +1033,36 @@ const SocialNFTABI = [
     "inputs": [
       {
         "internalType": "address",
-        "name": "user_",
+        "name": "owner_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startIndex_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "pageNum_",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUserOwn",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner_",
         "type": "address"
       }
     ],
@@ -1377,6 +1406,24 @@ const SocialNFTABI = [
       }
     ],
     "name": "setURI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "num_",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "setUserOwn",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
