@@ -4,8 +4,8 @@ import BootstrapTextField from "../../../widgets/textfield/BootstrapTextField"
 
 
 const MultipleSelection = (props) => {
-    const { nftIDs, onNFTSelected } = props;
-    const [selectedNumbers, setSelectedNumbers] = useState([]);
+    const { nftIDs, onNFTSelected, selectedIDs } = props;
+    const [selectedNumbers, setSelectedNumbers] = useState(selectedIDs);
     const [allSelected, setAllSelected] = useState(false)
 
     const handleChange = (event) => {

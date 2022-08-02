@@ -35,13 +35,6 @@ TabPanel.propTypes = {
 
 const StakePage = () => {
     const location = useLocation()
-    const [selectedIds, setSelectedIds] = useState([])
-    useEffect(() => {
-        if (location.state && location.state.id) {
-            selectedIds.push(location.state.id)
-        }
-    }, [location])
-
     const [value, setValue] = useState(0);
     
     const handleChange = (event, newValue) => {
@@ -57,7 +50,7 @@ const StakePage = () => {
                 </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <NFTStake />
+                <NFTStake nftInfos={location.state.nftInfos} nftInfo={location.state.nftInfo}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <LPStake />

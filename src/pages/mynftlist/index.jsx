@@ -7,6 +7,10 @@ import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
+import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
+import { apiPostGetNFTInfosByIDs } from "../../http/api"
+import { useWeb3React } from "@web3-react/core"
+import { getUserListItems, getUserListItemsNum } from "../../clients/list"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 const types = [
@@ -48,41 +52,22 @@ const statuses = [
     }
 ]
 
-// TODO: should be got from contract
-const nftInfos = [
-    {
-        id: 1235,
-        status: 1, // 1 闲置 2 质押中 3 出售中
-        type: 1,
-    }, {
-        id: 1236,
-        status: 2, // 1 闲置 2 质押中 3 出售中
-        type: 2,
-    }, {
-        id: 1238,
-        status: 3, // 1 闲置 2 质押中 3 出售中
-        type: 3,
-    }, {
-        id: 1239,
-        status: 1, // 1 闲置 2 质押中 3 出售中
-        type: 3,
-    }
-]
-
 
 const MyNFTListPage = () => {
 
     const navigate = useNavigate()
-    const location = useLocation()
     const [fillteredNFTInfos, setFillteredNFTInfos] = useState([])
     const [type, setType] = useState(0)
     const [status, setStatus] = useState(0)
     const [typeOpen, setTypeOpen] = useState(false)
     const [statusOpen, setStatusOpen] = useState(false)
-    const handleStakeClick = () => {
+    const { account } = useWeb3React()
+    const [nftInfos, setNftInfos] = useState([])
+    const handleStakeClick = (nftInfo) => {
         navigate('/stake', {
             state: {
-                id: 1238
+                nftInfo,
+                nftInfos
             }
         })
     }
@@ -100,10 +85,10 @@ const MyNFTListPage = () => {
             }
         } else {
             if (status === 0) {
-                setFillteredNFTInfos(_ => nftInfos.filter(nftInfo => nftInfo.type === type))
+                setFillteredNFTInfos(_ => nftInfos.filter(nftInfo => nftInfo.quality === type))
             } else {
                 setFillteredNFTInfos(_ => nftInfos
-                    .filter(nftInfo => nftInfo.type === type)
+                    .filter(nftInfo => nftInfo.quality === type)
                     .filter(nftInfo => nftInfo.status === status))
             }
         }
@@ -118,7 +103,7 @@ const MyNFTListPage = () => {
                 setFillteredNFTInfos(nftInfos)
             } else {
                 setFillteredNFTInfos(_ => nftInfos
-                    .filter(nftInfo => nftInfo.type === type))
+                    .filter(nftInfo => nftInfo.quality === type))
             }
         } else {
             if (type === 0) {
@@ -126,7 +111,7 @@ const MyNFTListPage = () => {
                     .filter(nftInfo => nftInfo.status === value))
             } else {
                 setFillteredNFTInfos(_ => nftInfos
-                    .filter(nftInfo => nftInfo.type === type)
+                    .filter(nftInfo => nftInfo.quality === type)
                     .filter(nftInfo => nftInfo.status === value))
             }
         }
@@ -148,51 +133,107 @@ const MyNFTListPage = () => {
         })
     }
 
-    useEffect(() => {
-        if (location && location.state && location.state.type >= 0) {
-            setType(location.state.type)
-            if (location.state.type === 0) {
-                // filter status
-                if (location && location.state && location.state.status >= 0) {
-                    setStatus(location.state.status)
-                    if (location.state.status === 0) {
-                        setFillteredNFTInfos(nftInfos)
-                    } else {
-                        setFillteredNFTInfos(_ => {
-                            return nftInfos
-                            .filter(nftInfo => nftInfo.status === location.state.status)
-                        })
-                    }
-                } else {
-                    setFillteredNFTInfos(nftInfos)
-                }
-            } else {
-                // filter status
-                if (location && location.state && location.state.status >= 0) {
-                    setStatus(location.state.status)
-                    if (location.state.status === 0) {
-                        setFillteredNFTInfos(_ => {
-                            return nftInfos.filter(nftInfo => nftInfo.type === location.state.type)
-                        })
-                    } else {
-                        setFillteredNFTInfos(_ => {
-                            return nftInfos
-                            .filter(nftInfo => nftInfo.type === location.state.type)
-                            .filter(nftInfo => nftInfo.status === location.state.status)
-                        })
-                    }
-                } else {
-                    setFillteredNFTInfos(_ => {
-                        return nftInfos.filter(nftInfo => nftInfo.type === location.state.type)
-                    })
-                }
-            }
-        } else {
-            // TODO: should get from contracts
-            setFillteredNFTInfos(nftInfos)
-        }
 
-    }, [location])
+    const initialInfos = async () => {
+        // get all nfts not listed with type
+        // 闲置的和 staking的
+        const pageSize = 100
+        var index = 0
+        var resp = []
+        var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+        resp.push(...res)
+        while (res.length === 100) {
+            index = pageSize * (index + 1)
+            res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            resp.push(...res)
+        }
+        console.log(resp)
+
+        // get free
+        const freeNFTs = resp.filter(nft => {
+            return !nft.staking
+        })
+        console.log(freeNFTs)
+        const freeIDs = freeNFTs.length > 0 ? freeNFTs.map(nft => nft.tokenId.toNumber()) : []
+        console.log(freeIDs)
+
+        // get nft infos from backend
+        const freeNFTResp = freeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(freeIDs) : []
+        console.log(freeNFTResp)
+
+
+        // get staked nfts
+        const stakedNFTs = resp.filter(nft => {
+            return nft.staking
+        })
+        console.log(stakedNFTs)
+        const stakedIDs = stakedNFTs.length > 0 ? stakedNFTs.map(nft => nft.tokenId.toNumber()) : []
+        console.log(stakedIDs)
+
+        // get nft infos from backend
+        const stakedNFTResp = stakedNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
+        console.log(stakedNFTResp)
+
+        // listed nft info
+        const amount = await getUserListItemsNum(account)
+        index = 0
+        resp = []
+        res = await getUserListItems(account, index, pageSize)
+        resp.push(...res)
+        while (resp.length === amount) {
+            index = pageSize * (index + 1)
+            res = await getUserListItemsNum(account, index, pageSize)
+            resp.push(...res)
+        }
+        console.log(resp)
+        const tokenIDS = resp.length > 0 ? resp.map(nft => nft.tokenId.toNumber()) : []
+        console.log(tokenIDS)
+
+        // get nft infos from backend
+        const onSaleNFTResp = resp.length > 0 ? await apiPostGetNFTInfosByIDs(tokenIDS) : []
+        console.log(onSaleNFTResp)
+
+        // all infos
+        var nftInfos = []
+
+        // 1 闲置 2 质押中 3 出售中
+        if (freeNFTResp.code === 200 && freeNFTResp.result && freeNFTResp.result.length > 0) {
+            nftInfos.push(...(freeNFTResp.result.map(nft => {
+                return {
+                    ...nft,
+                    status: 1
+                }
+            })))
+        }
+        if (stakedNFTResp.code === 200 && stakedNFTResp.result && stakedNFTResp.result.length > 0) {
+            nftInfos.push(...(stakedNFTResp.result.map(nft => {
+                return {
+                    ...nft,
+                    status: 2
+                }
+            })))
+        }
+        if (onSaleNFTResp.code === 200 && onSaleNFTResp.result && onSaleNFTResp.result.length > 0) {
+            nftInfos.push(...(onSaleNFTResp.result.map(nft => {
+                return {
+                    ...nft,
+                    status: 3
+                }
+            })))
+        }
+        // 排序
+        nftInfos = nftInfos.sort((a, b) => a.id < b.id)
+        console.log(nftInfos)
+        setNftInfos(nftInfos)
+        setFillteredNFTInfos(nftInfos)
+    }
+
+    useEffect(() => {
+        if (account) {
+            initialInfos()
+        }
+    }, [account])
+    
 
     return (
         <Box sx={{ backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)'}}>
@@ -215,18 +256,19 @@ const MyNFTListPage = () => {
                         onSelectClick={handleStatusSelectClick}  />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection:' column', gap: 3, px: 2}}>
+            {(!fillteredNFTInfos || fillteredNFTInfos.length === 0) && <Box>Loading...</Box>}
+            {fillteredNFTInfos && <Box sx={{ display: 'flex', flexDirection:' column', gap: 3, px: 2}}>
                 {fillteredNFTInfos.map(nftinfo => {
                     return (
                         <Card key={nftinfo.id} sx={{ border: '1px solid #F2F2F2', borderRadius: '20px', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', py: 2}}>
                                 <Box sx={{flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                    <CardMedia component={"img"} src={NFTImages[nftinfo.type - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />
+                                    <CardMedia component={"img"} src={NFTImages[nftinfo.quality - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />
                                     <Typography variant="inherit" sx={{fontSize: '16px', fontWeight: 700 }}>
-                                        {nftinfo.type === 1 && '铜#'+ nftinfo.id}
-                                        {nftinfo.type === 2 && '银#'+ nftinfo.id}
-                                        {nftinfo.type === 3 && '金#'+ nftinfo.id}
-                                        {nftinfo.type === 4 && '钻#'+ nftinfo.id}
+                                        {nftinfo.quality === 1 && '铜#'+ nftinfo.id}
+                                        {nftinfo.quality === 2 && '银#'+ nftinfo.id}
+                                        {nftinfo.quality === 3 && '金#'+ nftinfo.id}
+                                        {nftinfo.quality === 4 && '钻#'+ nftinfo.id}
                                     </Typography>
                                 </Box>
                                 <Typography variant="inherit" sx={{flex: 1, fontSize: '14px', fontWeight: 400}}>
@@ -238,7 +280,7 @@ const MyNFTListPage = () => {
                             <Divider />
                             <Box sx={{py: 3, px: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1}}>
                                 {nftinfo.status === 1 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
-                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={handleStakeClick}>去质押</Box>
+                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleStakeClick(nftinfo)}}>去质押</Box>
                                         <Box sx={{ flex: 1, background: '#ECF0FF', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#4263EB', cursor: 'pointer'}}>去出售</Box>
                                     </Box>}
                                 {nftinfo.status === 2 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
@@ -253,7 +295,7 @@ const MyNFTListPage = () => {
                         </Card>
                     )
                 })}
-            </Box>
+            </Box>}
         </Box>
     )
 }

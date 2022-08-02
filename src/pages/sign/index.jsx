@@ -37,15 +37,16 @@ const SignPage = () => {
         if (resp.result && resp.result.length > 0) {
             console.log(resp.result)
             // TODO: setMarkers
-            const startOfYear = moment().startOf('year')
             const nowDate = moment(Date.now()).format("DD-MM-YYYY")
             const markers = resp.result.map(days => {
+                const startOfYear = moment().startOf('year')
                 const marker = startOfYear.add(days - 1, 'day').format("DD-MM-YYYY")
                 if (marker === nowDate) {
                     setIsSigned(true)
                 }
                 return marker
             })
+            console.log(markers)
             setMarkers(markers)
         } else {
             setMarkers([])

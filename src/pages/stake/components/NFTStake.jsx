@@ -1,5 +1,5 @@
 import { Box, CardMedia, Chip, MenuItem, Typography } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import MultipleSelection from "./MultipleSelection"
 import BootstrapTextField from '../../../widgets/textfield/BootstrapTextField'
@@ -19,26 +19,17 @@ const nftTypes = [
     { label: '钻', value: 4 }
 ]
 
-const nftIDs = [
-    1100,
-    1101,
-    1102,
-    1103,
-    1104,
-    11005,
-    1106,
-    11052,
-    11051,
-    11009,
-];
 
-const NFTStake = () => {
-
+const NFTStake = (props) => {
+    const { nftInfos, nftInfo } = props
     const [selectedType, setSelectedType] = useState(1)
     const [selectedIDs, setSelectedIDs] = useState([])
+    const [nftIDs, setNftIDs] = useState([])
     const navigate = useNavigate()
     const handleTypeChange = (e) => {
         setSelectedType(e.target.value)
+        setSelectedIDs([])
+        setNftIDs(nftInfos.filter(nft => nft.quality === e.target.value).map(nftInfo => nftInfo.token_id))
     }
 
     const onNFTSelected = (selectedNFTIDs) => {
@@ -48,6 +39,16 @@ const NFTStake = () => {
     const handleStakeClick = () => {
         // TODO: stake selected nfts
     }
+
+    useEffect(() => {
+        console.log('hahah')
+        if (nftInfo.id) {
+            setSelectedIDs([nftInfo.token_id])
+            setSelectedType(nftInfo.quality)
+            setNftIDs(nftInfos.filter(nft => nft.quality === nftInfo.quality).map(nftInfo => nftInfo.token_id))
+        }
+    }, [])
+    
 
     const handleStakeRecordClick = () => {
         navigate('/mynft/list', {
@@ -96,7 +97,7 @@ const NFTStake = () => {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
                 <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>NFT编号:</Box>
-                <MultipleSelection nftIDs={nftIDs} onNFTSelected={onNFTSelected} />
+                <MultipleSelection nftIDs={nftIDs} onNFTSelected={onNFTSelected} selectedIDs={selectedIDs} />
             </Box>
             <Typography component={'div'} sx={{ color: '#333', alignSelf: 'flex-start', mt: 2, fontSize: '14px', fontWeight: 600}}>已选择编号:</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', alignSelf: 'flex-start', gap: 0.5, px: 1, mt: 2 }}>

@@ -6,7 +6,7 @@ import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
-import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
+import { getUserOwn, getUserOwnNum } from "../../clients/socialNFT"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 
 
@@ -28,21 +28,19 @@ const MyNFTPage = () => {
     }
     const initialInfos = async (account) => {
         // get all nfts not listed with type
+        const amount = await getUserOwnNum(account)
         const pageSize = 100
         var index = 0
         var resp = []
-        var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+        var res = await getUserOwn(account, index, pageSize)
         resp.push(...res)
-        while (res.length === 100) {
+        while (resp.length === amount) {
             index = pageSize * (index + 1)
-            res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            res = await getUserOwn(account, index, pageSize)
             resp.push(...res)
         }
         console.log(resp)
-        // resp = resp.filter(nft => {
-        //     return !nft.staking
-        // })
-        const tokenIDS = resp.map(nft => nft.tokenId.toNumber())
+        const tokenIDS = resp.map(tokenId => tokenId.toNumber())
         console.log(tokenIDS)
 
         // get nft infos from backend
