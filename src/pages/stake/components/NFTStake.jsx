@@ -25,10 +25,11 @@ const nftTypes = [
 
 
 const NFTStake = (props) => {
-    const { nftInfos, nftInfo, onStakeSuccess } = props
+    const { nftInfos, nftInfo, stakedIDs, onStakeSuccess, onUnStakeSuccess } = props
     const [selectedType, setSelectedType] = useState(1)
     const [selectedIDs, setSelectedIDs] = useState([])
     const [nftIDs, setNftIDs] = useState([])
+    const [stkIDs, setStkIDs] = useState([])
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleTypeChange = (e) => {
@@ -55,8 +56,12 @@ const NFTStake = (props) => {
                 dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
                 const stakedIDSet = new Set(selectedIDs)
                 const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
+                console.log(IDs)
+                console.log(selectedIDs)
                 setNftIDs(IDs)
                 setSelectedIDs([])
+                setStkIDs(prev => [...prev, ...IDs])
+                onStakeSuccess(selectedIDs)
                 console.log(resp)
             } else {
                 dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
@@ -64,6 +69,37 @@ const NFTStake = (props) => {
         } catch (e) {
             console.log(e)
             dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
+        }
+    }
+
+    const handleUnStakeAllAndGain = async () => {
+        if (stkIDs.length === 0) {
+            toast.error("当前没有质押的NFT")
+            return
+        }
+        dispatch(asyncSetLoading(true, "解除质押NFT", "正在解除质押NFT"))
+        try {
+            // TODO: more to stake
+            const resp = await batchStakeNFT(stkIDs, false)
+            if (resp.success) {
+                dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
+                // const stakedIDSet = new Set(selectedIDs)
+                // const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
+                // console.log(IDs)
+                // console.log(selectedIDs)
+                console.log(nftIDs)
+                console.log([...nftIDs, ...stkIDs])
+                setNftIDs(prev => [...prev, ...stkIDs])
+                setSelectedIDs([])
+                setStkIDs([])
+                onUnStakeSuccess(stkIDs)
+                console.log(resp)
+            } else {
+                dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
+            }
+        } catch (e) {
+            console.log(e)
+            dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
         }
     }
 
@@ -75,6 +111,9 @@ const NFTStake = (props) => {
         } else {
             setSelectedType(1)
             setNftIDs(nftInfos.filter(nft => nft.quality === 1).map(nftInfo => nftInfo.token_id))
+        }
+        if (stakedIDs && stakedIDs.length > 0) {
+            setStkIDs(stakedIDs)
         }
     }, [nftInfo, nftInfos])
     
@@ -147,7 +186,7 @@ const NFTStake = (props) => {
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
                         <Box sx={{ flex: 1 }}>
                             <Box sx={{ fontSize: '12px', color: '#7E8186' }}>我已质押的NFT数量</Box>
-                            <Box sx={{ fontSize: '16px', color: '#333', fontWeight: 700, mt: 0.5 }}>1522</Box>
+                            <Box sx={{ fontSize: '16px', color: '#333', fontWeight: 700, mt: 0.5 }}>{stkIDs.length}</Box>
                         </Box>
                         <Box sx={{ flex: 1 }}>
                             <Box sx={{ fontSize: '12px', color: '#7E8186' }}>我的所有待提取收益</Box>
@@ -155,7 +194,8 @@ const NFTStake = (props) => {
                         </Box>
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mt: 2, gap: 1}}>
-                        <Box sx={{ flex: 1, fontSize: '12px', color: '#fff', backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}>
+                        <Box sx={{ flex: 1, fontSize: '12px', color: '#fff', backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}
+                            onClick={handleUnStakeAllAndGain}>
                             解除质押并提取收益
                         </Box>
                         <Box sx={{ flex: 1, fontSize: '12px', color: '#4263EB', backgroundColor: '#ECF0FF', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}>

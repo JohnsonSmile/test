@@ -10,9 +10,10 @@ import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 import { getUserStakedTokenIDsByPage, stakeNFT } from "../../clients/socialNFT"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { useWeb3React } from "@web3-react/core"
-import { getUserListItems, getUserListItemsNum } from "../../clients/list"
+import { getUserListItems, getUserListItemsNum, unlist } from "../../clients/list"
 import { useDispatch } from "react-redux"
 import { asyncSetLoading } from "../../redux/reducers/status"
+
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 const types = [
@@ -111,7 +112,47 @@ const MyNFTListPage = () => {
             console.log(e)
             dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
         }
+    }
 
+    const handleListClick = (nftInfo) => {
+        navigate('/nft/listing')
+    }
+
+    const handleDisListClick = async (nftInfo) => {
+        dispatch(asyncSetLoading(true, "解除出售NFT", "正在解除出售NFT"))
+        try {
+            console.log(nftInfo)
+            // TODO: more to stake
+            const resp = await unlist(nftInfo.token_id)
+            if (resp.success) {
+                dispatch(asyncSetLoading(false, "解除出售NFT", "", 0, "", "解除出售NFT成功"))
+                console.log(resp.tokenId.toNumber())
+                setFreeNftInfos(prev => [...prev, nftInfo ])
+                setNftInfos(prev => {
+                    prev.map(p => {
+                        if (p.token_id === nftInfo.token_id) {
+                            p.status = 1
+                        }
+                        return p
+                    })
+                    return prev
+                })
+                setFillteredNFTInfos(prev => {
+                    prev.map(p => {
+                        if (p.token_id === nftInfo.token_id) {
+                            p.status = 1
+                        }
+                        return p
+                    })
+                    return prev
+                })
+            } else {
+                dispatch(asyncSetLoading(false, "解除出售NFT",  "", 0, "解除出售NFT失败"))
+            }
+        } catch (e) {
+            console.log(e)
+            dispatch(asyncSetLoading(false, "解除出售NFT",  "", 0, "解除出售NFT失败"))
+        }
     }
 
     const handleTypeChange = (type) => {
@@ -349,14 +390,14 @@ const MyNFTListPage = () => {
                             <Box sx={{py: 3, px: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1}}>
                                 {nftinfo.status === 1 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
                                         <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleStakeClick(nftinfo) }}>去质押</Box>
-                                        <Box sx={{ flex: 1, background: '#ECF0FF', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#4263EB', cursor: 'pointer'}}>去出售</Box>
+                                        <Box sx={{ flex: 1, background: '#ECF0FF', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#4263EB', cursor: 'pointer'}} onClick={ () => { handleListClick(nftinfo) }}>去出售</Box>
                                     </Box>}
                                 {nftinfo.status === 2 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
                                         <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleUnstakeClick(nftinfo) }}>解除质押</Box>
                                         <Box sx={{ flex: 1 }}></Box>
                                     </Box>}
                                 {nftinfo.status === 3 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
-                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}}>解除出售</Box>
+                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleDisListClick(nftinfo) }}>解除出售</Box>
                                         <Box sx={{ flex: 1 }}></Box>
                                     </Box>}
                             </Box>

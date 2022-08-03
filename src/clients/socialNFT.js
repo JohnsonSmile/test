@@ -240,9 +240,6 @@ const batchStakeNFT = async (tokenIds, isStake) => {
             if (tokenSet.has(tokenId.toNumber())) {
                 tokenSet.delete(tokenId.toNumber())
             }
-            console.log(tokenSet)
-            console.log(tokenId)
-            console.log(tokenId.toNumber())
             if (tokenSet.size === 0) {
                 resolve({
                     success: true,

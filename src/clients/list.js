@@ -47,24 +47,32 @@ const listing = async (tokenId, price) => {
             );
 
             window.Library.once(tx.hash, (transaction) => {
-                if (transaction.status === 1) {
-                    resolve({ success: true });
-                    // window.Library.call(tx)
-                    //     .then((res) => {
-                    //         console.log(res);
-                    //     })
-                    //     .catch((err) => {
-                    //         console.log(err);
-                    //         reject(err);
-                    //     });
-                } else {
-                    resolve({ success: false })
+                if (transaction.status !== 1) {
+                    window.Library.call(tx)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            reject(err);
+                        });
                 }
             });
         } catch (e) {
             console.log(e);
             reject(e);
         }
+        const tid = tokenId
+        // local store this tx hash
+        NoticeEmitter.on("list success", ({tokenId, price, isList}) => {
+            if (tid === tokenId.toNumber()) {
+                resolve({
+                    success: true,
+                    tokenId,
+                    price
+                })
+            }
+        });
     });
 };
 
@@ -98,6 +106,16 @@ const unlist = async (tokenId) => {
             console.log(e);
             reject(e);
         }
+        const tid = tokenId
+        // local store this tx hash
+        NoticeEmitter.on("unlist success", ({tokenId}) => {
+            if (tid === tokenId.toNumber()) {
+                resolve({
+                    success: true,
+                    tokenId,
+                })
+            }
+        });
     });
 };
 
@@ -131,6 +149,13 @@ const buy = async (tokenId) => {
             console.log(e);
             reject(e);
         }
+        // local store this tx hash
+        NoticeEmitter.on("buy success", (tokenId, price) => {
+            resolve({
+                success: true,
+                tokenId,
+            })
+        });
     });
 };
 

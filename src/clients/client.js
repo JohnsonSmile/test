@@ -100,9 +100,9 @@ const initialize = (provider) => {
       const accountLocal = localStorage.getItem("account");
       if (accountLocal === owner) {
         if (operation) {
-          NoticeEmitter.emit("list success", tokenId, price, true);
+          NoticeEmitter.emit("list success", {tokenId, price, isList:true});
         } else {
-          NoticeEmitter.emit("unlist success", tokenId, false);
+          NoticeEmitter.emit("unlist success", {tokenId, isList:false});
         }
       }
     }

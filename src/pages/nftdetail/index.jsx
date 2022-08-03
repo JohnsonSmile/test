@@ -7,7 +7,12 @@ import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 import { useCallback, useEffect } from "react"
 import { buy } from "../../clients/list"
 import { useDispatch } from "react-redux"
-import { asyncSetHide, asyncSetLoading } from "../../redux/reducers/status"
+import { asyncSetLoading } from "../../redux/reducers/status"
+import { ethers } from "ethers"
+import { getUsdtAllowance, getUsdtBalance, usdtApprove } from "../../clients/usdt"
+import { useWeb3React } from "@web3-react/core"
+import { getFormatBigNumber } from "../../utils"
+import { contracts } from "../../clients/contracts"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -15,6 +20,7 @@ const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage
 const NFTDetailPage = () => {
     const location = useLocation()
     const dispatch = useDispatch()
+    const { account } = useWeb3React()
     const getNftType = useCallback(() => {
         if (location.state.nftInfo.quality === 1) {
             return '铜'
@@ -32,8 +38,36 @@ const NFTDetailPage = () => {
     const handleBuyClick = async () => {
         dispatch(asyncSetLoading(true, "购买NFT", "购买NFT中..."))
         try {
+            // approve price
+            const price = ethers.utils.parseUnits(location.state.nftInfo.price, 'wei')
+            console.log(location.state.nftInfo.price)
+            // get balance
+            const usdtBalance = await getUsdtBalance(account)
+            console.log('usdtBalance===', getFormatBigNumber(usdtBalance))
+            if (usdtBalance.lt(price)) {
+                dispatch(asyncSetLoading(false, "购买NFT", "", 0, "USDT余额不足"))
+                return
+            }
+            // get approved usdt
+            dispatch(asyncSetLoading(true, "购买NFT", "获取USDT授权..."))
+            const usdtApproved = await getUsdtAllowance(account, contracts.socialNFT)
+            console.log(getFormatBigNumber(usdtApproved))
+            if (usdtApproved.lt(price)) {
+                // approve usdt
+                const approveUsdtResp = await usdtApprove(contracts.socialNFT, price)
+                console.log(approveUsdtResp)
+                if (!approveUsdtResp || !approveUsdtResp.success) {
+                    dispatch(asyncSetLoading(false, "购买NFT", "", 0, "获取USDT授权失败!"))
+                    return
+                }
+            }
             const res = await buy(location.state.nftInfo.token_id)
             // TODO: deal with the response 
+            if (res.success) {
+                dispatch(asyncSetLoading(false, "购买NFT", "", 0, "", "购买NFT成功"))
+            } else {
+                dispatch(asyncSetLoading(false, "购买NFT", "", 0, "购买NFT失败！"))
+            }
             console.log(res)
         } catch (e) {
             dispatch(asyncSetLoading(false, "购买NFT", "", 0, "购买NFT失败！"))
@@ -43,7 +77,7 @@ const NFTDetailPage = () => {
     
     useEffect(() =>{
         if (location.state) {
-            console.log(location.state)
+            console.log(ethers.utils.parseUnits(location.state.nftInfo.price, 'wei'))
         }
     }, [location, dispatch]);
     return (

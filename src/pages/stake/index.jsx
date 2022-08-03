@@ -49,11 +49,30 @@ const StakePage = () => {
         setValue(newValue);
     };
 
-    const onStakeSuccess = (tokenId) => {
-        setStakedIDs(prev => {
-            prev.push(tokenId)
-            return prev
+    const onStakeSuccess = (selectedIds) => {
+        const selectedSet = new Set(selectedIds)
+        setNftInfo({})
+        const nfts = nftInfos.map(nftInfo => {
+            if (selectedSet.has(nftInfo.token_id)) {
+                nftInfo.status = 2
+            }
+            return nftInfo
         })
+        setNftInfos(nfts)
+        setStakedIDs(prev => [...prev, ...selectedIds])
+    }
+
+    const onUnStakeSuccess = (stkIDs) => {
+        const selectedSet = new Set(stkIDs)
+        setNftInfo({})
+        const nfts = nftInfos.map(nftInfo => {
+            if (selectedSet.has(nftInfo.token_id)) {
+                nftInfo.status = 1
+            }
+            return nftInfo
+        })
+        setNftInfos(nfts)
+        setStakedIDs([])
     }
 
     const initialInfos = async () => {
@@ -84,6 +103,16 @@ const StakePage = () => {
         console.log(freeNFTResp)
 
 
+        // staked nft 
+        const stakeNFTs = resp.filter(nft => {
+            return nft.staking
+        })
+        console.log(stakeNFTs)
+        const stakedIDs = stakeNFTs.length > 0 ? stakeNFTs.map(nft => nft.tokenId.toNumber()) : []
+        console.log(stakedIDs)
+        setStakedIDs(stakedIDs)
+
+
         // all infos
         var nftInfos = []
 
@@ -108,7 +137,7 @@ const StakePage = () => {
         if (location.state && location.state.nftInfo) {
             setNftInfo(location.state.nftInfo)
         }
-    }, [location, stakedIDs, account])
+    }, [location, account])
     
     return (
         <Box sx={{ width: '100%', backgroundColor: '#FFF'}}>
@@ -119,7 +148,7 @@ const StakePage = () => {
                 </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <NFTStake nftInfos={nftInfos} nftInfo={nftInfo} onStakeSuccess={onStakeSuccess}/>
+                <NFTStake nftInfos={nftInfos} nftInfo={nftInfo} stakedIDs={stakedIDs} onStakeSuccess={onStakeSuccess} onUnStakeSuccess={onUnStakeSuccess}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <LPStake />
