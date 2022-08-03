@@ -13,6 +13,7 @@ import { getUsdtAllowance, getUsdtBalance, usdtApprove } from "../../clients/usd
 import { useWeb3React } from "@web3-react/core"
 import { getFormatBigNumber } from "../../utils"
 import { contracts } from "../../clients/contracts"
+import { toast } from "react-toastify"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -36,6 +37,10 @@ const NFTDetailPage = () => {
     },[location])
 
     const handleBuyClick = async () => {
+        if (location.state.nftInfo.owner === account || location.state.nftInfo.buyer === account) {
+            toast.warn("您不能购买您自己的NFT")
+            return
+        }
         dispatch(asyncSetLoading(true, "购买NFT", "购买NFT中..."))
         try {
             // approve price
@@ -50,17 +55,18 @@ const NFTDetailPage = () => {
             }
             // get approved usdt
             dispatch(asyncSetLoading(true, "购买NFT", "获取USDT授权..."))
-            const usdtApproved = await getUsdtAllowance(account, contracts.socialNFT)
+            const usdtApproved = await getUsdtAllowance(account, contracts.list)
             console.log(getFormatBigNumber(usdtApproved))
             if (usdtApproved.lt(price)) {
                 // approve usdt
-                const approveUsdtResp = await usdtApprove(contracts.socialNFT, price)
+                const approveUsdtResp = await usdtApprove(contracts.list, price)
                 console.log(approveUsdtResp)
                 if (!approveUsdtResp || !approveUsdtResp.success) {
                     dispatch(asyncSetLoading(false, "购买NFT", "", 0, "获取USDT授权失败!"))
                     return
                 }
             }
+            dispatch(asyncSetLoading(true, "购买NFT", "购买中..."))
             const res = await buy(location.state.nftInfo.token_id)
             // TODO: deal with the response 
             if (res.success) {
@@ -77,7 +83,7 @@ const NFTDetailPage = () => {
     
     useEffect(() =>{
         if (location.state) {
-            console.log(ethers.utils.parseUnits(location.state.nftInfo.price, 'wei'))
+            console.log(location.state.nftInfo)
         }
     }, [location, dispatch]);
     return (
@@ -105,8 +111,8 @@ const NFTDetailPage = () => {
             <Typography sx={{ color: '#333', fontSize: '21px', fontWeight: 700, mt: 1 }}>NFT#{location.state.nftInfo.token_id}</Typography>
             <Typography sx={{ color: '#333', fontSize: '14px', fontWeight: 500, mt: 1 }}>类型:{getNftType()}</Typography>
             <Typography sx={{ color: '#333', fontSize: '14px', fontWeight: 500 , mt: 1}}>价格:{location.state.nftInfo.price} wei</Typography>
-            <Box sx={{ mx: 2, mt: 4, backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', color: '#FFF', cursor: 'pointer' }}
-                onClick={handleBuyClick}>确认购买</Box>
+            {<Box sx={{ mx: 2, mt: 4, backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', color: '#FFF', cursor: 'pointer' }}
+                onClick={handleBuyClick}>确认购买</Box>}
         </Box>
 
     )
