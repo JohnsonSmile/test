@@ -194,6 +194,40 @@ const stakeNFT = async (tokenId, isStake) => {
     });
 };
 
+const batchStakeNFT = async (tokenIds, isStake) => {
+    if (!window.Signer || !window.socialNFTContract) {
+        console.warn("in socialNFT stakeNFT ");
+        initialize();
+    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const tx = await window.socialNFTContract.connect(window.Signer).batchStakeNFT(
+                tokenIds,
+                isStake
+                // {
+                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
+                // }
+            );
+
+            window.Library.once(tx.hash, (transaction) => {
+                if (transaction.status !== 1) {
+                    window.Library.call(tx)
+                        .then((res) => {
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            reject(err);
+                        });
+                }
+            });
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+}
+
 const approve = async (to, tokenId) => {
     if (!window.Signer || !window.socialNFTContract) {
         console.warn("in approve stakeNFT ");
@@ -248,5 +282,6 @@ export {
     getApproved,
     safeMint,
     stakeNFT,
+    batchStakeNFT,//批量质押
     approve // list上架流程需要， approve list to 为 list的合约地址,
 };

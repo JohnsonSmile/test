@@ -824,6 +824,24 @@ const SocialNFTABI = [
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "tokenIds_",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "isstake_",
+        "type": "bool"
+      }
+    ],
+    "name": "batchStakeNFT",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
