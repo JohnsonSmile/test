@@ -7,6 +7,10 @@ import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../../assets/images/mynft/copper_nft.png"
+import { batchStakeNFT, stakeNFT } from "../../../clients/socialNFT";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { asyncSetLoading } from "../../../redux/reducers/status";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -21,11 +25,12 @@ const nftTypes = [
 
 
 const NFTStake = (props) => {
-    const { nftInfos, nftInfo } = props
+    const { nftInfos, nftInfo, onStakeSuccess } = props
     const [selectedType, setSelectedType] = useState(1)
     const [selectedIDs, setSelectedIDs] = useState([])
     const [nftIDs, setNftIDs] = useState([])
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const handleTypeChange = (e) => {
         setSelectedType(e.target.value)
         setSelectedIDs([])
@@ -36,18 +41,42 @@ const NFTStake = (props) => {
         setSelectedIDs(selectedNFTIDs)
     }
 
-    const handleStakeClick = () => {
+    const handleStakeClick = async () => {
         // TODO: stake selected nfts
+        if (selectedIDs.length === 0) {
+            toast.error("至少选择一个")
+            return
+        }
+        dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
+        try {
+            // TODO: more to stake
+            const resp = await batchStakeNFT(selectedIDs, true)
+            if (resp.success) {
+                dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
+                const stakedIDSet = new Set(selectedIDs)
+                const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
+                setNftIDs(IDs)
+                setSelectedIDs([])
+                console.log(resp)
+            } else {
+                dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
+            }
+        } catch (e) {
+            console.log(e)
+            dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
+        }
     }
 
     useEffect(() => {
-        console.log('hahah')
         if (nftInfo.id) {
             setSelectedIDs([nftInfo.token_id])
             setSelectedType(nftInfo.quality)
             setNftIDs(nftInfos.filter(nft => nft.quality === nftInfo.quality).map(nftInfo => nftInfo.token_id))
+        } else {
+            setSelectedType(1)
+            setNftIDs(nftInfos.filter(nft => nft.quality === 1).map(nftInfo => nftInfo.token_id))
         }
-    }, [])
+    }, [nftInfo, nftInfos])
     
 
     const handleStakeRecordClick = () => {

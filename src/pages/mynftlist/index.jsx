@@ -7,10 +7,12 @@ import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
-import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
+import { getUserStakedTokenIDsByPage, stakeNFT } from "../../clients/socialNFT"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { useWeb3React } from "@web3-react/core"
 import { getUserListItems, getUserListItemsNum } from "../../clients/list"
+import { useDispatch } from "react-redux"
+import { asyncSetLoading } from "../../redux/reducers/status"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 const types = [
@@ -63,13 +65,53 @@ const MyNFTListPage = () => {
     const [statusOpen, setStatusOpen] = useState(false)
     const { account } = useWeb3React()
     const [nftInfos, setNftInfos] = useState([])
+    const [freeNftInfos, setFreeNftInfos] = useState([])
+    const location = useLocation()
+    const dispatch = useDispatch()
     const handleStakeClick = (nftInfo) => {
         navigate('/stake', {
             state: {
                 nftInfo,
-                nftInfos
+                nftInfos: freeNftInfos
             }
         })
+    }
+    const handleUnstakeClick = async (nftInfo) => {
+        dispatch(asyncSetLoading(true, "解除质押NFT", "正在解除质押NFT"))
+        try {
+            console.log(nftInfo)
+            // TODO: more to stake
+            const resp = await stakeNFT(nftInfo.token_id, false)
+            if (resp.success) {
+                dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
+                console.log(resp.tokenId.toNumber())
+                setFreeNftInfos(prev => [...prev, nftInfo ])
+                setNftInfos(prev => {
+                    prev.map(p => {
+                        if (p.token_id === nftInfo.token_id) {
+                            p.status = 1
+                        }
+                        return p
+                    })
+                    return prev
+                })
+                setFillteredNFTInfos(prev => {
+                    prev.map(p => {
+                        if (p.token_id === nftInfo.token_id) {
+                            p.status = 1
+                        }
+                        return p
+                    })
+                    return prev
+                })
+            } else {
+                dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
+            }
+        } catch (e) {
+            console.log(e)
+            dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
+        }
+
     }
 
     const handleTypeChange = (type) => {
@@ -134,7 +176,7 @@ const MyNFTListPage = () => {
     }
 
 
-    const initialInfos = async () => {
+    const initialInfos = async (status, type) => {
         // get all nfts not listed with type
         // 闲置的和 staking的
         const pageSize = 100
@@ -160,6 +202,7 @@ const MyNFTListPage = () => {
         // get nft infos from backend
         const freeNFTResp = freeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(freeIDs) : []
         console.log(freeNFTResp)
+
 
 
         // get staked nfts
@@ -198,6 +241,12 @@ const MyNFTListPage = () => {
 
         // 1 闲置 2 质押中 3 出售中
         if (freeNFTResp.code === 200 && freeNFTResp.result && freeNFTResp.result.length > 0) {
+            setFreeNftInfos(freeNFTResp.result.map(nft => {
+                return {
+                    ...nft,
+                    status: 1
+                }
+            }))
             nftInfos.push(...(freeNFTResp.result.map(nft => {
                 return {
                     ...nft,
@@ -225,14 +274,33 @@ const MyNFTListPage = () => {
         nftInfos = nftInfos.sort((a, b) => a.id < b.id)
         console.log(nftInfos)
         setNftInfos(nftInfos)
+        if (status !== 0) {
+            nftInfos = nftInfos.filter(nftInfo => nftInfo.status === status)
+        }
+        if (type !== 0) {
+            nftInfos = nftInfos.filter(nftInfo => nftInfo.quality === type)
+        }
+        console.log(nftInfos, type, status)
         setFillteredNFTInfos(nftInfos)
     }
 
     useEffect(() => {
-        if (account) {
-            initialInfos()
+        if (location && location.state 
+            && status === 0 && type === 0
+            && (location.state.status !== 0 || location.state.type !== 0) ) {
+            console.log(location.state)
+            setStatus(location.state.status)
+            setType(location.state.type)
+            if (account) {
+                initialInfos(location.state.status, location.state.type)
+            }
+        } else {
+
+            if (account) {
+                initialInfos(0, 0)
+            }
         }
-    }, [account])
+    }, [account, location])
     
 
     return (
@@ -265,10 +333,10 @@ const MyNFTListPage = () => {
                                 <Box sx={{flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                                     <CardMedia component={"img"} src={NFTImages[nftinfo.quality - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />
                                     <Typography variant="inherit" sx={{fontSize: '16px', fontWeight: 700 }}>
-                                        {nftinfo.quality === 1 && '铜#'+ nftinfo.id}
-                                        {nftinfo.quality === 2 && '银#'+ nftinfo.id}
-                                        {nftinfo.quality === 3 && '金#'+ nftinfo.id}
-                                        {nftinfo.quality === 4 && '钻#'+ nftinfo.id}
+                                        {nftinfo.quality === 1 && '铜#'+ nftinfo.token_id}
+                                        {nftinfo.quality === 2 && '银#'+ nftinfo.token_id}
+                                        {nftinfo.quality === 3 && '金#'+ nftinfo.token_id}
+                                        {nftinfo.quality === 4 && '钻#'+ nftinfo.token_id}
                                     </Typography>
                                 </Box>
                                 <Typography variant="inherit" sx={{flex: 1, fontSize: '14px', fontWeight: 400}}>
@@ -280,11 +348,11 @@ const MyNFTListPage = () => {
                             <Divider />
                             <Box sx={{py: 3, px: 4, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1}}>
                                 {nftinfo.status === 1 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
-                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleStakeClick(nftinfo)}}>去质押</Box>
+                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleStakeClick(nftinfo) }}>去质押</Box>
                                         <Box sx={{ flex: 1, background: '#ECF0FF', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#4263EB', cursor: 'pointer'}}>去出售</Box>
                                     </Box>}
                                 {nftinfo.status === 2 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>
-                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}}>解除质押</Box>
+                                        <Box sx={{ flex: 1, background: '#4263EB', borderRadius: '12px', height: '36px', lineHeight: '36px', color: '#FFF', cursor: 'pointer'}} onClick={ () => { handleUnstakeClick(nftinfo) }}>解除质押</Box>
                                         <Box sx={{ flex: 1 }}></Box>
                                     </Box>}
                                 {nftinfo.status === 3 && <Box sx={{display: 'flex', gap: 2, width: '100%'}}>

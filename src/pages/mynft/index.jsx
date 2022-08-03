@@ -23,6 +23,7 @@ const MyNFTPage = () => {
         navigate('/mynft/list', {
             state: {
                 type: quality,
+                status: 0
             }
         })
     }

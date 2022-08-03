@@ -191,6 +191,15 @@ const stakeNFT = async (tokenId, isStake) => {
             console.log(e);
             reject(e);
         }
+
+        // local store this tx hash
+        NoticeEmitter.on("stake success", ({tokenId, isStake}) => {
+            resolve({
+                success: true,
+                tokenId,
+                isStake
+            })
+        });
     });
 };
 
@@ -225,6 +234,23 @@ const batchStakeNFT = async (tokenIds, isStake) => {
             console.log(e);
             reject(e);
         }
+        const tokenSet = new Set(tokenIds)
+        // local store this tx hash
+        NoticeEmitter.on("stake success", ({tokenId, isStake}) => {
+            if (tokenSet.has(tokenId.toNumber())) {
+                tokenSet.delete(tokenId.toNumber())
+            }
+            console.log(tokenSet)
+            console.log(tokenId)
+            console.log(tokenId.toNumber())
+            if (tokenSet.size === 0) {
+                resolve({
+                    success: true,
+                    tokenIds,
+                    isStake
+                })
+            }
+        });
     });
 }
 

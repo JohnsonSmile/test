@@ -80,13 +80,15 @@ const initialize = (provider) => {
       console.log(owner, tokenId, newStatu, stakeAt);
       const accountLocal = localStorage.getItem("account");
       if (accountLocal === owner && newStatu) {
-        toast.info(
-          `You have stake your nft, tokenId is: ${tokenId.toString()}!`
-        );
+        NoticeEmitter.emit("stake success", {tokenId, isStake: true});
+        // toast.info(
+        //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
+        // );
       } else if (accountLocal === owner && !newStatu) {
-        toast.info(
-          `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
-        );
+        NoticeEmitter.emit("stake success", {tokenId, isStake: false});
+        // toast.info(
+        //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
+        // );
       }
     }
   );
