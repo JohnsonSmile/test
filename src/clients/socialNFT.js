@@ -2,12 +2,12 @@ import { getBigNumber, NoticeEmitter, formatNumber, getFormatBigNumber } from ".
 import { initialize } from "./client";
 
 // ------get function------
-const getTotalPrice = async (amount) => {
+const getTotalPrice = async (amount, payType) => {
     if (!window.socialNFTContract) {
         console.warn("in getPrice ");
         initialize();
     }
-    const totalPrice = await window.socialNFTContract.getTotalPrice(amount);
+    const totalPrice = await window.socialNFTContract.getTotalPrice(amount, payType);
     return totalPrice;
 };
 
@@ -115,7 +115,7 @@ const getApproved = async (tokenId) => {
 };
 
 // ------post function-----
-const safeMint = async (amount) => {
+const safeMint = async (amount, payType) => {
     if (!window.Signer || !window.socialNFTContract) {
         console.warn("in socialNFT safeMint ");
         initialize();
@@ -123,7 +123,8 @@ const safeMint = async (amount) => {
     return new Promise(async (resolve, reject) => {
         try {
             const tx = await window.socialNFTContract.connect(window.Signer).safeMint(
-                amount
+                amount,
+                payType
                 // {
                 //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
                 // }
@@ -193,7 +194,7 @@ const stakeNFT = async (tokenId, isStake) => {
         }
 
         // local store this tx hash
-        NoticeEmitter.on("stake success", ({tokenId, isStake}) => {
+        NoticeEmitter.on("stake success", ({ tokenId, isStake }) => {
             resolve({
                 success: true,
                 tokenId,
@@ -236,7 +237,7 @@ const batchStakeNFT = async (tokenIds, isStake) => {
         }
         const tokenSet = new Set(tokenIds)
         // local store this tx hash
-        NoticeEmitter.on("stake success", ({tokenId, isStake}) => {
+        NoticeEmitter.on("stake success", ({ tokenId, isStake }) => {
             if (tokenSet.has(tokenId.toNumber())) {
                 tokenSet.delete(tokenId.toNumber())
             }

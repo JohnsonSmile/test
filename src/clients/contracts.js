@@ -995,6 +995,11 @@ const SocialNFTABI = [
         "internalType": "uint256",
         "name": "tokenId_",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "payType_",
+        "type": "uint8"
       }
     ],
     "name": "getPriceOfTokenId",
@@ -1024,6 +1029,11 @@ const SocialNFTABI = [
         "internalType": "uint256",
         "name": "amount_",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "payType_",
+        "type": "uint8"
       }
     ],
     "name": "getTotalPrice",
@@ -1269,6 +1279,11 @@ const SocialNFTABI = [
         "internalType": "uint256",
         "name": "amount_",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "payType_",
+        "type": "uint8"
       }
     ],
     "name": "safeMint",
