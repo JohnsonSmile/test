@@ -8,6 +8,8 @@ import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
 import { getUserOwn, getUserOwnNum } from "../../clients/socialNFT"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
+import { useDispatch, useSelector } from "react-redux"
+import { asyncSetMyNft, getMyNft } from "../../redux/reducers/page"
 
 
 
@@ -15,10 +17,12 @@ const MyNFTPage = () => {
 
     const navigate = useNavigate()
     const { account } = useWeb3React()
-    const [copperNftInfos, setCopperNftInfos] = useState([])
-    const [silverNftInfos, setSilverNftInfos] = useState([])
-    const [goldNftInfos, setGoldNftInfos] = useState([])
-    const [diamondNftInfos, setDiamondNftInfos] = useState([])
+    // const [copperNftInfos, setCopperNftInfos] = useState([])
+    // const [silverNftInfos, setSilverNftInfos] = useState([])
+    // const [goldNftInfos, setGoldNftInfos] = useState([])
+    // const [diamondNftInfos, setDiamondNftInfos] = useState([])
+    const mynftState = useSelector(getMyNft)
+    const dispatch = useDispatch()
     const handleDetailClick = (quality) => {
         navigate('/mynft/list', {
             state: {
@@ -47,27 +51,36 @@ const MyNFTPage = () => {
         // get nft infos from backend
         const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
         console.log(nftInfoResp)
-        if (nftInfoResp.code === 200) {
+        if (nftInfoResp.code === 200 && nftInfoResp.result && nftInfoResp.result.length > 0) {
             const copperInfos = nftInfoResp.result.filter(nft => {
                 return nft.quality === 1
             })
             console.log("copperInfos", copperInfos)
-            setCopperNftInfos(copperInfos)
             const silverInfos = nftInfoResp.result.filter(nft => {
                 return nft.quality === 2
             })
             console.log("silverInfos", silverInfos)
-            setSilverNftInfos(silverInfos)
             const goldInfos = nftInfoResp.result.filter(nft => {
                 return nft.quality === 3
             })
-            setGoldNftInfos(goldInfos)
             console.log("goldInfos", goldInfos)
             const diamondInfos = nftInfoResp.result.filter(nft => {
                 return nft.quality === 4
             })
-            setDiamondNftInfos(diamondInfos)
             console.log("diamondInfos", diamondInfos)
+            dispatch(asyncSetMyNft({
+                copperNftInfos: copperInfos,
+                silverNftInfos: silverInfos,
+                goldNftInfos: goldInfos,
+                diamondNftInfos: diamondInfos,
+            }))
+        } else {
+            dispatch(asyncSetMyNft({
+                copperNftInfos: [],
+                silverNftInfos: [],
+                goldNftInfos: [],
+                diamondNftInfos: [],
+            }))
         }
     }
     useEffect(() => {
@@ -112,7 +125,7 @@ const MyNFTPage = () => {
                                 }}
                                 image={CopperNFTImage } />
                         </Box>
-                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >铜 {copperNftInfos.length}个</Typography>
+                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >铜 {mynftState.copperNftInfos.length}个</Typography>
                     <Box sx={{ cursor: 'pointer', color: '#7E8186', fontSize: '12px'}}>{'查看详情 >'}</Box>
                 </Card>
             </Grid>
@@ -147,7 +160,7 @@ const MyNFTPage = () => {
                                 }}
                                 image={SilverNFTImage } />
                         </Box>
-                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >银 {silverNftInfos.length}个</Typography>
+                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >银 {mynftState.silverNftInfos.length}个</Typography>
                     <Box sx={{ cursor: 'pointer', color: '#7E8186', fontSize: '12px'}}>{'查看详情 >'}</Box>
                 </Card>
             </Grid>
@@ -182,7 +195,7 @@ const MyNFTPage = () => {
                                 }}
                                 image={ GoldNFTImage } />
                         </Box>
-                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >金 {goldNftInfos.length}个</Typography>
+                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >金 {mynftState.goldNftInfos.length}个</Typography>
                     <Box sx={{ cursor: 'pointer', color: '#7E8186', fontSize: '12px'}}>{'查看详情 >'}</Box>
                 </Card>
             </Grid>
@@ -217,7 +230,7 @@ const MyNFTPage = () => {
                                 }}
                                 image={ DiamondNFTImage } />
                         </Box>
-                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >钻 {diamondNftInfos.length}个</Typography>
+                    <Typography sx={{mt: 0.5, color: '#333', fontSize: '16px', fontWeight: 700 }} >钻 {mynftState.diamondNftInfos.length}个</Typography>
                     <Box sx={{ cursor: 'pointer', color: '#7E8186', fontSize: '12px'}}>{'查看详情 >'}</Box>
                 </Card>
             </Grid>

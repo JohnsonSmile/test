@@ -12,11 +12,17 @@ export const pageSlice = createSlice({
         nftAmount: 0,
         promotionCount: 0,
         invitationCode: '',
-        inviter: ''
+        inviter: '',
+    },
+    mynft: {
+        copperNftInfos: [],
+        silverNftInfos: [],
+        goldNftInfos: [],
+        diamondNftInfos: [],
     },
     stake: {
         nftInfos: [],
-        selectedIDs: []
+        selectedIDs: [],
     }
   },
   reducers: {
@@ -41,10 +47,17 @@ export const pageSlice = createSlice({
           selectedIDs: action.payload
         }
     },
+    setMyNft: (state, action) => {
+        const mynft = state.mynft
+        state.mynft = {
+          ...mynft,
+          ...action.payload
+        }
+    },
   }
 })
 
-export const { setHome, setNftInfos, setSelectedIDs } = pageSlice.actions
+export const { setHome, setNftInfos, setSelectedIDs, setMyNft } = pageSlice.actions
 
 // async function
 const asyncSetHome = (home) => (dispatch) => {
@@ -59,15 +72,20 @@ const asyncSetSelectedIDs = (ids) => (dispatch) => {
     dispatch(setSelectedIDs(ids))
 }
 
-export { asyncSetHome, asyncSetNftInfos, asyncSetSelectedIDs }
+const asyncSetMyNft = (mynft) => (dispatch) => {
+    dispatch(setMyNft(mynft))
+}
+
+export { asyncSetHome, asyncSetNftInfos, asyncSetSelectedIDs, asyncSetMyNft }
 
 
 // state selector
 const getHome = (state) => state.pageReducer.home
 const getNftInfos = (state) => state.pageReducer.stake.nftInfos
 const getSelectedIDs = (state) => state.pageReducer.stake.selectedIDs
+const getMyNft = (state) => state.pageReducer.mynft
 
-export { getHome, getNftInfos, getSelectedIDs }
+export { getHome, getNftInfos, getSelectedIDs, getMyNft }
 
 export default pageSlice.reducer
   
