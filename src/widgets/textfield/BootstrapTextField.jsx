@@ -3,7 +3,7 @@ import { styled } from "@mui/styles";
 
 
 
-const BootstrapTextField = styled(Select)(({ theme }) => ({
+const BootstrapTextField = styled(TextField)(({ theme }) => ({
     '& .MuiOutlinedInput-root': {
         borderRadius: '12px',
         fontSize: '14px',

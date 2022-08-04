@@ -1,8 +1,7 @@
-import { Box, CardMedia, Chip, MenuItem, Typography } from "@mui/material"
+import { Box, CardMedia, Chip, MenuItem, Select, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import MultipleSelection from "./MultipleSelection"
-import BootstrapTextField from '../../../widgets/textfield/BootstrapTextField'
 import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
@@ -12,6 +11,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncSetLoading } from "../../../redux/reducers/status";
 import { asyncSetNftInfos, asyncSetSelectedIDs, getNftInfos, getSelectedIDs } from "../../../redux/reducers/page";
+import { styled } from "@mui/styles";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -23,6 +23,19 @@ const nftTypes = [
     { label: '金', value: 3 },
     { label: '钻', value: 4 }
 ]
+
+const BootstrapSelect = styled(Select)(({ theme }) => ({
+    '& .MuiOutlinedInput-root': {
+        borderRadius: '12px',
+        fontSize: '14px',
+        height: '48px',
+        border: '1px solid #F2F2F2'
+    },
+    '& .MuiSelect-select': {
+        display: 'flex',
+        alignItems: 'center',
+    },
+}));
 
 
 const NFTStake = (props) => {
@@ -163,7 +176,7 @@ const NFTStake = (props) => {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
                 <Box component={'label'} forid="staking-type-select" sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>NFT类型</Box>
-                <BootstrapTextField
+                <BootstrapSelect
                     id="staking-type-select"
                     select
                     value={selectedType}
@@ -178,7 +191,7 @@ const NFTStake = (props) => {
                             </Typography>
                         </MenuItem>
                     ))}
-                </BootstrapTextField>
+                </BootstrapSelect>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
                 <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>NFT编号:</Box>
