@@ -1,11 +1,9 @@
 import { Box, Tab,  Typography } from "@mui/material"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
 import PropTypes from 'prop-types';
 import NFTStake from "./components/NFTStake";
 import LPStake from "./components/LPStake";
 import BootstrapTabs from "../../widgets/tabs/BootstrapTabs";
-import { getUserListItems, getUserListItemsNum } from "../../clients/list";
 import { apiPostGetNFTInfosByIDs } from "../../http/api";
 import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT";
 import { useWeb3React } from "@web3-react/core";

@@ -21,7 +21,7 @@ import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
-import { getUserInfo } from '../../redux/reducers/user';
+import { getAvatar, getUserInfo, getUserName } from '../../redux/reducers/user';
 import { asyncSetHome, getHome } from '../../redux/reducers/page';
 
 
@@ -136,6 +136,8 @@ const HomePage = () => {
     const accountInfo = useSelector(getHome)
     const signInfo = useSelector(getSigInfo)
     const userInfo = useSelector(getUserInfo)
+    const avatar = useSelector(getAvatar)
+    const userName = useSelector(getUserName)
     const dispatch = useDispatch()
     const initialContractGlobalInfo = async () => {
             // initial contract global consts
@@ -204,7 +206,7 @@ const HomePage = () => {
     return (
         <>
             <Box sx={{ backgroundColor: '#FFF', mb: 4}}>
-                <UserInfo accountInfo={accountInfo} />
+                <UserInfo accountInfo={accountInfo} avatar={avatar} userName={userName} />
                 <Features features={features} informations={informations} />
                 <Box sx={{
                     backgroundColor: '#FFF', 

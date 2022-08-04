@@ -4,18 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { ellipsisAccount } from '../../../utils'
 
 const ProfileCard = (props) => {
-    const { accountInfo } = props
+    const { accountInfo, avatar, userName } = props
     const navigate = useNavigate()
     const handleSettingClick = () => {
         navigate('/setting')
     }
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <Avatar sx={{ width: 100, height: 100 }} />
+            <Avatar sx={{ width: 100, height: 100 }} src={avatar} />
             <Box 
                 sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, mt: 1.5, cursor: 'pointer'}}
                 onClick={handleSettingClick}>
-                <Typography sx={{color: 'InfoText', textAlign: 'center', fontSize: '20px'}}>{accountInfo.username}</Typography>
+                <Typography sx={{color: 'InfoText', textAlign: 'center', fontSize: '20px'}}>{userName}</Typography>
                 <EditIcon />
             </Box>
             <Typography sx={{color: 'rgba(0, 0, 0, .5)', textAlign: 'center', fontSize: '14px'}}>{ellipsisAccount(accountInfo.account)}</Typography>

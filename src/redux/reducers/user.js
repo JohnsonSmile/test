@@ -10,34 +10,51 @@ export const userSlice = createSlice({
       inviter: '',
       avatar: '',
       token: ''
-    }
+    },
+    avatar: '',
+    userName: ''
   },
   reducers: {
     setUserInfo:(state, action) => {
-      console.log(action.payload)
       const userInfo = state.userInfo
       state.userInfo = {
         ...userInfo,
         ...action.payload
       }
-    }
+    },
+    setAvatar: (state, action) => {
+      state.avatar = action.payload
+    },
+    setUserName: (state, action) => {
+      state.userName = action.payload
+    },
   }
 })
 
-export const { setUserInfo } = userSlice.actions
+export const { setUserInfo, setAvatar, setUserName } = userSlice.actions
 
 // async function
 const asyncSetUserInfo = (userInfo) => (dispatch) => {
   dispatch(setUserInfo(userInfo))
 }
 
-export { asyncSetUserInfo }
+const asyncSetAatar = (avatar) => (dispatch) => {
+  dispatch(setAvatar(avatar))
+}
+
+const asyncSetUserName = (avatar) => (dispatch) => {
+  dispatch(setUserName(avatar))
+}
+
+export { asyncSetUserInfo, asyncSetAatar, asyncSetUserName }
 
 
 // state selector
 const getUserInfo = (state) => state.userReducer.userInfo
+const getAvatar = (state) => state.userReducer.avatar
+const getUserName = (state) => state.userReducer.userName
 
-export { getUserInfo }
+export { getUserInfo, getAvatar, getUserName }
 
 export default userSlice.reducer
   

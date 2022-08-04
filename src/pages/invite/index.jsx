@@ -1,6 +1,5 @@
 import { Avatar, Box, CardMedia, Typography } from "@mui/material"
 import QRCode from 'qrcode.react';
-import { useEffect, useState } from "react";
 import domtoimage from 'dom-to-image';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import InviteBgTopImage from "../../assets/images/invite/background_top.png";
@@ -8,7 +7,7 @@ import InviteBgBottomImage from "../../assets/images/invite/background_bottom.pn
 import { ReactComponent as QRCodeIcon } from "../../assets/icon/invite/qrcode.svg";
 import { ReactComponent as AppIcon } from "../../assets/icon/invite/app.svg"
 import { useSelector } from "react-redux";
-import { getUserInfo } from '../../redux/reducers/user';
+import { getAvatar, getUserInfo, getUserName } from '../../redux/reducers/user';
 import { getHome } from '../../redux/reducers/page';
 import { toast } from "react-toastify";
 
@@ -17,6 +16,8 @@ const InvitePage = () => {
     
     const userInfo = useSelector(getUserInfo)
     const homeInfo = useSelector(getHome)
+    const avatar = useSelector(getAvatar)
+    const userName = useSelector(getUserName)
     const handleDownloadClick = () => {
         setTimeout(() => {
             console.log('get download')
@@ -51,10 +52,10 @@ const InvitePage = () => {
                         flexDirection: 'column', 
                         alignItems: 'center',  px: 2 }} >
                     <Box sx={{ position: 'absolute', top: '-40px'}}>
-                        <Avatar sx={{ width: 80, height: 80, border: '4px solid #FFF', borderRadius: '50%' }}/>
+                        <Avatar sx={{ width: 80, height: 80, border: '4px solid #FFF', borderRadius: '50%' }} src={avatar}/>
                     </Box>
                     <Box sx={{ pt: 8, display: 'flex', flexDirection: 'column' }}>
-                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>{userInfo.userName ? userInfo.userName : 'AAA'}</Typography>
+                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>{userName}</Typography>
                         <Typography sx={{color:'#7E8186', fontSize: 12, mt: 1}}>诚邀您加入AAA社区Value Bank项目</Typography>
                     </Box>
                     <Box sx={{ mt: 2 }}>

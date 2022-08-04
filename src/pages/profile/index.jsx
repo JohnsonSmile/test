@@ -8,6 +8,8 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
+import { useSelector } from "react-redux"
+import { getAvatar, getUserName } from "../../redux/reducers/user"
 
 const ProfilePage = () => {
     const { account } = useWeb3React()
@@ -17,6 +19,9 @@ const ProfilePage = () => {
         yesterdayFianceIncome: 3500,
         yesterdayPromotionIncome: 4511.23 
     })
+
+    const avatar = useSelector(getAvatar)
+    const userName = useSelector(getUserName)
     const navigate = useNavigate()
     const handleMyAssetsClick = () => {
         navigate('/myassets')
@@ -44,7 +49,7 @@ const ProfilePage = () => {
     return (
         <Box sx={{backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)'}}>
             <Box sx={{ pt: 2 }}>
-                <ProfileCard accountInfo={accountInfo} />
+                <ProfileCard accountInfo={accountInfo} avatar={avatar} userName={userName}/>
             </Box>
             <List sx={{ width: '100%', bgcolor: 'background.paper', mt: 3 }}>
                 <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handleMyAssetsClick}>
