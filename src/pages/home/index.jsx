@@ -23,6 +23,7 @@ import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
 import { getUserInfo } from '../../redux/reducers/user';
 import { asyncSetLoading } from '../../redux/reducers/status';
+import { asyncSetHome, getHome } from '../../redux/reducers/page';
 
 
 // FIXME: should be set
@@ -133,17 +134,7 @@ const vsdUsdtData = {
 
 const HomePage = () => {
     const { account } = useWeb3React()
-    const [accountInfo, setAccountInfo] = useState({
-        account: '',
-        userName: '',
-        avatar: '',
-        yesterdayGain: 0,
-        isSigned: false,
-        nftAmount: 0,
-        promotionCount: 0,
-        invitationCode: '',
-        inviter: ''
-    })
+    const accountInfo = useSelector(getHome)
     const signInfo = useSelector(getSigInfo)
     const userInfo = useSelector(getUserInfo)
     const dispatch = useDispatch()
@@ -163,17 +154,26 @@ const HomePage = () => {
                 const res = await apiPostGetUserInfo(account, signInfo.sigHex, "hello")
                 console.log("res", res)
                 if (res.code === 200 && res.result) {
-                    setAccountInfo(prev => {
-                        return {
-                            ...prev,
-                            ...res.result.userInfo,
-                            isSigned: res.result.isSigned,
-                            promotionCount: res.result.promotionCount,
-                            nftAmount: amount ? amount : 0
-                        }
-                    })
+                    const accInfo = JSON.parse(JSON.stringify(accountInfo))
+                    dispatch(asyncSetHome({
+                        ...accInfo,
+                        ...res.result.userInfo,
+                        isSigned: res.result.isSigned,
+                        promotionCount: res.result.promotionCount,
+                        nftAmount: amount ? amount : 0
+                    }))
                 } else {
-                    setAccountInfo({})
+                    dispatch(asyncSetHome({
+                        account: '',
+                        userName: '',
+                        avatar: '',
+                        yesterdayGain: 0,
+                        isSigned: false,
+                        nftAmount: 0,
+                        promotionCount: 0,
+                        invitationCode: '',
+                        inviter: ''
+                    }))
                 }
             }
     }
@@ -181,16 +181,27 @@ const HomePage = () => {
     useEffect(() => {
         if (account) {
             if (account === userInfo.account) {
-                setAccountInfo(prev => {
-                    return { ...prev, ...userInfo, }
-                })
+                const accInfo = JSON.parse(JSON.stringify(accountInfo))
+                dispatch(asyncSetHome({
+                    ...accInfo,...userInfo,
+                }))
             }
             // initial contract infos
             initialContractGlobalInfo()
         } else {
-            setAccountInfo({})
+            dispatch(asyncSetHome({
+                account: '',
+                userName: '',
+                avatar: '',
+                yesterdayGain: 0,
+                isSigned: false,
+                nftAmount: 0,
+                promotionCount: 0,
+                invitationCode: '',
+                inviter: ''
+            }))
         }
-    }, [account])
+    }, [account, userInfo])
     return (
         <>
             <Box sx={{ backgroundColor: '#FFF', mb: 4}}>

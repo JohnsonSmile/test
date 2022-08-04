@@ -4,12 +4,15 @@ export const pageSlice = createSlice({
   name: 'page',
   initialState: {
     home: {
-      account: '', 
-      id :'', 
-      invitationCode: '', 
-      inviter: '',
-      avatar: '',
-      token: ''
+        account: '',
+        userName: '',
+        avatar: '',
+        yesterdayGain: 0,
+        isSigned: false,
+        nftAmount: 0,
+        promotionCount: 0,
+        invitationCode: '',
+        inviter: ''
     },
     stake: {
         nftInfos: [],
