@@ -20,6 +20,10 @@ export const pageSlice = createSlice({
         goldNftInfos: [],
         diamondNftInfos: [],
     },
+    build: {
+        buildTotalCount: 0,
+        buildAmount: 1
+    },
     stake: {
         nftInfos: [],
         selectedIDs: [],
@@ -54,10 +58,24 @@ export const pageSlice = createSlice({
           ...action.payload
         }
     },
+    setBuildTotalCount: (state, action) => {
+        const build = state.build
+        state.build = {
+          ...build,
+          buildTotalCount: action.payload
+        }
+    },
+    setBuildAmount: (state, action) => {
+        const build = state.build
+        state.build = {
+          ...build,
+          buildAmount: action.payload
+        }
+    },
   }
 })
 
-export const { setHome, setNftInfos, setSelectedIDs, setMyNft } = pageSlice.actions
+export const { setHome, setNftInfos, setSelectedIDs, setMyNft, setBuildTotalCount, setBuildAmount } = pageSlice.actions
 
 // async function
 const asyncSetHome = (home) => (dispatch) => {
@@ -76,7 +94,15 @@ const asyncSetMyNft = (mynft) => (dispatch) => {
     dispatch(setMyNft(mynft))
 }
 
-export { asyncSetHome, asyncSetNftInfos, asyncSetSelectedIDs, asyncSetMyNft }
+const asyncSetBuildTotalCount = (count) => (dispatch) => {
+    dispatch(setBuildTotalCount(count))
+}
+
+const asyncSetBuildAmount = (count) => (dispatch) => {
+    dispatch(setBuildAmount(count))
+}
+
+export { asyncSetHome, asyncSetNftInfos, asyncSetSelectedIDs, asyncSetMyNft, asyncSetBuildTotalCount, asyncSetBuildAmount }
 
 
 // state selector
@@ -84,8 +110,10 @@ const getHome = (state) => state.pageReducer.home
 const getNftInfos = (state) => state.pageReducer.stake.nftInfos
 const getSelectedIDs = (state) => state.pageReducer.stake.selectedIDs
 const getMyNft = (state) => state.pageReducer.mynft
+const getBuildTotalCount = (state) => state.pageReducer.build.buildTotalCount
+const getBuildAmount = (state) => state.pageReducer.build.buildAmount
 
-export { getHome, getNftInfos, getSelectedIDs, getMyNft }
+export { getHome, getNftInfos, getSelectedIDs, getMyNft, getBuildTotalCount, getBuildAmount }
 
 export default pageSlice.reducer
   

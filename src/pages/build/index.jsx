@@ -4,15 +4,18 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
 import { contracts } from "../../clients/contracts"
-import { getTotalPrice, getTotalSupply, safeMint } from "../../clients/socialNFT"
+import { getTotalSupply, safeMint } from "../../clients/socialNFT"
 import { getUsdtAllowance, getUsdtBalance, usdtApprove } from "../../clients/usdt"
 import { getValueAllowance, getValueBalance, valueApprove } from "../../clients/value"
 import { getVSDAllowance, getVSDBalance, VSDApprove } from "../../clients/vsd"
 import BuildDialog from "./components/BuildDialog"
 import { ethers } from "ethers";
 import { getFormatBigNumber } from "../../utils"
-import { asyncSetHide, asyncSetLoading } from "../../redux/reducers/status"
-import { useDispatch } from "react-redux"
+import { asyncSetLoading } from "../../redux/reducers/status"
+import { useDispatch, useSelector } from "react-redux"
+import PayOptionDialog from "./components/PayOptionDialog"
+import { asyncSetBuildAmount, getBuildAmount } from "../../redux/reducers/page"
+import { apiPostGetNFTInfosByIDs } from "../../http/api.js"
 
 
 const countBtns = [
@@ -46,32 +49,30 @@ const rows = [
 
 const BuildPage = () => {
     const { account } = useWeb3React()
-    const [count, setCount] = useState(1)
-    const [totalPrice, setTotalPrice] = useState('')
-    const [priceInfo, setPriceInfo] = useState({})
+    const count = useSelector(getBuildAmount)
     const [buildCount, setBuildCount] = useState(0)
     const [open, setOpen] = useState(false)
+    const [payDialogOpen, setPayDialogOpen] = useState(false)
     const dispatch = useDispatch()
     // TODO: should be got from contract mint 
     // result of build: eg: {gold:10, sliver: 1, copper: 0, diamond: 1}
     const [result, setResult] = useState(null)
-    const handleCountChange = (c) => {
-        if (c.target.value) {
-            setCount(Number(c.target.value))
+    const handleCountChange = (e) => {
+        if (e.target.value) {
+            dispatch(asyncSetBuildAmount(Number(e.target.value)))
         } else {
-            setCount('')
+            dispatch(asyncSetBuildAmount(''))
         }
     }
     const handleCountBtnClick = (btn) => {
-        setCount(btn.value)
+        dispatch(asyncSetBuildAmount(Number(btn.value)))
     }
     const handleBuildBtnClick = () => {
         if (!count) {
             toast.error('数量不能为空!')
             return
         }
-        // call contract to build nft.
-        buildNFT()
+        setPayDialogOpen(true)
     }
 
     // ===============contract apis================
@@ -83,29 +84,15 @@ const BuildPage = () => {
             console.log(e)
         }
     }
-    const getPrice = async (count) => {
-        try {
-            const res = await getTotalPrice(count)
-            setPriceInfo(res)
-            const prices = []
-            if (res.totalUsdtPrice.gt(ethers.BigNumber.from(0))) {
-                prices.push(getFormatBigNumber(res.totalUsdtPrice) + ' USDT')
-            }
-            if (res.totalValuePrice.gt(ethers.BigNumber.from(0))) {
-                prices.push(getFormatBigNumber(res.totalValuePrice) + ' V6')
-            }
-            if (res.totalVsdPrice.gt(ethers.BigNumber.from(0))) {
-                prices.push(getFormatBigNumber(res.totalVsdPrice) + ' VSD')
-            }
-            const price = prices.join(' + ')
-            setTotalPrice(price)
-            // TODO: 
-            console.log(res)
-        } catch (e) {
-            console.log(e)
+    const onPaySelected = (price, type) => {
+        console.log(price)
+        console.log(type)
+        // call contract to build nft.
+        if (price && type) {
+            buildNFT(price, type) 
         }
     }
-    const buildNFT = async () => {
+    const buildNFT = async (priceInfo, type) => {
         dispatch(asyncSetLoading(true, "铸造NFT", "正在铸造NFT"))
         try {
             if (priceInfo.totalUsdtPrice.gt(ethers.BigNumber.from(0))) {
@@ -181,9 +168,32 @@ const BuildPage = () => {
             dispatch(asyncSetLoading(true, "铸造NFT", "Mint NFT..."))
             console.log('safe mint')
             // safe mint
-            const res = await safeMint(count)
+            const res = await safeMint(count, type)
             if (res.success) {
-                dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+                console.log(res)
+                const ids = res.tokenIds.map(tokenId => tokenId.toNumber())
+                console.log(ids)
+                // set result ?? {gold:10, sliver: 1, copper: 0, diamond: 1}
+                try {
+                    const nftInfoResp = await apiPostGetNFTInfosByIDs(ids)
+                    console.log(nftInfoResp)
+                    if (nftInfoResp.code === 200 && nftInfoResp.result && nftInfoResp.result.length > 0) {
+                        const cropper = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 1).length
+                        const silver = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 2).length
+                        const gold = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 3).length
+                        const diamond = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 4).length
+                        const result = { gold, silver, cropper, diamond }
+                        dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
+                        console.log(result)
+                        setResult(result)
+                        setOpen(true)
+                    } else {
+                        dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+                    }
+                } catch (e) {
+                    console.log(e)
+                    dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+                }
             } else {
                 dispatch(asyncSetLoading(false, "铸造NFT",  "", 0, "铸造NFT失败"))
             }
@@ -200,12 +210,10 @@ const BuildPage = () => {
             dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
             // 1. get now build count
             getTotalSupplyCount()
-            getPrice(count)
+            // getPrice(count)
             // const usdt = price.usdt * count
             // const v6 = price.v6 *count
             // setTotalPrice(`${usdt} USDT + ${v6} V6`)
-        } else {
-            setTotalPrice('数量不能为空')
         }
     }, [count])
 
@@ -255,9 +263,9 @@ const BuildPage = () => {
                         }} onClick={() => { handleCountBtnClick(btn) }}>{btn.title}</Box>
                     })}
                 </Box>
-                <Box>
+                {/* <Box>
                     <Typography variant={'inherit'} sx={{ mt: 2, color: '#7E8186', fontSize: '14px' }} >消耗:{totalPrice}</Typography>
-                </Box>
+                </Box> */}
                 <Box sx={{ mt: 2, width: '100%' }}>
                     <Box sx={{ background: '#4263EB', borderRadius: '20px', height: '56px', lineHeight: '56px', mx: 3, cursor: 'pointer', fontSize: '16px', fontWeight: 600, color: '#FFF' }}
                         onClick={handleBuildBtnClick}>铸造</Box>
@@ -296,6 +304,7 @@ const BuildPage = () => {
                     </Table>
                 </Box>
                 <BuildDialog isOpen={open} setIsOpen={setOpen} result={result} setResult={setResult} />
+                <PayOptionDialog isOpen={payDialogOpen} setIsOpen={setPayDialogOpen} onPaySelected={onPaySelected}/>
             </Box>
         </>
     )

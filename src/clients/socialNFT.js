@@ -148,15 +148,12 @@ const safeMint = async (amount, payType) => {
             reject(e);
         }
         // local store this tx hash
-        const tokenIds = [];
-        NoticeEmitter.on("mint success", (tokenId) => {
-            tokenIds.push(tokenId);
-            if (tokenIds.length === amount) {
-                resolve({
-                    success: true,
-                    tokenIds,
-                });
-            }
+        console.log('amount===', amount)
+        NoticeEmitter.on("mint success", (tokenIds) => {
+            resolve({
+                success: true,
+                tokenIds,
+            });
         });
     });
 };
