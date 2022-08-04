@@ -43,7 +43,7 @@ const features = [
         image: <LPTradeIcon />,
         title: '代币交易',
         url: '/lpmarket',
-        isReady: true
+        isReady: false
     },
     {
         image: <SignIcon />,
@@ -172,6 +172,8 @@ const HomePage = () => {
                             nftAmount: amount ? amount : 0
                         }
                     })
+                } else {
+                    setAccountInfo({})
                 }
             }
     }
@@ -183,14 +185,10 @@ const HomePage = () => {
                     return { ...prev, ...userInfo, }
                 })
             }
-            // TODO: get all information from backend and set infos
-            // get username, avatar, etc
-            const avatar = 'https://img2.baidu.com/it/u=2859542338,3761174075&fm=253&fmt=auto&app=138&f=JPEG?w=501&h=500'
-            setAccountInfo(prev => {
-                return { ...prev, account, avatar }
-            })
             // initial contract infos
             initialContractGlobalInfo()
+        } else {
+            setAccountInfo({})
         }
     }, [account])
     return (

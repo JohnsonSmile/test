@@ -55,7 +55,7 @@ export const UserInfo = (props) => {
     const classes = useStyles()
     return (
         <>
-            {!accountInfo.account && <Box sx={{
+            {!accountInfo.account && !accountInfo.invitationCode && <Box sx={{
                 minHeight: 140,
                 display: 'flex',
                 flexDirection: 'column',

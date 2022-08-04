@@ -1,9 +1,9 @@
-import { TextField } from "@mui/material";
+import { Select, TextField } from "@mui/material";
 import { styled } from "@mui/styles";
 
 
 
-const BootstrapTextField = styled(TextField)(({ theme }) => ({
+const BootstrapTextField = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-root': {
         borderRadius: '12px',
         fontSize: '14px',

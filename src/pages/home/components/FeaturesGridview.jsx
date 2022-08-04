@@ -1,11 +1,16 @@
 import { Box, Grid, Typography } from "@mui/material"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const FeaturesGridView = (props) => {
     const { features } = props
     const navigate = useNavigate()
     const handleFeatureClick = (feature) => {
-        navigate(feature.url)
+        if (feature.isReady) {
+            navigate(feature.url)
+        } else {
+            toast.warn("暂未开放相关功能...")
+        }
     }
 
     return (

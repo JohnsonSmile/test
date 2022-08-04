@@ -4,6 +4,7 @@ import { ReactComponent as MenuIcon } from '../../assets/icon/menu.svg'
 import { ReactComponent as AvatarIcon } from '../../assets/icon/home/avatar.svg'
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const listItems = [
@@ -32,13 +33,13 @@ const listItems = [
         url: '/sign',
         isReady: true
     },{
-        title: '代币交易市场',
-        url: '/lpmarket',
-        isReady: true
-    },{
         title: '邀请他人',
         url: '/invite',
         isReady: true
+    },{
+        title: '代币交易市场',
+        url: '/lpmarket',
+        isReady: false
     },{
         title: '消息中心',
         url: '/',
@@ -70,8 +71,12 @@ const SideDrawer = () => {
 
     const handleListItemClick = (item) => {
         // TODO: if user is already logged in, if not show dialog for login
-        setIsDrawerOpen(false)
-        navigate(item.url)
+        if (item.isReady) {
+            setIsDrawerOpen(false)
+            navigate(item.url)
+        } else {
+            toast.warn("暂未开放相关功能...")
+        }
     }
 
     const handleProfileClick = () => { 

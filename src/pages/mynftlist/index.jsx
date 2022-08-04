@@ -13,6 +13,7 @@ import { useWeb3React } from "@web3-react/core"
 import { getUserListItems, getUserListItemsNum, unlist } from "../../clients/list"
 import { useDispatch } from "react-redux"
 import { asyncSetLoading } from "../../redux/reducers/status"
+import { asyncSetSelectedIDs } from "../../redux/reducers/page"
 
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
@@ -66,16 +67,11 @@ const MyNFTListPage = () => {
     const [statusOpen, setStatusOpen] = useState(false)
     const { account } = useWeb3React()
     const [nftInfos, setNftInfos] = useState([])
-    const [freeNftInfos, setFreeNftInfos] = useState([])
     const location = useLocation()
     const dispatch = useDispatch()
     const handleStakeClick = (nftInfo) => {
-        navigate('/stake', {
-            state: {
-                nftInfo,
-                nftInfos: freeNftInfos
-            }
-        })
+        dispatch(asyncSetSelectedIDs([nftInfo.token_id]))
+        navigate('/stake')
     }
     const handleUnstakeClick = async (nftInfo) => {
         dispatch(asyncSetLoading(true, "解除质押NFT", "正在解除质押NFT"))
@@ -86,7 +82,6 @@ const MyNFTListPage = () => {
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
                 console.log(resp.tokenId.toNumber())
-                setFreeNftInfos(prev => [...prev, nftInfo ])
                 setNftInfos(prev => {
                     prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
@@ -127,7 +122,6 @@ const MyNFTListPage = () => {
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除出售NFT", "", 0, "", "解除出售NFT成功"))
                 console.log(resp.tokenId.toNumber())
-                setFreeNftInfos(prev => [...prev, nftInfo ])
                 setNftInfos(prev => {
                     prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
@@ -282,12 +276,6 @@ const MyNFTListPage = () => {
 
         // 1 闲置 2 质押中 3 出售中
         if (freeNFTResp.code === 200 && freeNFTResp.result && freeNFTResp.result.length > 0) {
-            setFreeNftInfos(freeNFTResp.result.map(nft => {
-                return {
-                    ...nft,
-                    status: 1
-                }
-            }))
             nftInfos.push(...(freeNFTResp.result.map(nft => {
                 return {
                     ...nft,

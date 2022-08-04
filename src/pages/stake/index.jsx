@@ -9,6 +9,8 @@ import { getUserListItems, getUserListItemsNum } from "../../clients/list";
 import { apiPostGetNFTInfosByIDs } from "../../http/api";
 import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT";
 import { useWeb3React } from "@web3-react/core";
+import { useDispatch } from "react-redux";
+import { asyncSetNftInfos } from "../../redux/reducers/page";
 
 
 const TabPanel = (props) => {
@@ -38,42 +40,12 @@ TabPanel.propTypes = {
 
 
 const StakePage = () => {
-    const location = useLocation()
     const [value, setValue] = useState(0);
-    const [nftInfos, setNftInfos] = useState([])
-    const [nftInfo, setNftInfo] = useState({})
-    const [stakedIDs, setStakedIDs] = useState([])
     const { account } = useWeb3React()
-    
+    const dispatch = useDispatch()
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-    const onStakeSuccess = (selectedIds) => {
-        const selectedSet = new Set(selectedIds)
-        setNftInfo({})
-        const nfts = nftInfos.map(nftInfo => {
-            if (selectedSet.has(nftInfo.token_id)) {
-                nftInfo.status = 2
-            }
-            return nftInfo
-        })
-        setNftInfos(nfts)
-        setStakedIDs(prev => [...prev, ...selectedIds])
-    }
-
-    const onUnStakeSuccess = (stkIDs) => {
-        const selectedSet = new Set(stkIDs)
-        setNftInfo({})
-        const nfts = nftInfos.map(nftInfo => {
-            if (selectedSet.has(nftInfo.token_id)) {
-                nftInfo.status = 1
-            }
-            return nftInfo
-        })
-        setNftInfos(nfts)
-        setStakedIDs([])
-    }
 
     const initialInfos = async () => {
         // get all nfts not listed with type
@@ -107,10 +79,12 @@ const StakePage = () => {
         const stakeNFTs = resp.filter(nft => {
             return nft.staking
         })
-        console.log(stakeNFTs)
+
+        // get nft infos from backend
         const stakedIDs = stakeNFTs.length > 0 ? stakeNFTs.map(nft => nft.tokenId.toNumber()) : []
         console.log(stakedIDs)
-        setStakedIDs(stakedIDs)
+        const stakeNFTResp = stakeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
+        console.log(stakeNFTResp)
 
 
         // all infos
@@ -125,19 +99,24 @@ const StakePage = () => {
                 }
             })))
         }
+        if (stakeNFTResp.code === 200 && stakeNFTResp.result && stakeNFTResp.result.length > 0) {
+            nftInfos.push(...(stakeNFTResp.result.map(nft => {
+                return {
+                    ...nft,
+                    status: 2
+                }
+            })))
+        }
         
         // 排序
         nftInfos = nftInfos.sort((a, b) => a.id < b.id)
+        dispatch(asyncSetNftInfos(nftInfos))
         console.log(nftInfos)
-        setNftInfos(nftInfos)
     }
 
     useEffect(() =>{
         initialInfos()
-        if (location.state && location.state.nftInfo) {
-            setNftInfo(location.state.nftInfo)
-        }
-    }, [location, account])
+    }, [account])
     
     return (
         <Box sx={{ width: '100%', backgroundColor: '#FFF'}}>
@@ -148,7 +127,7 @@ const StakePage = () => {
                 </BootstrapTabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <NFTStake nftInfos={nftInfos} nftInfo={nftInfo} stakedIDs={stakedIDs} onStakeSuccess={onStakeSuccess} onUnStakeSuccess={onUnStakeSuccess}/>
+                <NFTStake />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <LPStake />

@@ -7,10 +7,11 @@ import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../../assets/images/mynft/copper_nft.png"
-import { batchStakeNFT, stakeNFT } from "../../../clients/socialNFT";
+import { batchStakeNFT } from "../../../clients/socialNFT";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { asyncSetLoading } from "../../../redux/reducers/status";
+import { asyncSetNftInfos, asyncSetSelectedIDs, getNftInfos, getSelectedIDs } from "../../../redux/reducers/page";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -25,43 +26,48 @@ const nftTypes = [
 
 
 const NFTStake = (props) => {
-    const { nftInfos, nftInfo, stakedIDs, onStakeSuccess, onUnStakeSuccess } = props
+    const nftInfos = useSelector(getNftInfos)
+    const selectedIDs = useSelector(getSelectedIDs)
     const [selectedType, setSelectedType] = useState(1)
-    const [selectedIDs, setSelectedIDs] = useState([])
     const [nftIDs, setNftIDs] = useState([])
     const [stkIDs, setStkIDs] = useState([])
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleTypeChange = (e) => {
         setSelectedType(e.target.value)
-        setSelectedIDs([])
+        dispatch(asyncSetSelectedIDs([]))
         setNftIDs(nftInfos.filter(nft => nft.quality === e.target.value).map(nftInfo => nftInfo.token_id))
     }
 
     const onNFTSelected = (selectedNFTIDs) => {
-        setSelectedIDs(selectedNFTIDs)
+        dispatch(asyncSetSelectedIDs([selectedNFTIDs]))
     }
 
     const handleStakeClick = async () => {
-        // TODO: stake selected nfts
         if (selectedIDs.length === 0) {
             toast.error("至少选择一个")
             return
         }
         dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
         try {
-            // TODO: more to stake
             const resp = await batchStakeNFT(selectedIDs, true)
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
                 const stakedIDSet = new Set(selectedIDs)
-                const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
-                console.log(IDs)
-                console.log(selectedIDs)
-                setNftIDs(IDs)
-                setSelectedIDs([])
-                setStkIDs(prev => [...prev, ...IDs])
-                onStakeSuccess(selectedIDs)
+                var nfts = JSON.parse(JSON.stringify(nftInfos))
+                nfts = nfts.map(nft => {
+                    if (stakedIDSet.has(nft.token_id)) {
+                        nft.status = 2
+                    }
+                    return nft
+                })
+                dispatch(asyncSetNftInfos(nfts))
+                dispatch(asyncSetSelectedIDs([]))
+                // const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
+                // console.log(IDs)
+                // console.log(selectedIDs)
+                // setNftIDs(IDs)
+                // setStkIDs(prev => [...prev, ...IDs])
                 console.log(resp)
             } else {
                 dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
@@ -83,17 +89,24 @@ const NFTStake = (props) => {
             const resp = await batchStakeNFT(stkIDs, false)
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
-                // const stakedIDSet = new Set(selectedIDs)
+                const stakedIDSet = new Set(stkIDs)
+                var nfts = JSON.parse(JSON.stringify(nftInfos))
+                nfts = nfts.map(nft => {
+                    if (stakedIDSet.has(nft.token_id)) {
+                        nft.status = 1
+                    }
+                    return nft
+                })
+                dispatch(asyncSetNftInfos(nfts))
+                dispatch(asyncSetSelectedIDs([]))
                 // const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
                 // console.log(IDs)
                 // console.log(selectedIDs)
-                console.log(nftIDs)
-                console.log([...nftIDs, ...stkIDs])
-                setNftIDs(prev => [...prev, ...stkIDs])
-                setSelectedIDs([])
-                setStkIDs([])
-                onUnStakeSuccess(stkIDs)
-                console.log(resp)
+                // console.log(nftIDs)
+                // console.log([...nftIDs, ...stkIDs])
+                // setNftIDs(prev => [...prev, ...stkIDs])
+                // setStkIDs([])
+                // console.log(resp)
             } else {
                 dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
             }
@@ -104,18 +117,22 @@ const NFTStake = (props) => {
     }
 
     useEffect(() => {
-        if (nftInfo.id) {
-            setSelectedIDs([nftInfo.token_id])
-            setSelectedType(nftInfo.quality)
-            setNftIDs(nftInfos.filter(nft => nft.quality === nftInfo.quality).map(nftInfo => nftInfo.token_id))
+        if (selectedIDs.length > 0 ) {
+            const selectedNFT = nftInfos.filter(nft => nft.token_id === selectedIDs[0])
+            const quality = selectedNFT.length > 0 ?  selectedNFT[0].quality : 1
+            setSelectedType(quality)
+            const nftids = nftInfos.filter(nft => nft.status === 1 && nft.quality === quality).map(nftInfo => nftInfo.token_id)
+            console.log(nftids)
+            setNftIDs(nftids)
+            const stkids = nftInfos.filter(nft => nft.status === 2).map(nftInfo => nftInfo.token_id)
+            console.log(stkids)
+            setStkIDs(stkids)
         } else {
             setSelectedType(1)
-            setNftIDs(nftInfos.filter(nft => nft.quality === 1).map(nftInfo => nftInfo.token_id))
+            setNftIDs(nftInfos.filter(nft => nft.status === 1 && nft.quality === 1).map(nftInfo => nftInfo.token_id))
+            setStkIDs(nftInfos.filter(nft => nft.status === 2).map(nftInfo => nftInfo.token_id))
         }
-        if (stakedIDs && stakedIDs.length > 0) {
-            setStkIDs(stakedIDs)
-        }
-    }, [nftInfo, nftInfos])
+    }, [selectedIDs, nftInfos])
     
 
     const handleStakeRecordClick = () => {

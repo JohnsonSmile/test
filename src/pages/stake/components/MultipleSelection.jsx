@@ -30,35 +30,27 @@ const MultipleSelection = (props) => {
 
     return (
         <BootstrapTextField
-            select
+            multiple
             value={selectedNumbers}
             onChange={handleChange}
-            SelectProps={{
-                multiple: true,
-                renderValue: (selected) => {
-                    if (selected.length === nftIDs.length) {
-                        setAllSelected(true)
-                        return '全部'
-                    } else {
-                        setAllSelected(false)
-                    }
-                    if (selected.length > 5) {
-                        return '多个'
-                    }
-                    if (selected.length === 0) {
-                        return '请选择'
-                    }
-                    return '#' + selected.join(', #')
-                },
-                sx: {
-                    pr: 2
-                },
-                MenuProps: {
-                    sx: {
-                        maxHeight: '280px'
-                    }
+            renderValue={(selected) => {
+                console.log(props.nftIDs)
+                if (nftIDs.length === 0 || selected.length === 0 || selectedNumbers.length === 0) {
+                    return '请选择'
                 }
+                if (selected.length === nftIDs.length) {
+                    setAllSelected(true)
+                    return '全部'
+                } else {
+                    setAllSelected(false)
+                }
+                if (selected.length > 5) {
+                    return '多个'
+                }
+                return '#' + selected.join(', #')
             }}
+            sx={{pr: 2}}
+            MenuProps= {{sx: { maxHeight: '280px' }}}
             fullWidth
         >
             <MenuItem sx={{ color: '#333' }} onClick={handleAllClick}>
