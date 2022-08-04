@@ -82,16 +82,16 @@ const BuildDialog = (props) => {
                             </Fade>
                         </Box>}
                     {result && <Box sx={{ minHeight: 180, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 1}}>
-                        {result && result.cropper && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
+                        {(result && result.cropper !== 0 ) && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
                             {result.cropper}个铜
                         </Typography>}
-                        {result && result.silver && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
+                        {(result && result.silver !== 0) && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
                             {result.silver}个银
                         </Typography>}
-                        {result && result.gold && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
+                        {(result && result.gold !== 0) && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
                             {result.gold}个金
                         </Typography>}
-                        {result && result.diamond && <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
+                        {(result && result.diamond !== 0 )&& <Typography sx={{color: '#333', fontSize: '22px', fontWeight: 600, lineHeight: '20px' }} gutterBottom>
                             {result.diamond}个钻
                         </Typography>}
                     </Box>}

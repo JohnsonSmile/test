@@ -63,7 +63,10 @@ const ProfilePage = () => {
                     </ListItemAvatar>
                     <ListItemText primaryTypographyProps={{ color: '#333' }} primary="每日签到" />
                 </ListItem>
-                <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handlePromotionDetailClick}>
+                <ListItem sx={{py:1}} secondaryAction={<Box sx={{display: 'flex', alignItems: 'center'}} >
+                        <Typography sx={{color: '#000', opacity: 0.4}}>敬请期待</Typography>
+                        <KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}}/>
+                    </Box>} >
                     <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: '#F4F6FA' }}>
                         <PromotionIcon />

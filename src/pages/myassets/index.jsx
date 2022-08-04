@@ -17,6 +17,8 @@ import { ethers } from "ethers"
 import { getUserOwnNum, getUserStakedNum, getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
 import { getUserListItems, getUserListItemsNum } from "../../clients/list"
 import { apiPostGetNFTInfosByIDs } from "../../http"
+import { useDispatch, useSelector } from "react-redux"
+import { asyncSetAssetsDetail, asyncSetMyNftInfos, asyncSetMyVsdInfos, getAssetsDetail, getMyNftInfos, getMyVsdInfos } from "../../redux/reducers/page"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -24,28 +26,10 @@ const MyAssetsPage = () => {
     const animationRef = useRef(null);
     const [isAnimating, setIsAnimating] = useState(false)
     const { account } = useWeb3React()
-    const [assetsDetail, setAssetsDetail] = useState({
-        usdt: 1234.21,
-        nft: 1223,
-        vsd: 121.22,
-        value: 123124.21,
-        totalAssets: 2735
-    })
-    const [myNftInfos, setMyNftInfos] = useState({
-        totalAmount: 10,
-        stakeAmount: 10,
-        totalPrice: 750,
-        yesterdayGain: 150,
-        latestNfts: []
-    })
-    const [myVsdInfos, setMyVsdInfos] = useState({
-        vsdAmount: 11023.23,
-        vsdPrice: 0.1,
-        vsdTotalPrice: 1120.82,
-        stakeRate: 100,
-        lpToken: 230,
-        vsdCanBeAcheived: 840
-    })
+    const dispatch = useDispatch()
+    const assetsDetail = useSelector(getAssetsDetail)
+    const myNftInfos = useSelector(getMyNftInfos)
+    const myVsdInfos = useSelector(getMyVsdInfos)
     const navigate = useNavigate()
     const initialAnime = () => {
         if (animationRef.current == null) {
@@ -80,13 +64,13 @@ const MyAssetsPage = () => {
         const valueBalance = await getValueBalance(account)
         // get my nft count
         const nftNum = await getUserOwnNum(account)
-        setAssetsDetail({
+        dispatch(asyncSetAssetsDetail({
             usdt: ethers.utils.formatEther(usdtBalance),
             vsd: ethers.utils.formatEther(vsdBalance),
             value: ethers.utils.formatEther(valueBalance),
             totalAssets: 0, // 算法？？？
             nft: nftNum
-        })
+        }))
         // get my staked nft count
         const stakedNum = await getUserStakedNum(account)
         // get market price
@@ -127,25 +111,25 @@ const MyAssetsPage = () => {
             })
             console.log(latestNfts)
         }
-        setMyNftInfos({
+        dispatch(asyncSetMyNftInfos({
             totalAmount: nftNum,
             stakeAmount: stakedNum,
             totalPrice,
             yesterdayGain: '未知',
             latestNfts,
-        })
+        }))
         // get vsd price
         // get vsd total price
         // get lp token
         // get vsd can be collected
-        setMyVsdInfos({
+        dispatch(asyncSetMyVsdInfos({
             vsdAmount: ethers.utils.formatEther(vsdBalance),
             vsdPrice: 0.1, // 从哪里获得
             vsdTotalPrice: 1120.82,
             stakeRate: 100,
             lpToken: 230,
             vsdCanBeAcheived: 840
-        })
+        }))
     }
     useEffect(() => {
 

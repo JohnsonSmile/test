@@ -2,19 +2,22 @@ import { Avatar, Box, CardMedia, Typography } from "@mui/material"
 import QRCode from 'qrcode.react';
 import { useEffect, useState } from "react";
 import domtoimage from 'dom-to-image';
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import InviteBgTopImage from "../../assets/images/invite/background_top.png";
 import InviteBgBottomImage from "../../assets/images/invite/background_bottom.png";
 import { ReactComponent as QRCodeIcon } from "../../assets/icon/invite/qrcode.svg";
 import { ReactComponent as AppIcon } from "../../assets/icon/invite/app.svg"
+import { useSelector } from "react-redux";
+import { getUserInfo } from '../../redux/reducers/user';
+import { getHome } from '../../redux/reducers/page';
+import { toast } from "react-toastify";
 
 
 const InvitePage = () => {
     
-    const [url, setUrl] = useState(window.location.origin + "/login?inviteCode=1234")
-    const [open, setOpen] = useState(false)
-
+    const userInfo = useSelector(getUserInfo)
+    const homeInfo = useSelector(getHome)
     const handleDownloadClick = () => {
-        setOpen(true)
         setTimeout(() => {
             console.log('get download')
             const node = document.querySelector('#invite-card-render')
@@ -27,6 +30,11 @@ const InvitePage = () => {
               link.click()
             })
         }, 500);
+    }
+
+    const onCopyInvitationCode = (res) => {
+        console.log(res)
+        toast.success("邀请码复制成功!")
     }
     
     return (
@@ -46,17 +54,17 @@ const InvitePage = () => {
                         <Avatar sx={{ width: 80, height: 80, border: '4px solid #FFF', borderRadius: '50%' }}/>
                     </Box>
                     <Box sx={{ pt: 8, display: 'flex', flexDirection: 'column' }}>
-                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>船中八策</Typography>
+                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>{userInfo.userName ? userInfo.userName : 'AAA'}</Typography>
                         <Typography sx={{color:'#7E8186', fontSize: 12, mt: 1}}>诚邀您加入AAA社区Value Bank项目</Typography>
                     </Box>
                     <Box sx={{ mt: 2 }}>
                         <Typography sx={{color:'#333', fontSize: '16px', fontWeight: 600, textAlign: 'center'}}>我的邀请码</Typography>
-                        <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, textAlign: 'center', mt: 1}}>12JOIH</Typography>
+                        <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, textAlign: 'center', mt: 1}}>{userInfo.invitationCode}</Typography>
                     </Box>
                     <Box sx={{ width: '120px', height: '120px', boxSizing: 'border-box', mt: 4, position: 'relative'}}>
                         <QRCodeIcon style={{width: '120px', height: '120px'}}/>
                         <Box sx={{ width: '90px', height: '90px', position: 'absolute', top: '60px', left: '60px', transform: 'translate(-50%, -50%)'}}>
-                            <QRCode value={url} size={90} />
+                            <QRCode value={window.location.origin + "/login?inviteCode=" + userInfo.invitationCode} size={90} />
                         </Box>
                     </Box>
                     <Box sx={{ mt: 4 }}>
@@ -73,16 +81,20 @@ const InvitePage = () => {
             <Box sx={{display: 'flex', gap: 2, mt: 3, zIndex: 1, position: 'relative' }}>
                 <Box sx={{ flex: 1, borderRadius: '12px', border: '1px solid #FFF', lineHeight: '44px', cursor: 'pointer', backgroundColor: '#FFF', color: '#4263EB', fontWeight: 600 }}
                     onClick={handleDownloadClick}>保存图片</Box>
-                <Box sx={{ flex: 1, borderRadius: '12px', border: '1px solid #FFF', lineHeight: '44px', cursor: 'pointer', color: '#FFF', fontWeight: 600 }}>复制邀请码</Box>
+                <Box sx={{ flex: 1, borderRadius: '12px', border: '1px solid #FFF', lineHeight: '44px', cursor: 'pointer', color: '#FFF', fontWeight: 600 }}>      
+                    <CopyToClipboard text={userInfo.invitationCode} onCopy={onCopyInvitationCode}>
+                        <span className="copy">复制邀请码</span>
+                    </CopyToClipboard>   
+                </Box>
             </Box>
             <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center', mt: 3, backgroundColor: '#FFF', borderRadius: '12px', py: 3, zIndex: 1, position: 'relative' }}>
                 <Box sx={{flex: 1}}>
                     <Typography sx={{color:'#333', fontSize: '14px' }}>已推广有效账户</Typography>
-                    <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, mt: 1 }}>24</Typography>
+                    <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, mt: 1 }}>{homeInfo.promotionCount}</Typography>
                 </Box>
                 <Box sx={{flex: 1}}>
                     <Typography sx={{color:'#333', fontSize: '14px' }}>累计推广收入</Typography>
-                    <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, mt: 1 }}>12340.123 
+                    <Typography sx={{color:'#4263EB', fontSize: '24px', fontWeight: 600, mt: 1 }}>未知 
                     <Box component={'span'} sx={{ fontSize: '14px', color: '#333' }}> VS</Box>
                     </Typography>
                 </Box>

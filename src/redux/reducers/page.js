@@ -27,6 +27,30 @@ export const pageSlice = createSlice({
     stake: {
         nftInfos: [],
         selectedIDs: [],
+    },
+    myassets: {
+        assetsDetail: {
+            usdt: 1234.21,
+            nft: 1223,
+            vsd: 121.22,
+            value: 123124.21,
+            totalAssets: 2735
+        },
+        myNftInfos: {
+            totalAmount: 10,
+            stakeAmount: 10,
+            totalPrice: 750,
+            yesterdayGain: 150,
+            latestNfts: []
+        },
+        myVsdInfos: {
+            vsdAmount: 11023.23,
+            vsdPrice: 0.1,
+            vsdTotalPrice: 1120.82,
+            stakeRate: 100,
+            lpToken: 230,
+            vsdCanBeAcheived: 840
+        }
     }
   },
   reducers: {
@@ -72,10 +96,41 @@ export const pageSlice = createSlice({
           buildAmount: action.payload
         }
     },
+    setAssetsDetail: (state, action) => {
+        const myassets = state.myassets
+        state.myassets = {
+          ...myassets,
+          assetsDetail: action.payload
+        }
+    },
+    setMyNftInfos: (state, action) => {
+        const myassets = state.myassets
+        state.myassets = {
+          ...myassets,
+          myNftInfos: action.payload
+        }
+    },
+    setMyVsdInfos: (state, action) => {
+        const myassets = state.myassets
+        state.myassets = {
+            ...myassets,
+            myVsdInfos: action.payload
+        }
+    }
   }
 })
 
-export const { setHome, setNftInfos, setSelectedIDs, setMyNft, setBuildTotalCount, setBuildAmount } = pageSlice.actions
+export const { 
+    setHome, 
+    setNftInfos, 
+    setSelectedIDs, 
+    setMyNft, 
+    setBuildTotalCount, 
+    setBuildAmount, 
+    setAssetsDetail,
+    setMyNftInfos,
+    setMyVsdInfos,
+} = pageSlice.actions
 
 // async function
 const asyncSetHome = (home) => (dispatch) => {
@@ -102,7 +157,30 @@ const asyncSetBuildAmount = (count) => (dispatch) => {
     dispatch(setBuildAmount(count))
 }
 
-export { asyncSetHome, asyncSetNftInfos, asyncSetSelectedIDs, asyncSetMyNft, asyncSetBuildTotalCount, asyncSetBuildAmount }
+
+const asyncSetAssetsDetail = (detail) => (dispatch) => {
+    dispatch(setAssetsDetail(detail))
+}
+
+const asyncSetMyNftInfos = (nftinfos) => (dispatch) => {
+    dispatch(setMyNftInfos(nftinfos))
+}
+
+const asyncSetMyVsdInfos = (vsdinfos) => (dispatch) => {
+    dispatch(setMyVsdInfos(vsdinfos))
+}
+
+export { 
+    asyncSetHome, 
+    asyncSetNftInfos, 
+    asyncSetSelectedIDs, 
+    asyncSetMyNft, 
+    asyncSetBuildTotalCount, 
+    asyncSetBuildAmount,
+    asyncSetAssetsDetail,
+    asyncSetMyNftInfos,
+    asyncSetMyVsdInfos,
+}
 
 
 // state selector
@@ -112,8 +190,21 @@ const getSelectedIDs = (state) => state.pageReducer.stake.selectedIDs
 const getMyNft = (state) => state.pageReducer.mynft
 const getBuildTotalCount = (state) => state.pageReducer.build.buildTotalCount
 const getBuildAmount = (state) => state.pageReducer.build.buildAmount
+const getAssetsDetail = (state) => state.pageReducer.myassets.assetsDetail
+const getMyNftInfos = (state) => state.pageReducer.myassets.myNftInfos
+const getMyVsdInfos = (state) => state.pageReducer.myassets.myVsdInfos
 
-export { getHome, getNftInfos, getSelectedIDs, getMyNft, getBuildTotalCount, getBuildAmount }
+export { 
+    getHome, 
+    getNftInfos, 
+    getSelectedIDs, 
+    getMyNft, 
+    getBuildTotalCount, 
+    getBuildAmount,
+    getAssetsDetail,
+    getMyNftInfos,
+    getMyVsdInfos,
+}
 
 export default pageSlice.reducer
   

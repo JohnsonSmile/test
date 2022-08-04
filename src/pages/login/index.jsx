@@ -1,7 +1,7 @@
 import { Box, CardMedia, Typography } from "@mui/material"
 import { useWeb3React } from "@web3-react/core"
 import { useEffect, useState } from "react"
-import { useLocation, useMatch, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { injected } from "../../clients/client"
 import { asyncSetAccount, asyncSetSignInfo, getAccount, getSigInfo } from "../../redux/reducers/wallet"
 import { isIMTokenAvailable, isTokenPocketAvailable } from "../../utils/wallet"
@@ -11,12 +11,12 @@ import { apiPostCreateUser, apiPostLogin } from "../../http"
 import InviteBgTopImage from "../../assets/images/invite/background_top.png";
 import InviteBgBottomImage from "../../assets/images/invite/background_bottom.png";
 import { ReactComponent as BNBIcon } from "../../assets/icon/login/bnb.svg";
+import { ReactComponent as LogoIcon } from "../../assets/icon/login/logo.svg";
 import InviteTextField from "./components/InviteTextField";
 import InviteCodeDialog from "./components/InviteCodeDialog"
-import { asyncSetLoading, getDescription, getIsLoading, getTitle } from "../../redux/reducers/status"
+import { asyncSetLoading } from "../../redux/reducers/status"
 import LoadingDialog from "../../widgets/loading/LoadingDialog"
 import { asyncSetUserInfo } from "../../redux/reducers/user"
-import { getTokenURI } from "../../clients/socialNFT"
 
 
 // const stringAvatar = (name) => {
@@ -140,6 +140,7 @@ const LoginPage = () => {
             <CardMedia component={"img"} image={InviteBgTopImage} sx={{ width: '100vw', height: '100vw', position: 'absolute', top: '-56px', left: 0, zIndex: 1 }} />
             <CardMedia component={"img"} image={InviteBgBottomImage} sx={{ width: '100vw', height: '100vw', position: 'absolute', bottom: 0, left: 0, zIndex: 1 }} />
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 2, position: 'relative', zIndex: 2 }} >
+                <LogoIcon sx={{ height: '56px', width: '56px', mb: 3 }}/>
                 <Typography variant="h2" sx={{
                     fontSize: '36px',
                     fontWeight: 600}}>Value 算法理财</Typography>    

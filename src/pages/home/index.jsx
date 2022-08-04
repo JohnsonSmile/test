@@ -1,7 +1,7 @@
 import {Box} from '@mui/material';
 import { UserInfo } from "./components/UserInfo";
 import Features from "./components/Features";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import SocialNFTBoard from './components/SocialNFTBoard';
 import VSDBoard from './components/VSDBoard';
@@ -16,13 +16,12 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getBaseURI, getTokenURI, getUserOwnNum } from '../../clients/socialNFT';
+import { getBaseURI, getUserOwnNum } from '../../clients/socialNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
 import { getUserInfo } from '../../redux/reducers/user';
-import { asyncSetLoading } from '../../redux/reducers/status';
 import { asyncSetHome, getHome } from '../../redux/reducers/page';
 
 
