@@ -128,7 +128,10 @@ const StakePage = () => {
                 <NFTStake />
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <LPStake />
+                <Box sx={{ color: '#333', mt: 4 }}>
+                    即将上线, 敬请期待...
+                </Box>
+                {/* <LPStake /> */}
             </TabPanel>
         </Box>
     )
