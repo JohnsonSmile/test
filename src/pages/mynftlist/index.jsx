@@ -83,22 +83,22 @@ const MyNFTListPage = () => {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
                 console.log(resp.tokenId.toNumber())
                 setNftInfos(prev => {
-                    prev.map(p => {
+                    const res = prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
                             p.status = 1
                         }
                         return p
                     })
-                    return prev
+                    return res
                 })
                 setFillteredNFTInfos(prev => {
-                    prev.map(p => {
+                    const res = prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
                             p.status = 1
                         }
                         return p
                     })
-                    return prev
+                    return res
                 })
             } else {
                 dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
@@ -123,22 +123,22 @@ const MyNFTListPage = () => {
                 dispatch(asyncSetLoading(false, "解除出售NFT", "", 0, "", "解除出售NFT成功"))
                 console.log(resp.tokenId.toNumber())
                 setNftInfos(prev => {
-                    prev.map(p => {
+                    const res = prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
                             p.status = 1
                         }
                         return p
                     })
-                    return prev
+                    return res
                 })
                 setFillteredNFTInfos(prev => {
-                    prev.map(p => {
+                    const res = prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
                             p.status = 1
                         }
                         return p
                     })
-                    return prev
+                    return res
                 })
             } else {
                 dispatch(asyncSetLoading(false, "解除出售NFT",  "", 0, "解除出售NFT失败"))
