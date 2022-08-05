@@ -19,6 +19,7 @@ import { getUserListItems, getUserListItemsNum } from "../../clients/list"
 import { apiPostGetNFTInfosByIDs } from "../../http"
 import { useDispatch, useSelector } from "react-redux"
 import { asyncSetAssetsDetail, asyncSetMyNftInfos, asyncSetMyVsdInfos, getAssetsDetail, getMyNftInfos, getMyVsdInfos } from "../../redux/reducers/page"
+import { toast } from "react-toastify"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -64,10 +65,23 @@ const MyAssetsPage = () => {
         const valueBalance = await getValueBalance(account)
         // get my nft count
         const nftNum = await getUserOwnNum(account)
+
+        const usdtBArray = ethers.utils.formatEther(usdtBalance).split('.')
+        const usdtBaStr = (usdtBArray.length === 2) 
+            ? usdtBArray[0] + '.' + usdtBArray[1].slice(0, 2)
+            : usdtBArray[0]
+        const vsdBArray = ethers.utils.formatEther(vsdBalance).split('.')
+        const vsdBaStr = (vsdBArray.length === 2) 
+            ? vsdBArray[0] + '.' + vsdBArray[1].slice(0, 2)
+            : vsdBArray[0]
+        const valueBArray = ethers.utils.formatEther(valueBalance).split('.')
+        const valueBaStr = (valueBArray.length === 2) 
+            ? valueBArray[0] + '.' + valueBArray[1].slice(0, 2)
+            : valueBArray[0]
         dispatch(asyncSetAssetsDetail({
-            usdt: ethers.utils.formatEther(usdtBalance),
-            vsd: ethers.utils.formatEther(vsdBalance),
-            value: ethers.utils.formatEther(valueBalance),
+            usdt: usdtBaStr,
+            vsd: vsdBaStr,
+            value: valueBaStr,
             totalAssets: 0, // 算法？？？
             nft: nftNum
         }))
@@ -161,10 +175,12 @@ const MyAssetsPage = () => {
 
     const handleGainVSDClick = () => {
         // TODO: gain vsd
+        toast.info('即将上线,敬请期待...')
     }
 
     const handleLiquidManageClick = () => {
         // TODO: liquid manage
+        toast.info('即将上线,敬请期待...')
     }
 
     // TODO: if user already login
