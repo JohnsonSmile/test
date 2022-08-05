@@ -90,8 +90,15 @@ const MyAssetsPage = () => {
         resp.forEach(nft => {
             price = price.add(nft.listItem.price)
         });
+        // plus unlist floor price ,let's say 0.1 ether
+        price = price.add(ethers.utils.parseEther(((nftNum - amount) * 0.1).toString()))
         console.log(price)
-        const totalPrice = ethers.utils.formatUnits(price, 'wei') + 'wei'
+        const etherPrice = ethers.utils.formatEther(price).split('.')
+        console.log(etherPrice)
+        const totalPrice = (etherPrice.length === 2) 
+            ? etherPrice[0] + '.' + etherPrice[1].slice(0, 2) + ' USDT'
+            : etherPrice[0] + ' USDT'
+        console.log(totalPrice)
         // get yesterday gain
         // get four nft 
         const nftIDs = await getUserOwn(account, 0, 4)

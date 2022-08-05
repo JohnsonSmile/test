@@ -1,4 +1,4 @@
-import { Box, CardMedia,  MenuItem,  Typography } from "@mui/material"
+import { Box, CardMedia,  InputAdornment,  MenuItem,  Typography } from "@mui/material"
 import BootstrapTextField from '../../widgets/textfield/BootstrapTextField'
 import { useEffect, useState } from "react"
 import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
@@ -14,6 +14,7 @@ import { contracts } from "../../clients/contracts"
 import { CheckBox } from "@mui/icons-material"
 import { asyncSetLoading } from "../../redux/reducers/status"
 import { useDispatch } from "react-redux"
+import { toast } from "react-toastify"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -31,7 +32,7 @@ const nftTypes = [
 const NFTListingPage = () => {
     const [currentQuality, setCurrentQuality] = useState(0)
     const [currentTokenId, setCurrentTokenId] = useState(-1)
-    const [currentPrice, setCurrentPrice] = useState(0)
+    const [currentPrice, setCurrentPrice] = useState('0')
     const [saleTime, setSaleTime] = useState('')
     const [nftInfos, setNftInfos] = useState([])
     const { account } = useWeb3React()
@@ -55,6 +56,15 @@ const NFTListingPage = () => {
     }
 
     const handleListingClick = async () => {
+        if (currentPrice <= 0) {
+            toast.error('价格不能为0，或者为负数')
+            return
+        }
+        if (!currentTokenId) {
+            toast.error('请选择您要上架的NFT！')
+            return
+        }
+        const price = ethers.utils.parseEther(currentPrice)
         try {
             dispatch(asyncSetLoading(true, "上架NFT", "查看NFT是否已授权"))
             // get is approved
@@ -71,7 +81,7 @@ const NFTListingPage = () => {
             }
             dispatch(asyncSetLoading(true, "上架NFT", "正在上架..."))
             // TODO: listing item
-            const res = await listing(currentTokenId, currentPrice)
+            const res = await listing(currentTokenId, price)
             console.log(res)
             if (res.success) {
                 dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "上架NFT成功!"))
@@ -203,6 +213,9 @@ const NFTListingPage = () => {
                     onChange={handlePriceChange}
                     fullWidth
                     placeholder="输入卖出价格"
+                    InputProps={{
+                        endAdornment:<InputAdornment position="end">USDT</InputAdornment>
+                    }}
                     >
                 </BootstrapTextField>
             </Box>

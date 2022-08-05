@@ -164,7 +164,7 @@ const MarketPage = () => {
         var itemInfos = items.map(item => {
             return {
                 id: item.tokenId.toNumber(),
-                price: ethers.utils.formatUnits(item.listItem.price, 'wei'),
+                price: ethers.utils.formatEther(item.listItem.price),
                 status: item.listItem.listStatu === 1,
                 owner: item.listItem.owner,
                 buyer: item.listItem.buyer
@@ -226,7 +226,7 @@ const MarketPage = () => {
             itemInfos = items.map(item => {
                 return {
                     id: item.tokenId.toNumber(),
-                    price: ethers.utils.formatUnits(item.listItem.price, 'wei'),
+                    price: ethers.utils.formatEther(item.listItem.price),
                     status: item.listItem.listStatu === 1,
                     owner: item.listItem.owner,
                     buyer: item.listItem.buyer
@@ -364,7 +364,7 @@ const MarketPage = () => {
                                 </Box>
                                 <Typography sx={{ px: 1.8, color: '#333', fontSize: '16px', fontWeight: 700, lineHeight: '20px' }} >NFT#{nftinfo.token_id}</Typography>
                                 <Typography sx={{ px: 1.8, color: '#8C8C8C', fontSize: '12px', fontWeight: 400, lineHeight: '18px' }} >价格</Typography>
-                                <Typography sx={{ px: 1.8, color: '#333', fontSize: '14px', fontWeight: 500, lineHeight: '18px' }} >{nftinfo.price} wei</Typography>
+                                <Typography sx={{ px: 1.8, color: '#333', fontSize: '14px', fontWeight: 500, lineHeight: '18px' }} >{nftinfo.price} USDT</Typography>
                             </Card>
                         </Grid>
                         ))}

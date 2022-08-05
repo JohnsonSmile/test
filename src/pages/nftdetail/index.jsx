@@ -37,14 +37,14 @@ const NFTDetailPage = () => {
     },[location])
 
     const handleBuyClick = async () => {
-        if (location.state.nftInfo.owner === account || location.state.nftInfo.buyer === account) {
-            toast.warn("您不能购买您自己的NFT")
-            return
-        }
+        // if (location.state.nftInfo.owner === account || location.state.nftInfo.buyer === account) {
+        //     toast.warn("您不能购买您自己的NFT")
+        //     return
+        // }
         dispatch(asyncSetLoading(true, "购买NFT", "购买NFT中..."))
         try {
             // approve price
-            const price = ethers.utils.parseUnits(location.state.nftInfo.price, 'wei')
+            const price = ethers.utils.parseEther(location.state.nftInfo.price)
             console.log(location.state.nftInfo.price)
             // get balance
             const usdtBalance = await getUsdtBalance(account)
@@ -110,7 +110,7 @@ const NFTDetailPage = () => {
             </Box>
             <Typography sx={{ color: '#333', fontSize: '21px', fontWeight: 700, mt: 1 }}>NFT#{location.state.nftInfo.token_id}</Typography>
             <Typography sx={{ color: '#333', fontSize: '14px', fontWeight: 500, mt: 1 }}>类型:{getNftType()}</Typography>
-            <Typography sx={{ color: '#333', fontSize: '14px', fontWeight: 500 , mt: 1}}>价格:{location.state.nftInfo.price} wei</Typography>
+            <Typography sx={{ color: '#333', fontSize: '14px', fontWeight: 500 , mt: 1}}>价格:{location.state.nftInfo.price} USDT</Typography>
             {<Box sx={{ mx: 2, mt: 4, backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', color: '#FFF', cursor: 'pointer' }}
                 onClick={handleBuyClick}>确认购买</Box>}
         </Box>
