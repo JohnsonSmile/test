@@ -55,7 +55,7 @@ const InvitePage = () => {
                         <Avatar sx={{ width: 80, height: 80, border: '4px solid #FFF', borderRadius: '50%' }} src={avatar}/>
                     </Box>
                     <Box sx={{ pt: 8, display: 'flex', flexDirection: 'column' }}>
-                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>{userName}</Typography>
+                        <Typography sx={{color:'#333', fontSize: '24px', fontWeight: 600}}>{userName ? userName : 'AAA'}</Typography>
                         <Typography sx={{color:'#7E8186', fontSize: 12, mt: 1}}>诚邀您加入AAA社区Value Bank项目</Typography>
                     </Box>
                     <Box sx={{ mt: 2 }}>

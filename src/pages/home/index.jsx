@@ -206,7 +206,7 @@ const HomePage = () => {
     return (
         <>
             <Box sx={{ backgroundColor: '#FFF', mb: 4}}>
-                <UserInfo accountInfo={accountInfo} avatar={avatar} userName={userName} />
+                <UserInfo accountInfo={accountInfo} avatar={avatar} userName={userName ? userName : 'AAA'} />
                 <Features features={features} informations={informations} />
                 <Box sx={{
                     backgroundColor: '#FFF', 

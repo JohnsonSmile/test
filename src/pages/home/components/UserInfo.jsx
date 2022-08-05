@@ -51,6 +51,21 @@ export const UserInfo = (props) => {
         // TODO:login state should be in global mobx
         // setIsLogin(true)
     }
+    const handleNavToNFTClick = () => {
+        navigate('/mynft')
+    }
+
+    const handleNavToSignClick = () => {
+        navigate('/sign')   
+    }
+
+    const handleNavToPromotionClick = () => {
+        navigate('/invite')
+    }
+
+    const handleNavToProfileClick = () => {
+        navigate('/profile')
+    }
 
     const classes = useStyles()
     return (
@@ -69,7 +84,8 @@ export const UserInfo = (props) => {
                 </button> 
             </Box>}
             {accountInfo.account && <Box sx={{px: 2, backgroundColor: '#4263EB'}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', pt: 2, pb: 1, px: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', pt: 2, pb: 1, px: 2, cursor: 'pointer'}}
+                        onClick={handleNavToProfileClick}>
                         <Avatar {...stringAvatar(accountInfo.userName ? accountInfo.userName : 'AAA')} sx={{ width: 40, height: 40 }} src={avatar} />
                         <Box sx={{ ml: 1 }}>
                             <Typography sx={{ fontSize: 14, fontWeight: 500, textAlign: 'left'}}>{userName}</Typography>
@@ -81,15 +97,18 @@ export const UserInfo = (props) => {
                             <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>昨日收益</Typography>
                             <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.yesterdayGain} VSD</Typography>
                         </Box>
-                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5, cursor: 'pointer' }}
+                            onClick={handleNavToSignClick}>
                             <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>今日签到</Typography>
                             <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.isSigned ? '已签到' : '未签到'}</Typography>
                         </Box>
-                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5, cursor: 'pointer'}}
+                            onClick={handleNavToNFTClick}>
                             <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>持有NFT</Typography>
                             <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.nftAmount}</Typography>
                         </Box>
-                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5, cursor: 'pointer'}}
+                            onClick={handleNavToPromotionClick}>
                             <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>推广人数</Typography>
                             <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.promotionCount}</Typography>
                         </Box>

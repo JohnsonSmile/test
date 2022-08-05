@@ -49,7 +49,7 @@ const ProfilePage = () => {
     return (
         <Box sx={{backgroundColor: '#FFF', minHeight: 'calc(100vh - 56px)'}}>
             <Box sx={{ pt: 2 }}>
-                <ProfileCard accountInfo={accountInfo} avatar={avatar} userName={userName}/>
+                <ProfileCard accountInfo={accountInfo} avatar={avatar} userName={userName ? userName : 'AAA'}/>
             </Box>
             <List sx={{ width: '100%', bgcolor: 'background.paper', mt: 3 }}>
                 <ListItem sx={{py:1}} secondaryAction={<KeyboardArrowRightIcon sx={{color: '#000', opacity: 0.4}} />} onClick={handleMyAssetsClick}>

@@ -9,7 +9,7 @@ import { toast } from "react-toastify"
 const SettingPage = () => {
     const avatar = useSelector(getAvatar)
     const userName = useSelector(getUserName)
-    const [username, setUsername] = useState(userName)
+    const [username, setUsername] = useState(userName ? userName : 'AAA')
     const [avatarUrl, setAvatarUrl] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
