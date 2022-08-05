@@ -14,7 +14,7 @@ import { useWeb3React } from "@web3-react/core"
 import { getVSDBalance } from "../../clients/vsd"
 import { getValueBalance } from "../../clients/value"
 import { ethers } from "ethers"
-import { getUserOwnNum, getUserStakedNum, getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
+import { getUserOwn, getUserOwnNum, getUserStakedNum, getUserStakedTokenIDsByPage } from "../../clients/socialNFT"
 import { getUserListItems, getUserListItemsNum } from "../../clients/list"
 import { apiPostGetNFTInfosByIDs } from "../../http"
 import { useDispatch, useSelector } from "react-redux"
@@ -94,9 +94,9 @@ const MyAssetsPage = () => {
         const totalPrice = ethers.utils.formatUnits(price, 'wei') + 'wei'
         // get yesterday gain
         // get four nft 
-        const nftInfos = await getUserStakedTokenIDsByPage(account, 0, 4)
-        console.log(nftInfos)
-        const tokenIDS = nftInfos.map(nft => nft.tokenId.toNumber())
+        const nftIDs = await getUserOwn(account, 0, 4)
+        console.log(nftIDs)
+        const tokenIDS = nftIDs.map(id => id.toNumber())
         console.log(tokenIDS)
         // get nft infos from backend
         const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
