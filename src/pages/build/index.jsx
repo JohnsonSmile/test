@@ -190,15 +190,21 @@ const BuildPage = () => {
                         const diamond = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 4).length
                         const result = { gold, silver, cropper, diamond }
                         dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
+                        // update build amount 
+                        getTotalSupplyCount()
                         console.log(result)
                         setResult(result)
                         setOpen(true)
                     } else {
                         dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+                        // update build amount 
+                        getTotalSupplyCount()
                     }
                 } catch (e) {
                     console.log(e)
                     dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
+                    // update build amount 
+                    getTotalSupplyCount()
                 }
             } else {
                 dispatch(asyncSetLoading(false, "铸造NFT",  "", 0, "铸造NFT失败"))
