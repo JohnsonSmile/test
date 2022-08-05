@@ -51,12 +51,6 @@ const initialize = (provider) => {
     library
   );
 
-  window.swapContract = new ethers.Contract(
-    contracts.swap,
-    contracts.swapABI,
-    library
-  );
-
   window.Library = library;
 
   window.Signer = library.getSigner();
@@ -80,12 +74,12 @@ const initialize = (provider) => {
       console.log(owner, tokenId, newStatu, stakeAt);
       const accountLocal = localStorage.getItem("account");
       if (accountLocal === owner && newStatu) {
-        NoticeEmitter.emit("stake success", {tokenId, isStake: true});
+        NoticeEmitter.emit("stake success", { tokenId, isStake: true });
         // toast.info(
         //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
         // );
       } else if (accountLocal === owner && !newStatu) {
-        NoticeEmitter.emit("stake success", {tokenId, isStake: false});
+        NoticeEmitter.emit("stake success", { tokenId, isStake: false });
         // toast.info(
         //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
         // );
@@ -100,9 +94,9 @@ const initialize = (provider) => {
       const accountLocal = localStorage.getItem("account");
       if (accountLocal === owner) {
         if (operation) {
-          NoticeEmitter.emit("list success", {tokenId, price, isList:true});
+          NoticeEmitter.emit("list success", { tokenId, price, isList: true });
         } else {
-          NoticeEmitter.emit("unlist success", {tokenId, isList:false});
+          NoticeEmitter.emit("unlist success", { tokenId, isList: false });
         }
       }
     }
