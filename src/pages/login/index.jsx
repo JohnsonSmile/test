@@ -59,7 +59,7 @@ const LoginPage = () => {
             dispatch(asyncSetUserInfo({ account, id, invitationCode, inviter }))
             dispatch(asyncSetLoading(true, "开启 Value Bank", "正在登录...", 10000))
             // after create user login again, cause already has sig info
-            const resp = await apiPostLogin(account, sigInfo.sigHex, "hello")
+            const resp = await apiPostLogin(account, sigInfo[account], "hello")
             console.log(resp)
             const { code, result } = resp
             if (code === 200) {
