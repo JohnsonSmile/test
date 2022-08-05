@@ -13,6 +13,9 @@ const SocialNFTBoard = (props) => {
         // TODO: if user logged in
         navigate('/build')
     }
+    const handleTradeNFTClick = () => {
+        navigate('/market')
+    }
     return (
         <Card sx={{ minWidth: 275, pb: 2, boxShadow: '0px 0px 10px rgba(66, 61, 247, 0.08)', borderRadius: '20px', mt: 2 }}>
         <Box>
@@ -82,7 +85,8 @@ const SocialNFTBoard = (props) => {
         <Box sx={{display: 'flex', px: 2, gap: 1.5}}>
             <Box onClick={ handleBuildNFTClick } sx={{ flex:1, background: '#4263EB', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#FFF', 
                 fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer'}}>铸造NFT</Box>
-            <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}>交易NFT</Box>
+            <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}
+                onClick={ handleTradeNFTClick }>交易NFT</Box>
         </Box>
         </Card>
     );

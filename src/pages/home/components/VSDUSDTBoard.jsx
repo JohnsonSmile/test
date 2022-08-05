@@ -4,9 +4,19 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Divider, Grid } from '@mui/material';
 import { formatNumber } from '../../../utils/utils';
+import { toast } from 'react-toastify';
 
 const VSDUSDTBoard = (props) => {
     const { vsdUsdtData } = props;
+
+    const handleVSDUSDTClick = () => {
+        toast.info("即将上线，敬请期待...")
+    }
+
+    const handleLPAndMiningClick = () => {
+        toast.info("即将上线，敬请期待...")
+    }
+
     return (
         <Card sx={{ minWidth: 275, pb: 2, boxShadow: '0px 0px 10px rgba(66, 61, 247, 0.08)', borderRadius: '20px', mt: 2 }}>
             <Box>
@@ -75,8 +85,10 @@ const VSDUSDTBoard = (props) => {
             </Box>
             <Box sx={{display: 'flex', px: 2, gap: 1.5}}>
                 <Box sx={{ flex:1, background: '#4263EB', borderRadius: '20px', 
-                    height: '56px', lineHeight: '56px', color: '#FFF', fontSize: 16, cursor: 'pointer', fontWeight: 600, boxSizing: 'border-box'}} >提供VSD-USDT</Box>
-                <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}>LP参与挖矿</Box>
+                    height: '56px', lineHeight: '56px', color: '#FFF', fontSize: 16, cursor: 'pointer', fontWeight: 600, boxSizing: 'border-box'}} 
+                        onClick={handleVSDUSDTClick}>提供VSD-USDT</Box>
+                <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}
+                    onClick={handleLPAndMiningClick}>LP参与挖矿</Box>
             </Box>
         </Card>
     );

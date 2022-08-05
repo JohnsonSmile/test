@@ -7,6 +7,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import VSDChartView from './VSDChartView';
 import { formatNumber } from '../../../utils/utils';
+import { toast } from 'react-toastify';
 
 
 const dayData = [820, 932, 901, 934, 1290, 1330, 1320];
@@ -19,9 +20,14 @@ const VSDBoard = (props) => {
     const { vsdData } = props;
     const [isChartShow, setIsChartShow] = useState(false)
     const toggleChartShow = () => {
-        setIsChartShow(prev => {
-            return !prev
-        })
+        toast.info("即将上线，敬请期待...")
+        return
+        // setIsChartShow(prev => {
+        //     return !prev
+        // })
+    }
+    const handleVSDTradeClick = () => {
+        toast.info("即将上线，敬请期待...")
     }
     return (
         <Card sx={{ minWidth: 275, pb: 2, boxShadow: '0px 0px 10px rgba(66, 61, 247, 0.08)', borderRadius: '20px', mt: 2 }}>
@@ -94,7 +100,8 @@ const VSDBoard = (props) => {
                 height: '56px', lineHeight: '56px', color: '#FFF', fontSize: 16, cursor: 'pointer',
                 fontWeight: 600, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'center'}} 
                 onClick={toggleChartShow}>{isChartShow ? '收起图表' : '查看图表'}{isChartShow ? <ArrowUpwardIcon /> :<ArrowDownwardIcon/>}</Box>
-            <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}>交易VSD</Box>
+            <Box sx={{ flex:1, background: '#ECF0FF', borderRadius: '20px', height: '56px', lineHeight: '56px', color: '#4263EB', fontSize: 16, fontWeight: 600, boxSizing: 'border-box', cursor: 'pointer' }}
+                onClick={handleVSDTradeClick}>交易VSD</Box>
         </Box>
         {isChartShow && <VSDChartView dayData={dayData} weekData={weekData} monthData={monthData} yearData={yearData} />}
         </Card>
