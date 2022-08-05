@@ -5,6 +5,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SideDrawer from './SideDrawer';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { asyncSetLoading, getErrMessage, getSuccessMessage } from '../../redux/reducers/status';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const TopAppBar = () => {
@@ -14,6 +16,9 @@ const TopAppBar = () => {
   const [shouldBackShow, setShouldBackShow] = useState(false)
   const [headerColor, setHeaderColor] = useState('transparent')
   const [listItemVisible, setListItemVisible] = useState(false)
+  const errMsg = useSelector(getErrMessage)
+  const successMsg = useSelector(getSuccessMessage)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleBackClick = () => {
     navigate(-1)
@@ -88,6 +93,10 @@ const TopAppBar = () => {
       setShouldBackShow(true)
       setHeaderColor('#FFF')
     }
+    if (!successMsg && !errMsg) {
+      dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
+    }
+    
   }, [location])
   
   return (

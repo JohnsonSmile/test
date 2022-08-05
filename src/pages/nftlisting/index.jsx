@@ -140,7 +140,6 @@ const NFTListingPage = () => {
     }
 
     useEffect(() => {
-        dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
         if (account) {
             initialInfos(currentQuality, account)
         }
