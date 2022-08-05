@@ -6,12 +6,17 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import LoadingDialog from "../loading/LoadingDialog";
 import { useWeb3React } from "@web3-react/core";
+import { useDispatch, useSelector } from "react-redux";
+import { asyncSetUserInfo, getUserInfo } from '../../redux/reducers/user';
+import { asyncSetHome } from "../../redux/reducers/page";
 
 
 const Layout = (props) => {
     const location = useLocation()
     const navigate = useNavigate()
     const { account } = useWeb3React()
+    const userInfo = useSelector(getUserInfo)
+    const dispatch = useDispatch()
     useEffect(() => {
         if (location.pathname === '/') {
             navigate('/home')
@@ -20,6 +25,30 @@ const Layout = (props) => {
     useEffect(() => {
         if (account) {
           localStorage.setItem("account", account);
+          console.log(userInfo)
+          if (account !== userInfo.account) {
+            console.log('请重新登录！')
+            dispatch(asyncSetUserInfo({      
+                account: '', 
+                id :'', 
+                invitationCode: '', 
+                inviter: '',
+                avatar: '',
+                token: ''
+            }))
+            dispatch(asyncSetHome({
+                account: '',
+                userName: '',
+                avatar: '',
+                yesterdayGain: 0,
+                isSigned: false,
+                nftAmount: 0,
+                promotionCount: 0,
+                invitationCode: '',
+                inviter: '',
+            }))
+            navigate('/login')
+          }
         } else {
           localStorage.setItem("account", "");
         }

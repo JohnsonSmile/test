@@ -107,7 +107,7 @@ const StakePage = () => {
         }
         
         // 排序
-        nftInfos = nftInfos.sort((a, b) => a.id < b.id)
+        nftInfos = nftInfos.sort((a, b) => a.id - b.id)
         dispatch(asyncSetNftInfos(nftInfos))
         console.log(nftInfos)
     }

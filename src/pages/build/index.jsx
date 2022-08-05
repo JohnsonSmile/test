@@ -41,10 +41,10 @@ const createData = (name, rate, gain) => {
 }
 
 const rows = [
-    createData('铜', '68%', '12VSD'),
-    createData('银', '23%', '25VSD'),
-    createData('金', '7%', '50VSD'),
-    createData('钻', '2%', '100VSD'),
+    createData('铜', '68%', '6VSD'),
+    createData('银', '23%', '12.5VSD'),
+    createData('金', '7%', '25VSD'),
+    createData('钻', '2%', '50VSD'),
 ];
 
 const BuildPage = () => {
@@ -285,9 +285,9 @@ const BuildPage = () => {
                 <Box sx={{ mt: 4, width: '100%' }}>
                     <Box sx={{ px: 3, textAlign: 'left', display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >规则:</Typography>
-                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >1. 前1000个铸造的NFT,消耗200USDT+10V6</Typography>
-                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >2. 前1001~2000个铸造的NFT,消耗200USDT+30V6</Typography>
-                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >3. 2001个后,消耗1000VSD</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >1. 前2000个铸造的NFT,消耗50USDT+5V6或者65USDT</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >2. 前2001~4000个铸造的NFT,消耗40USDT+10V6或者70USDT</Typography>
+                        <Typography variant={'inherit'} sx={{ fontSize: '12px', fontWeight: 500, color: '#7E8186' }} >3. 4001个后,消耗750VSD</Typography>
                     </Box>
                 </Box>
                 <Box sx={{ my: 4, borderRadius: '12px', border: '1px solid #EDEEF2' }}>

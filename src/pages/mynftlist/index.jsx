@@ -300,7 +300,7 @@ const MyNFTListPage = () => {
             })))
         }
         // 排序
-        nftInfos = nftInfos.sort((a, b) => a.id < b.id)
+        nftInfos = nftInfos.sort((a, b) => b.id - a.id)
         console.log(nftInfos)
         setNftInfos(nftInfos)
         if (status !== 0) {

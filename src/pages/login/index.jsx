@@ -17,6 +17,7 @@ import InviteCodeDialog from "./components/InviteCodeDialog"
 import { asyncSetLoading } from "../../redux/reducers/status"
 import LoadingDialog from "../../widgets/loading/LoadingDialog"
 import { asyncSetUserInfo } from "../../redux/reducers/user"
+import { toast } from "react-toastify"
 
 
 // const stringAvatar = (name) => {
@@ -83,36 +84,34 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (account) {
-            if (account !== signAccount) {
-                window.Library.getSigner(account).signMessage("hello").then((sigHex) => {
-                    console.log("account==", account)
-                    console.log("sig==", sigHex)
-                    // save message info local
-                    dispatch(asyncSetSignInfo({ account, sigHex }))
-                    dispatch(asyncSetAccount(account))
-                    apiPostLogin(account, sigHex, "hello").then(res => {
-                        const { code, result } = res
-                        if (code === 200) {
-                            const { JWTToken, User } = result
-                            dispatch(asyncSetUserInfo({...User, token: JWTToken }))
-                            // go to home
-                            navigate('/')
-                        }
-                    })
+            if (signInfo && signInfo[account]) {
+                apiPostLogin(account, signInfo[account], "hello").then(res => {
+                    const { code, result } = res
+                    if (code === 200) {
+                        const { JWTToken, User } = result
+                        dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                        // go to home
+                        navigate('/')
+                    }
                 })
-            } else {
-                if (signInfo) {
-                    apiPostLogin(account, signInfo.sigHex, "hello").then(res => {
-                        const { code, result } = res
-                        if (code === 200) {
-                            const { JWTToken, User } = result
-                            dispatch(asyncSetUserInfo({...User, token: JWTToken }))
-                            // go to home
-                            navigate('/')
-                        }
-                    })
-                } 
-            }
+                return
+            } 
+            window.Library.getSigner(account).signMessage("hello").then((sigHex) => {
+                console.log("account==", account)
+                console.log("sig==", sigHex)
+                // save message info local
+                dispatch(asyncSetSignInfo({ account, sigHex }))
+                dispatch(asyncSetAccount(account))
+                apiPostLogin(account, sigHex, "hello").then(res => {
+                    const { code, result } = res
+                    if (code === 200) {
+                        const { JWTToken, User } = result
+                        dispatch(asyncSetUserInfo({...User, token: JWTToken }))
+                        // go to home
+                        navigate('/')
+                    }
+                })
+            })
         }
     }, [account, signAccount, dispatch])
 

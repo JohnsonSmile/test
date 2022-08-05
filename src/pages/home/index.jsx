@@ -151,8 +151,8 @@ const HomePage = () => {
             const amount = await getUserOwnNum(account)
             console.log(amount)
             // get user info
-            if (signInfo && signInfo.sigHex) {
-                const res = await apiPostGetUserInfo(account, signInfo.sigHex, "hello")
+            if (signInfo && signInfo[account]) {
+                const res = await apiPostGetUserInfo(account, signInfo[account], "hello")
                 console.log("res", res)
                 if (res.code === 200 && res.result) {
                     const accInfo = JSON.parse(JSON.stringify(accountInfo))

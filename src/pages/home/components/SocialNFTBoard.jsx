@@ -17,7 +17,7 @@ const SocialNFTBoard = (props) => {
         <Card sx={{ minWidth: 275, pb: 2, boxShadow: '0px 0px 10px rgba(66, 61, 247, 0.08)', borderRadius: '20px', mt: 2 }}>
         <Box>
             <Typography component={'div'} sx={{ fontSize: 16, fontWeight: 700, m: 1.5 }} color="text.primary" gutterBottom>
-            Social NFT
+            Valuable NFT
             </Typography>
             <Divider sx={{ opacity: 0.5 }} />
             <Grid container columns={6} sx={{
