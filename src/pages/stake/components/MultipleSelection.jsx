@@ -1,27 +1,44 @@
 import { useState } from 'react';
-import { Typography, Checkbox, MenuItem } from '@mui/material';
-import BootstrapTextField from "../../../widgets/textfield/BootstrapTextField"
+import { Typography, Checkbox, MenuItem, Select } from '@mui/material';
+import { styled } from '@mui/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { asyncSetSelectedIDs, getSelectedIDs } from '../../../redux/reducers/page';
+
+
+const BootstrapSelect = styled(Select)(({ theme }) => ({
+    '& .MuiOutlinedInput-root': {
+        borderRadius: '12px',
+        fontSize: '14px',
+        height: '48px',
+        border: '1px solid #F2F2F2'
+    },
+    '& .MuiSelect-select': {
+        display: 'flex',
+        alignItems: 'center',
+    },
+}));
 
 
 const MultipleSelection = (props) => {
-    const { nftIDs, onNFTSelected, selectedIDs } = props;
-    const [selectedNumbers, setSelectedNumbers] = useState(selectedIDs);
+    const { nftIDs, onNFTSelected } = props;
+    const selectedIDs = useSelector(getSelectedIDs)
+    const dispatch = useDispatch()
     const [allSelected, setAllSelected] = useState(false)
 
     const handleChange = (event) => {
         const {target: { value },} = event;
         const nfts = typeof value === 'string' ? value.split(',') : value
-        setSelectedNumbers(nfts);
+        dispatch(asyncSetSelectedIDs(nfts))
         onNFTSelected(nfts)
     };
 
     const handleAllClick = () => {
         setAllSelected(prev => {
             if (prev) {
-                setSelectedNumbers([])
+                dispatch(asyncSetSelectedIDs([]))
                 onNFTSelected([])
             } else {
-                setSelectedNumbers(nftIDs)
+                dispatch(asyncSetSelectedIDs(nftIDs))
                 onNFTSelected(nftIDs)
             }
             return !prev
@@ -29,13 +46,13 @@ const MultipleSelection = (props) => {
     }
 
     return (
-        <BootstrapTextField
+        <BootstrapSelect
             multiple
-            value={selectedNumbers}
+            value={selectedIDs}
             onChange={handleChange}
             renderValue={(selected) => {
                 console.log(props.nftIDs)
-                if (nftIDs.length === 0 || selected.length === 0 || selectedNumbers.length === 0) {
+                if (nftIDs.length === 0 || selected.length === 0 || selectedIDs.length === 0) {
                     return '请选择'
                 }
                 if (selected.length === nftIDs.length) {
@@ -59,11 +76,11 @@ const MultipleSelection = (props) => {
             </MenuItem>
             {nftIDs.map((id) => (
                 <MenuItem key={id} value={id} sx={{ color: '#333' }}>
-                    <Checkbox checked={selectedNumbers.indexOf(id) > -1 } />
+                    <Checkbox checked={selectedIDs.indexOf(id) > -1 } />
                     <Typography variant='inherit'  sx={{ color: '#333' }} >#{id}</Typography>
                 </MenuItem>
             ))}
-        </BootstrapTextField>
+        </BootstrapSelect>
     );
 }
 

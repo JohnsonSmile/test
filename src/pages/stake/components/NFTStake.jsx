@@ -47,13 +47,15 @@ const NFTStake = (props) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleTypeChange = (e) => {
+        console.log(e.target.value)
         setSelectedType(e.target.value)
         dispatch(asyncSetSelectedIDs([]))
         setNftIDs(nftInfos.filter(nft => nft.quality === e.target.value).map(nftInfo => nftInfo.token_id))
     }
 
     const onNFTSelected = (selectedNFTIDs) => {
-        dispatch(asyncSetSelectedIDs([selectedNFTIDs]))
+        console.log(selectedNFTIDs)
+        dispatch(asyncSetSelectedIDs(selectedNFTIDs))
     }
 
     const handleStakeClick = async () => {
@@ -130,7 +132,7 @@ const NFTStake = (props) => {
     }
 
     useEffect(() => {
-        if (selectedIDs.length > 0 ) {
+        if (nftInfos.length > 0 ) {
             const selectedNFT = nftInfos.filter(nft => nft.token_id === selectedIDs[0])
             const quality = selectedNFT.length > 0 ?  selectedNFT[0].quality : 1
             setSelectedType(quality)
@@ -145,7 +147,7 @@ const NFTStake = (props) => {
             setNftIDs(nftInfos.filter(nft => nft.status === 1 && nft.quality === 1).map(nftInfo => nftInfo.token_id))
             setStkIDs(nftInfos.filter(nft => nft.status === 2).map(nftInfo => nftInfo.token_id))
         }
-    }, [selectedIDs, nftInfos])
+    }, [nftInfos])
     
 
     const handleStakeRecordClick = () => {
@@ -195,7 +197,7 @@ const NFTStake = (props) => {
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.8, pt: 3, width: '100%' }}>
                 <Box component={'label'} sx={{fontSize: '14px', fontWeight: 600, color: '#333'}}>NFT编号:</Box>
-                <MultipleSelection nftIDs={nftIDs} onNFTSelected={onNFTSelected} selectedIDs={selectedIDs} />
+                <MultipleSelection nftIDs={nftIDs} onNFTSelected={onNFTSelected} />
             </Box>
             <Typography component={'div'} sx={{ color: '#333', alignSelf: 'flex-start', mt: 2, fontSize: '14px', fontWeight: 600}}>已选择编号:</Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', alignSelf: 'flex-start', gap: 0.5, px: 1, mt: 2 }}>
