@@ -94,7 +94,7 @@ export const UserInfo = (props) => {
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: 'row',alignItems: 'center', py: 2}}>
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>昨日收益</Typography>
+                            <Typography sx={{ fontSize: 12, fontWeight: 500, opacity: 0.8 }}>今日收益预估</Typography>
                             <Typography sx={{ fontSize: 14, fontWeight: 600 }}>{accountInfo.yesterdayGain} VSD</Typography>
                         </Box>
                         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5, cursor: 'pointer' }}

@@ -22,8 +22,9 @@ const SignPage = () => {
                 setMarkers(prev => {
                     const nowDate = moment(Date.now()).format("DD-MM-YYYY")
                     console.log('nowDate', nowDate)
-                    prev.push(nowDate)
-                    return prev
+                    const markersArray = [...prev]
+                    markersArray.push(nowDate)
+                    return markersArray
                 })
             }
             

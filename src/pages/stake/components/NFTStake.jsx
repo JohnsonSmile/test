@@ -10,7 +10,7 @@ import { batchStakeNFT } from "../../../clients/socialNFT";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncSetLoading } from "../../../redux/reducers/status";
-import { asyncSetNftInfos, asyncSetSelectedIDs, getNftInfos, getSelectedIDs } from "../../../redux/reducers/page";
+import { asyncSetNftInfos, asyncSetSelectedIDs, getHome, getNftInfos, getSelectedIDs } from "../../../redux/reducers/page";
 import { styled } from "@mui/styles";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
@@ -38,9 +38,10 @@ const BootstrapSelect = styled(Select)(({ theme }) => ({
 }));
 
 
-const NFTStake = (props) => {
+const NFTStake = () => {
     const nftInfos = useSelector(getNftInfos)
     const selectedIDs = useSelector(getSelectedIDs)
+    const homeInfo = useSelector(getHome)
     const [selectedType, setSelectedType] = useState(1)
     const [nftIDs, setNftIDs] = useState([])
     const [stkIDs, setStkIDs] = useState([])
@@ -160,6 +161,9 @@ const NFTStake = (props) => {
     }
 
     const handleSignClick = () => {
+        if(homeInfo.isSigned) {
+            return
+        }
         navigate('/sign')
     }
 
@@ -241,7 +245,7 @@ const NFTStake = (props) => {
                     <Box sx={{ fontSize: '12px', color: '#333', textAlign: 'left', fontWeight: 500 }}>规则：</Box>
                     <Box sx={{ fontSize: '12px', color: '#333', textAlign: 'left', fontWeight: 500, pt: 0.5 }}>① 申请提取收益三天后到账</Box>
                     <Box sx={{ fontSize: '12px', color: '#333', textAlign: 'left', fontWeight: 500, pt: 0.5 }}> ② 需要每日登录签到，否则当日无收益。</Box>
-                    <Box sx={{ fontSize: '12px', color: '#4263EB', textAlign: 'left', pt: 1, cursor: 'pointer'}} onClick={handleSignClick}>{'您今日还未签到，去签到->'}</Box>
+                    <Box sx={{ fontSize: '12px', color: '#4263EB', textAlign: 'left', pt: 1, cursor: 'pointer'}} onClick={handleSignClick}>{homeInfo.isSigned ? '已签到' :'您今日还未签到，去签到->'}</Box>
                 </Box>
             </Box>
             <Box sx={{ mt: 1.5, py: 1, width: '100%' }}>

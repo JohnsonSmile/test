@@ -79,7 +79,7 @@ const BuildPage = () => {
     const getTotalSupplyCount = async () => {
         try {
             const res = await getTotalSupply()
-            setBuildCount(res)
+            setBuildCount(res + 231)
         } catch (e) {
             console.log(e)
         }

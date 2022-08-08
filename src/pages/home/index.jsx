@@ -16,10 +16,10 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getBaseURI, getUserOwnNum } from '../../clients/socialNFT';
+import { getUserOwnNum, getUserStakedTokenIDsByPage } from '../../clients/socialNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiPostGetUserInfo } from '../../http';
+import { apiPostGetNFTInfosByIDs, apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
 import { getAvatar, getUserInfo, getUserName } from '../../redux/reducers/user';
 import { asyncSetHome, getHome } from '../../redux/reducers/page';
@@ -142,14 +142,49 @@ const HomePage = () => {
     const initialContractGlobalInfo = async () => {
             // initial contract global consts
             // TODO: make this properly
-            const resp = await getBaseURI()
-            console.log(resp)
+            // const resp = await getBaseURI()
             // TODO: just use this to dev
             const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
             dispatch(setTokenURI(tokenURI))
             // get user own num
             const amount = await getUserOwnNum(account)
             console.log(amount)
+
+            // gain tody
+            const pageSize = 100
+            var index = 0
+            var tokensResp = []
+            var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            tokensResp.push(...res)
+            while (res.length === 100) {
+                index = pageSize * (index + 1)
+                res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+                tokensResp.push(...res)
+            }
+            console.log(tokensResp)
+
+            // staked nft 
+            const stakeNFTs = tokensResp.filter(nft => {
+                return nft.staking
+            })
+
+            // get nft infos from backend
+            const stakedIDs = stakeNFTs.length > 0 ? stakeNFTs.map(nft => nft.tokenId.toNumber()) : []
+            console.log(stakedIDs)
+            const stakeNFTResp = stakeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
+            console.log(stakeNFTResp)
+
+            var gain = 0
+            if (stakeNFTResp.code === 200 && stakeNFTResp.result && stakeNFTResp.result.length > 0) {
+                // copper
+                const cropper = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 1).length
+                const silver = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 2).length
+                const gold = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 3).length
+                const diamond = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 4).length
+                console.log(cropper)
+                gain = cropper * 6 + silver * 12.5 + gold * 25 + diamond * 50
+            }
+            
             // get user info
             if (signInfo && signInfo[account]) {
                 const res = await apiPostGetUserInfo(account, signInfo[account], "hello")
@@ -161,7 +196,8 @@ const HomePage = () => {
                         ...res.result.userInfo,
                         isSigned: res.result.isSigned,
                         promotionCount: res.result.promotionCount,
-                        nftAmount: amount ? amount : 0
+                        nftAmount: amount ? amount : 0,
+                        yesterdayGain: gain
                     }))
                 } else {
                     dispatch(asyncSetHome({
