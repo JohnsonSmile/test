@@ -138,6 +138,43 @@ const approve = async (to, tokenId) => {
     });
 };
 
+const setApprovalForAll = async (operator, approved) => {
+    if (!window.Signer || !window.valuebleNFTContract) {
+        console.warn("in approve stakeNFT ");
+        initialize();
+    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            const tx = await window.valuebleNFTContract.connect(window.Signer).setApprovalForAll(
+                operator,
+                approved
+                // {
+                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
+                // }
+            );
+
+            window.Library.once(tx.hash, (transaction) => {
+                if (transaction.status === 1) {
+                    // window.Library.call(tx)
+                    //     .then((res) => {
+                    //         console.log(res);
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //         reject(err);
+                    //     });
+                    resolve({ success: true })
+                } else {
+                    resolve({ success: false })
+                }
+            });
+        } catch (e) {
+            console.log(e);
+            reject(e);
+        }
+    });
+}
+
 const batchStakeNFT = () => {
     throw new Error('not implemented');
 }
@@ -166,5 +203,6 @@ export {
     batchStakeNFT,
     getUserStakedTokenIDsByPage,
     getUserStakedNum,
-    stakeNFT
+    stakeNFT,
+    setApprovalForAll//operator: mineAddress approved:true
 };
