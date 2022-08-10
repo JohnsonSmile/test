@@ -1811,6 +1811,25 @@ const MineABI = [
         "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
+      }
+    ],
+    "name": "NFTRescue",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
         "indexed": false,
