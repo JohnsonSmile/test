@@ -40,14 +40,19 @@ const initialize = (provider) => {
     contracts.valueABI,
     library
   );
-  window.socialNFTContract = new ethers.Contract(
-    contracts.socialNFT,
-    contracts.socialNFTABI,
+  window.valuebleNFTContract = new ethers.Contract(
+    contracts.valuebleNFTABI,
+    contracts.valuebleNFTABIABI,
     library
   );
   window.listContract = new ethers.Contract(
     contracts.list,
     contracts.listABI,
+    library
+  );
+  window.mineContract = new ethers.Contract(
+    contracts.mine,
+    contracts.mineABI,
     library
   );
 
@@ -57,7 +62,7 @@ const initialize = (provider) => {
 
   // listener
   // socialnft
-  window.socialNFTContract.on(
+  window.valuebleNFTContract.on(
     "SafeMint",
     (owner, amount, tokenIds, safeMintAt) => {
       console.log(owner, amount, tokenIds, safeMintAt);
@@ -67,25 +72,48 @@ const initialize = (provider) => {
       }
     }
   );
-  window.socialNFTContract.on(
-    "Stake",
-    (owner, tokenId, newStatu, stakeAt) => {
+
+  window.mineContract.on(
+    "NFTStaked",
+    (owner, tokenId, stakeAt) => {
       // TODO: toast something!
       console.log(owner, tokenId, newStatu, stakeAt);
       const accountLocal = localStorage.getItem("account");
-      if (accountLocal === owner && newStatu) {
-        NoticeEmitter.emit("stake success", { tokenId, isStake: true });
-        // toast.info(
-        //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
-        // );
-      } else if (accountLocal === owner && !newStatu) {
-        NoticeEmitter.emit("stake success", { tokenId, isStake: false });
-        // toast.info(
-        //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
-        // );
-      }
+      // if (accountLocal === owner && newStatu) {
+      //   NoticeEmitter.emit("stake success", { tokenId, isStake: true });
+      //   // toast.info(
+      //   //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
+      //   // );
+      // } else if (accountLocal === owner && !newStatu) {
+      //   NoticeEmitter.emit("stake success", { tokenId, isStake: false });
+      //   // toast.info(
+      //   //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
+      //   // );
+      // }
     }
   );
+
+  window.mineContract.on(
+    "NFTRescue",
+    (owner, tokenId) => {
+      // TODO: toast something!
+      console.log(owner, tokenId);
+      const accountLocal = localStorage.getItem("account");
+      // if (accountLocal === owner && newStatu) {
+      //   NoticeEmitter.emit("stake success", { tokenId, isStake: true });
+      //   // toast.info(
+      //   //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
+      //   // );
+      // } else if (accountLocal === owner && !newStatu) {
+      //   NoticeEmitter.emit("stake success", { tokenId, isStake: false });
+      //   // toast.info(
+      //   //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
+      //   // );
+      // }
+    }
+  );
+
+
 
   // list
   window.listContract.on(
