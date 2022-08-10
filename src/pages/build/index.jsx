@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import BoxImg from '../../assets/build/box.png'
 import { contracts } from "../../clients/contracts"
-import { getTotalSupply, safeMint } from "../../clients/socialNFT"
+import { getTotalSupply, safeMint } from "../../clients/valuebleNFT"
 import { getUsdtAllowance, getUsdtBalance, usdtApprove } from "../../clients/usdt"
 import { getValueAllowance, getValueBalance, valueApprove } from "../../clients/value"
 import { getVSDAllowance, getVSDBalance, VSDApprove } from "../../clients/vsd"

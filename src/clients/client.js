@@ -41,8 +41,8 @@ const initialize = (provider) => {
     library
   );
   window.valuebleNFTContract = new ethers.Contract(
+    contracts.value,
     contracts.valuebleNFTABI,
-    contracts.valuebleNFTABIABI,
     library
   );
   window.listContract = new ethers.Contract(
@@ -77,7 +77,7 @@ const initialize = (provider) => {
     "NFTStaked",
     (owner, tokenId, stakeAt) => {
       // TODO: toast something!
-      console.log(owner, tokenId, newStatu, stakeAt);
+      console.log(owner, tokenId, stakeAt);
       const accountLocal = localStorage.getItem("account");
       // if (accountLocal === owner && newStatu) {
       //   NoticeEmitter.emit("stake success", { tokenId, isStake: true });

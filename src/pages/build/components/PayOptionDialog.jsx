@@ -3,7 +3,7 @@ import { styled } from "@mui/styles";
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from "react";
-import { getTotalPrice } from "../../../clients/socialNFT";
+import { getTotalPrice } from "../../../clients/valuebleNFT";
 import { ethers } from "ethers";
 import { getFormatBigNumber } from "../../../utils";
 import { useSelector } from "react-redux";

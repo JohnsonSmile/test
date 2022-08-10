@@ -6,7 +6,7 @@ import DiamondNFTImage from "../../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../../assets/images/mynft/copper_nft.png"
-import { batchStakeNFT } from "../../../clients/socialNFT";
+import { batchStakeNFT } from "../../../clients/valuebleNFT";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { asyncSetLoading } from "../../../redux/reducers/status";

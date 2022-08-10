@@ -5,7 +5,7 @@ import NFTStake from "./components/NFTStake";
 import LPStake from "./components/LPStake";
 import BootstrapTabs from "../../widgets/tabs/BootstrapTabs";
 import { apiPostGetNFTInfosByIDs } from "../../http/api";
-import { getUserStakedTokenIDsByPage } from "../../clients/socialNFT";
+import { getUserStakedTokenIDsByPage } from "../../clients/valuebleNFT";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { asyncSetNftInfos } from "../../redux/reducers/page";

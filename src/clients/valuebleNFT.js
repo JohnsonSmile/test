@@ -138,6 +138,21 @@ const approve = async (to, tokenId) => {
     });
 };
 
+const batchStakeNFT = () => {
+    throw new Error('not implemented');
+}
+
+const getUserStakedTokenIDsByPage = () => {
+    throw new Error('not implemented');
+}
+
+const getUserStakedNum = () => {
+    throw new Error('not implemented');
+}
+
+const stakeNFT = () => {
+    throw new Error('not implemented');
+}
 
 export {
     getTotalPrice, // 得到铸造的总的价格，传递数量amount -> getAllowce(看有无授权) -> approve (usdt, vsd 等) -> safeMint
@@ -147,5 +162,9 @@ export {
     getTotalSupply, // 已经 build 的nft总数量
     getApproved,
     safeMint, // isStake_ 是否质押
-    approve // list上架流程需要， approve list to 为 list的合约地址,
+    approve, // list上架流程需要， approve list to 为 list的合约地址,
+    batchStakeNFT,
+    getUserStakedTokenIDsByPage,
+    getUserStakedNum,
+    stakeNFT
 };

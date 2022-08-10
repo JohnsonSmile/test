@@ -9,7 +9,7 @@ import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 
 import TypeSelect from "../mynftlist/components/TypeSelect";
 import AlphaSelect from "./components/AlphaSelect";
-import { getBalance } from "../../clients/socialNFT";
+import { getBalance } from "../../clients/valuebleNFT";
 import { apiPostGetNFTInfosByIDs } from "../../http/api.js"
 import { getListItems } from "../../clients/list";
 import { contracts } from "../../clients/contracts";

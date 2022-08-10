@@ -16,7 +16,7 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getUserOwnNum, getUserStakedTokenIDsByPage } from '../../clients/socialNFT';
+import { getUserOwnNum, getUserStakedTokenIDsByPage } from '../../clients/valuebleNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetNFTInfosByIDs, apiPostGetUserInfo } from '../../http';
@@ -223,8 +223,8 @@ const HomePage = () => {
                     ...accInfo,...userInfo,
                 }))
             }
-            // initial contract infos
-            initialContractGlobalInfo()
+            // TODO:initial contract infos
+            // initialContractGlobalInfo()
         } else {
             dispatch(asyncSetHome({
                 account: '',
