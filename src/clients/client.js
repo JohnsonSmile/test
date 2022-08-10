@@ -41,7 +41,7 @@ const initialize = (provider) => {
     library
   );
   window.valuebleNFTContract = new ethers.Contract(
-    contracts.value,
+    contracts.valuebleNFT,
     contracts.valuebleNFTABI,
     library
   );
