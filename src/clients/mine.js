@@ -114,7 +114,7 @@ const rescue = async (tokenIds) => {
             reject(e);
         }
         // local store this tx hash
-        console.log('amount===', amount)
+        // console.log('amount===', amount)
         NoticeEmitter.on("rescue success", (tokenIds) => {
             resolve({
                 success: true,

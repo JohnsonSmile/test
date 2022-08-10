@@ -16,7 +16,8 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getUserOwnNum, getUserStakedTokenIDsByPage } from '../../clients/valuebleNFT';
+import { getUserOwnNum  } from '../../clients/valuebleNFT';
+import { getUserStaked } from '../../clients/mine'
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { apiPostGetNFTInfosByIDs, apiPostGetUserInfo } from '../../http';
@@ -146,19 +147,24 @@ const HomePage = () => {
             // TODO: just use this to dev
             const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
             dispatch(setTokenURI(tokenURI))
-            // get user own num
-            const amount = await getUserOwnNum(account)
-            console.log(amount)
+            var amount = 0
+            try {
+                // get user own num
+                amount = await getUserOwnNum(account)
+                console.log(amount)
+            } catch (e) {
+                console.log(e)
+            }
 
             // gain tody
             const pageSize = 100
             var index = 0
             var tokensResp = []
-            var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            var res = await getUserStaked(account, index, pageSize)
             tokensResp.push(...res)
             while (res.length === 100) {
                 index = pageSize * (index + 1)
-                res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+                res = await getUserStaked(account, index, pageSize)
                 tokensResp.push(...res)
             }
             console.log(tokensResp)
@@ -224,7 +230,7 @@ const HomePage = () => {
                 }))
             }
             // TODO:initial contract infos
-            // initialContractGlobalInfo()
+            initialContractGlobalInfo()
         } else {
             dispatch(asyncSetHome({
                 account: '',
