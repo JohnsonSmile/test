@@ -38,7 +38,7 @@ const features = [
         image: <NFTMarketIcon />,
         title: 'NFT市场',
         url: '/market',
-        isReady: true
+        isReady: false
     },
     {
         image: <LPTradeIcon />,

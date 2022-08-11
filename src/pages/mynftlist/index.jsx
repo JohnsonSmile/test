@@ -7,14 +7,15 @@ import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
-import { getUserOwn, getUserOwnNum, stakeNFT } from "../../clients/valuebleNFT"
-import { getUserStaked } from "../../clients/mine"
+import { getApproved, getIsApprovedForAll, getUserOwn, getUserOwnNum, stakeNFT } from "../../clients/valuebleNFT"
+import { getUserStaked, rescue } from "../../clients/mine"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { useWeb3React } from "@web3-react/core"
 import { getUserListItems, getUserListItemsNum, unlist } from "../../clients/list"
 import { useDispatch } from "react-redux"
 import { asyncSetLoading } from "../../redux/reducers/status"
 import { asyncSetSelectedIDs } from "../../redux/reducers/page"
+import { toast } from "react-toastify"
 
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
@@ -79,10 +80,11 @@ const MyNFTListPage = () => {
         try {
             console.log(nftInfo)
             // TODO: more to stake
-            const resp = await stakeNFT(nftInfo.token_id, false)
+            const resp = await rescue([nftInfo.token_id])
+            console.log(resp)
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
-                console.log(resp.tokenId.toNumber())
+                console.log(resp.tokenIds)
                 setNftInfos(prev => {
                     const res = prev.map(p => {
                         if (p.token_id === nftInfo.token_id) {
@@ -111,10 +113,14 @@ const MyNFTListPage = () => {
     }
 
     const handleListClick = (nftInfo) => {
+        toast.info("暂不支持，敬请期待...")
+        return
         navigate('/nft/listing')
     }
 
     const handleDisListClick = async (nftInfo) => {
+        toast.info("暂不支持，敬请期待...")
+        return
         dispatch(asyncSetLoading(true, "解除出售NFT", "正在解除出售NFT"))
         try {
             console.log(nftInfo)
@@ -230,6 +236,7 @@ const MyNFTListPage = () => {
             return {
                 token_id: res.tokenId.toNumber(),
                 quality: res.tokenQuality.toNumber(),
+                isStaked: res.isStaked,
             }
         })
         console.log(tokenInfos)
@@ -241,7 +248,7 @@ const MyNFTListPage = () => {
 
 
         // get staked nfts
-        const stakedNFTs = resp.filter(nft => {
+        const stakedNFTs = tokenInfos.filter(nft => {
             return nft.isStaked
         })
 
@@ -334,7 +341,7 @@ const MyNFTListPage = () => {
             {fillteredNFTInfos && <Box sx={{ display: 'flex', flexDirection:' column', gap: 3, px: 2}}>
                 {fillteredNFTInfos.map(nftinfo => {
                     return (
-                        <Card key={nftinfo.id} sx={{ border: '1px solid #F2F2F2', borderRadius: '20px', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}>
+                        <Card key={nftinfo.token_id} sx={{ border: '1px solid #F2F2F2', borderRadius: '20px', boxShadow: '0px 10px 50px rgba(242, 242, 242, 0.6)'}}>
                             <Box sx={{display: 'flex', flexDirection: 'row', py: 2}}>
                                 <Box sx={{flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                                     <CardMedia component={"img"} src={NFTImages[nftinfo.quality - 1]} sx={{ width: '30px', height: '30px', mr: 0.5 }} />

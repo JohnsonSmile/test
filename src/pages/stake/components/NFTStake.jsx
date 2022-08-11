@@ -13,7 +13,7 @@ import { asyncSetNftInfos, asyncSetSelectedIDs, getHome, getNftInfos, getSelecte
 import { styled } from "@mui/styles";
 import { rescue, staking } from "../../../clients/mine";
 import { useWeb3React } from "@web3-react/core";
-import { approve, setApprovalForAll } from "../../../clients/valuebleNFT";
+import { approve, getIsApprovedForAll, setApprovalForAll } from "../../../clients/valuebleNFT";
 import { contracts } from "../../../clients/contracts";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
@@ -70,44 +70,38 @@ const NFTStake = () => {
         }
         dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
         try {
-            // approve to mine
-            dispatch(asyncSetLoading(true, "质押NFT", "正在获取授权"))
-            var res
-            try {
-                console.log(contracts.mine)
-                res = await setApprovalForAll(contracts.mine, true)
-            } catch (err) {
-                console.log(err)
-            }
-            console.log(res)
-            if (res.success) {
-                dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
-                console.log(selectedIDs)
-                const resp = await staking(account, selectedIDs)
-                if (resp.success) {
-                    dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
-                    const stakedIDSet = new Set(selectedIDs)
-                    var nfts = JSON.parse(JSON.stringify(nftInfos))
-                    nfts = nfts.map(nft => {
-                        if (stakedIDSet.has(nft.token_id)) {
-                            nft.status = 2
-                        }
-                        return nft
-                    })
-                    dispatch(asyncSetNftInfos(nfts))
-                    dispatch(asyncSetSelectedIDs([]))
-                    // const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
-                    // console.log(IDs)
-                    // console.log(selectedIDs)
-                    // setNftIDs(IDs)
-                    // setStkIDs(prev => [...prev, ...IDs])
-                    console.log(resp)
-                } else {
-                    dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
-                }
 
+            // get is approved
+            const isApproved = await getIsApprovedForAll(account, contracts.mine)
+            console.log(isApproved)
+            if (!isApproved) {
+                // approve to mine
+                dispatch(asyncSetLoading(true, "质押NFT", "正在获取授权"))
+                const res = await setApprovalForAll(contracts.mine, true)
+                console.log(res)
+                if (!res.success) {
+                    console.log('获取授权失败...')
+                    dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
+                    return
+                }
+            }
+            dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
+            console.log(selectedIDs, account)
+            const resp = await staking(account, selectedIDs)
+            if (resp.success) {
+                dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
+                const stakedIDSet = new Set(selectedIDs)
+                var nfts = JSON.parse(JSON.stringify(nftInfos))
+                nfts = nfts.map(nft => {
+                    if (stakedIDSet.has(nft.token_id)) {
+                        nft.status = 2
+                    }
+                    return nft
+                })
+                dispatch(asyncSetNftInfos(nfts))
+                dispatch(asyncSetSelectedIDs([]))
+                console.log(resp)
             } else {
-                console.log('获取授权失败...')
                 dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
             }
         } catch (e) {
@@ -124,7 +118,9 @@ const NFTStake = () => {
         dispatch(asyncSetLoading(true, "解除质押NFT", "正在解除质押NFT"))
         try {
             // TODO: more to stake
+            console.log(stkIDs)
             const resp = await rescue(stkIDs)
+            return
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
                 const stakedIDSet = new Set(stkIDs)
@@ -137,14 +133,6 @@ const NFTStake = () => {
                 })
                 dispatch(asyncSetNftInfos(nfts))
                 dispatch(asyncSetSelectedIDs([]))
-                // const IDs = nftIDs.filter(id => !stakedIDSet.has(id))
-                // console.log(IDs)
-                // console.log(selectedIDs)
-                // console.log(nftIDs)
-                // console.log([...nftIDs, ...stkIDs])
-                // setNftIDs(prev => [...prev, ...stkIDs])
-                // setStkIDs([])
-                // console.log(resp)
             } else {
                 dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
             }

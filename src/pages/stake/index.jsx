@@ -61,6 +61,7 @@ const StakePage = () => {
             return {
                 token_id: res.tokenId.toNumber(),
                 quality: res.tokenQuality.toNumber(),
+                isStaked: res.isStaked
             }
         })
         console.log(tokenInfos)
@@ -72,7 +73,7 @@ const StakePage = () => {
 
 
         // get staked nfts
-        const stakedNFTs = resp.filter(nft => {
+        const stakedNFTs = tokenInfos.filter(nft => {
             return nft.isStaked
         })
 

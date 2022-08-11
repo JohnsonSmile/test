@@ -55,6 +55,16 @@ const getApproved = async (tokenId) => {
     return await window.valuebleNFTContract.getApproved(tokenId);
 };
 
+
+const getIsApprovedForAll = async (account, address) => {
+
+    if (!window.valuebleNFTContract) {
+        console.warn("in valuebleNFT isApprovedForAll ");
+        initialize();
+    }
+    return await window.valuebleNFTContract.isApprovedForAll(account, address);
+}
+
 // ------post function-----
 const safeMint = async (amount, payType, isStake) => {
     if (!window.Signer || !window.valuebleNFTContract) {
@@ -198,11 +208,12 @@ export {
     getUserOwn,// 获取用户NFT tokenId（包含Listing的NFT） 包含品质
     getTotalSupply, // 已经 build 的nft总数量
     getApproved,
+    getIsApprovedForAll,
     safeMint, // isStake_ 是否质押
     approve, // list上架流程需要， approve list to 为 list的合约地址,
     batchStakeNFT,
     getUserStakedTokenIDsByPage,
     getUserStakedNum,
     stakeNFT,
-    setApprovalForAll//operator: mineAddress approved:true
+    setApprovalForAll,//operator: mineAddress approved:true
 };

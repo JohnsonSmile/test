@@ -21,10 +21,6 @@ const listItems = [
         url: '/mynft',
         isReady: true
     },{
-        title: 'NFT交易市场',
-        url: '/market',
-        isReady: true
-    },{
         title: '质押',
         url: '/stake',
         isReady: true
@@ -36,6 +32,10 @@ const listItems = [
         title: '邀请他人',
         url: '/invite',
         isReady: true
+    },{
+        title: 'NFT交易市场',
+        url: '/market',
+        isReady: false
     },{
         title: '代币交易市场',
         url: '/lpmarket',

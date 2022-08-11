@@ -37,7 +37,6 @@ const getAllStaked = async (startIndex, pageNum) => {
     return await window.mineContract.getAllStaked(startIndex, pageNum);
 }
 
-
 // ------post function-----
 const staking = async (account, tokenIds) => {
     if (!window.Signer || !window.mineContract) {
@@ -58,7 +57,8 @@ const staking = async (account, tokenIds) => {
                 if (transaction.status !== 1) {
                     window.Library.call(tx)
                         .then((res) => {
-                            console.log(res);
+                            console.log(res)
+                            reject(res);
                         })
                         .catch((err) => {
                             console.log(err);
@@ -73,7 +73,7 @@ const staking = async (account, tokenIds) => {
         }
         // local store this tx hash
         console.log('amount===', tokenIds.length)
-        NoticeEmitter.on("staking success", (tokenIds) => {
+        NoticeEmitter.on("stake success", ({tokenId, isStake}) => {
             resolve({
                 success: true,
                 tokenIds,
@@ -90,17 +90,18 @@ const rescue = async (tokenIds) => {
     return new Promise(async (resolve, reject) => {
         try {
             const tx = await window.mineContract.connect(window.Signer).rescue(
-                tokenIds
-                // {
-                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
-                // }
+                tokenIds,
+                {
+                  gasLimit: 300000 * tokenIds.length,
+                }
             );
 
             window.Library.once(tx.hash, (transaction) => {
                 if (transaction.status !== 1) {
                     window.Library.call(tx)
                         .then((res) => {
-                            console.log(res);
+                            console.log(res)
+                            reject(res);
                         })
                         .catch((err) => {
                             console.log(err);
@@ -115,7 +116,7 @@ const rescue = async (tokenIds) => {
         }
         // local store this tx hash
         // console.log('amount===', amount)
-        NoticeEmitter.on("rescue success", (tokenIds) => {
+        NoticeEmitter.on("rescue success", ({tokenId, isStake}) => {
             resolve({
                 success: true,
                 tokenIds,

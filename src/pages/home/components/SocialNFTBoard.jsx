@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { formatNumber } from '../../../utils/utils';
+import { toast } from 'react-toastify';
 
 const SocialNFTBoard = (props) => {
     const { socialData } = props;
@@ -14,6 +15,8 @@ const SocialNFTBoard = (props) => {
         navigate('/build')
     }
     const handleTradeNFTClick = () => {
+        toast.info("暂不支持，敬请期待...")
+        return
         navigate('/market')
     }
     return (

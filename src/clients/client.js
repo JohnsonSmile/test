@@ -79,17 +79,14 @@ const initialize = (provider) => {
       // TODO: toast something!
       console.log(owner, tokenId, stakeAt);
       const accountLocal = localStorage.getItem("account");
-      // if (accountLocal === owner && newStatu) {
-      //   NoticeEmitter.emit("stake success", { tokenId, isStake: true });
-      //   // toast.info(
-      //   //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
-      //   // );
-      // } else if (accountLocal === owner && !newStatu) {
-      //   NoticeEmitter.emit("stake success", { tokenId, isStake: false });
-      //   // toast.info(
-      //   //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
-      //   // );
-      // }
+      console.log(accountLocal)
+      console.log(owner)
+      if (accountLocal === owner) {
+        NoticeEmitter.emit("stake success", { tokenId, isStake: true });
+        // toast.info(
+        //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
+        // );
+      }
     }
   );
 
@@ -99,17 +96,12 @@ const initialize = (provider) => {
       // TODO: toast something!
       console.log(owner, tokenId);
       const accountLocal = localStorage.getItem("account");
-      // if (accountLocal === owner && newStatu) {
-      //   NoticeEmitter.emit("stake success", { tokenId, isStake: true });
-      //   // toast.info(
-      //   //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
-      //   // );
-      // } else if (accountLocal === owner && !newStatu) {
-      //   NoticeEmitter.emit("stake success", { tokenId, isStake: false });
-      //   // toast.info(
-      //   //   `You have unstake your nft, tokenId is: ${tokenId.toString()}!`
-      //   // );
-      // }
+      if (accountLocal === owner) {
+        NoticeEmitter.emit("rescue success", { tokenId, isStake: false });
+        // toast.info(
+        //   `You have stake your nft, tokenId is: ${tokenId.toString()}!`
+        // );
+      } 
     }
   );
 

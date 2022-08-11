@@ -14,12 +14,12 @@ import { useWeb3React } from "@web3-react/core"
 import { getVSDBalance } from "../../clients/vsd"
 import { getValueBalance } from "../../clients/value"
 import { ethers } from "ethers"
-import { getUserOwn, getUserOwnNum, getUserStakedNum } from "../../clients/valuebleNFT"
+import { getUserOwn, getUserOwnNum } from "../../clients/valuebleNFT"
 import { getUserListItems, getUserListItemsNum } from "../../clients/list"
-import { apiPostGetNFTInfosByIDs } from "../../http"
 import { useDispatch, useSelector } from "react-redux"
 import { asyncSetAssetsDetail, asyncSetMyNftInfos, asyncSetMyVsdInfos, getAssetsDetail, getMyNftInfos, getMyVsdInfos } from "../../redux/reducers/page"
 import { toast } from "react-toastify"
+import { getUserStakedNum } from "../../clients/mine"
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -87,6 +87,7 @@ const MyAssetsPage = () => {
         }))
         // get my staked nft count
         const stakedNum = await getUserStakedNum(account)
+        console.log(stakedNum)
         // get market price
         const amount = await getUserListItemsNum(account)
         const pageSize = 100
@@ -115,23 +116,17 @@ const MyAssetsPage = () => {
         console.log(totalPrice)
         // get yesterday gain
         // get four nft 
-        const nftIDs = await getUserOwn(account, 0, 4)
-        console.log(nftIDs)
-        const tokenIDS = nftIDs.map(id => id.toNumber())
-        console.log(tokenIDS)
+        const nftInfos = await getUserOwn(account, 0, 4)
         // get nft infos from backend
-        const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
-        console.log(nftInfoResp)
-        var latestNfts = []
-        if (nftInfoResp.code === 200 && nftInfoResp.result && nftInfoResp.result.length > 0) {
-            latestNfts = nftInfoResp.result.map(nft => {
-                return {
-                    image: NFTImages[nft.quality - 1],
-                    id: nft.token_id
-                }
-            })
-            console.log(latestNfts)
-        }
+        // const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
+        // console.log(nftInfoResp)
+        console.log(nftInfos)
+        var latestNfts = nftInfos.map(nftInfo => {
+            return {
+                image: NFTImages[nftInfo.tokenQuality - 1],
+                id: nftInfo.tokenId
+            }
+        })
         dispatch(asyncSetMyNftInfos({
             totalAmount: nftNum,
             stakeAmount: stakedNum,
