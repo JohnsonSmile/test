@@ -1050,9 +1050,26 @@ const ValuebleNFT = [
     "name": "safeMint",
     "outputs": [
       {
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenQuality",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isStaked",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct ValuebleNFT.tokenInfo[]",
+        "name": "tokenInfos",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "nonpayable",
@@ -2645,7 +2662,7 @@ const contracts = {
   usdt: "0x5040d8F5d3498BB041bD9155A4bC1EAA14ecaB28",
   vsd: "0x747B068eBA74cc3C915c1Cb9C3264C1762eA3AbE",
   value: "0xbeFF5FA15Ec737cCAdD6b5AfAeac434EeF07A87d",
-  valuebleNFT: "0x4C4820D5214db88799d4a1d3ea8a12975a4bfF2A",
+  valuebleNFT: "0x1a68970da077f2440808D874Deb9f0Db0069A766",
   list: "0x2CDf0E7E0b56039eC74f5086CB724A21DC74fb45",
   mine: "0xFa0F9Ed4FEB410f6d94dB51c31b827a660835Cf4",
   usdtABI: ERC20ABI,
