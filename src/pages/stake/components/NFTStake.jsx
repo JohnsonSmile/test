@@ -110,6 +110,10 @@ const NFTStake = () => {
         }
     }
 
+    const handleGain = () => {
+        toast.info('暂不支持，敬请期待...')
+    }
+
     const handleUnStakeAllAndGain = async () => {
         if (stkIDs.length === 0) {
             toast.error("当前没有质押的NFT")
@@ -120,7 +124,7 @@ const NFTStake = () => {
             // TODO: more to stake
             console.log(stkIDs)
             const resp = await rescue(stkIDs)
-            return
+            console.log(resp)
             if (resp.success) {
                 dispatch(asyncSetLoading(false, "解除质押NFT", "", 0, "", "解除质押NFT成功"))
                 const stakedIDSet = new Set(stkIDs)
@@ -242,10 +246,11 @@ const NFTStake = () => {
                     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', mt: 2, gap: 1}}>
                         <Box sx={{ flex: 1, fontSize: '12px', color: '#fff', backgroundColor: '#4263EB', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}
                             onClick={handleUnStakeAllAndGain}>
-                            解除质押并提取收益
+                            解除质押
                         </Box>
-                        <Box sx={{ flex: 1, fontSize: '12px', color: '#4263EB', backgroundColor: '#ECF0FF', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}>
-                            只提取收益
+                        <Box sx={{ flex: 1, fontSize: '12px', color: '#4263EB', backgroundColor: '#ECF0FF', borderRadius: '12px', lineHeight: '44px', fontWeight: 600, cursor: 'pointer'}}
+                            onClick={handleGain}>
+                            提取收益
                         </Box>
                     </Box>
                 </Box>

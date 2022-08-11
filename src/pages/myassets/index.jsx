@@ -117,9 +117,6 @@ const MyAssetsPage = () => {
         // get yesterday gain
         // get four nft 
         const nftInfos = await getUserOwn(account, 0, 4)
-        // get nft infos from backend
-        // const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
-        // console.log(nftInfoResp)
         console.log(nftInfos)
         var latestNfts = nftInfos.map(nftInfo => {
             return {

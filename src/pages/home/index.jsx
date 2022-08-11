@@ -16,11 +16,10 @@ import { ReactComponent as AssetsIcon } from "../../assets/icon/home/assets.svg"
 import { ReactComponent as ChatIcon } from "../../assets/icon/home/chat.svg"
 import { ReactComponent as RankIcon } from "../../assets/icon/home/rank.svg"
 import { ReactComponent as CompoundIcon } from "../../assets/icon/home/compound.svg"
-import { getUserOwnNum  } from '../../clients/valuebleNFT';
-import { getUserStaked } from '../../clients/mine'
+import { getUserOwn, getUserOwnNum  } from '../../clients/valuebleNFT';
 import { setTokenURI } from '../../redux/reducers/contracts';
 import { useDispatch, useSelector } from 'react-redux';
-import { apiPostGetNFTInfosByIDs, apiPostGetUserInfo } from '../../http';
+import { apiPostGetUserInfo } from '../../http';
 import { getSigInfo } from '../../redux/reducers/wallet';
 import { getAvatar, getUserInfo, getUserName } from '../../redux/reducers/user';
 import { asyncSetHome, getHome } from '../../redux/reducers/page';
@@ -148,48 +147,35 @@ const HomePage = () => {
             const tokenURI = 'https://qjgw0y2t09.execute-api.us-east-1.amazonaws.com/metadata?index='
             dispatch(setTokenURI(tokenURI))
             var amount = 0
-            try {
-                // get user own num
-                amount = await getUserOwnNum(account)
-                console.log(amount)
-            } catch (e) {
-                console.log(e)
-            }
-
-            // gain tody
+            // get user own num
+            amount = await getUserOwnNum(account)
+            console.log(amount)
             const pageSize = 100
             var index = 0
-            var tokensResp = []
-            var res = await getUserStaked(account, index, pageSize)
-            tokensResp.push(...res)
-            while (res.length === 100) {
+            var resp = []
+            var res = await getUserOwn(account, index, pageSize)
+            resp.push(...res)
+            while (resp.length === amount) {
                 index = pageSize * (index + 1)
-                res = await getUserStaked(account, index, pageSize)
-                tokensResp.push(...res)
+                res = await getUserOwn(account, index, pageSize)
+                resp.push(...res)
             }
-            console.log(tokensResp)
-
-            // staked nft 
-            const stakeNFTs = tokensResp.filter(nft => {
-                return nft.staking
+            console.log(resp)
+            const tokenInfos = resp.map(res => {
+                return {
+                    token_id: res.tokenId.toNumber(),
+                    quality: res.tokenQuality.toNumber(),
+                    isStaked: res.isStaked,
+                }
             })
+            console.log(tokenInfos)
+            const cropper = tokenInfos.filter(token => token.quality === 1).length
+            const silver = tokenInfos.filter(token => token.quality === 2).length
+            const gold = tokenInfos.filter(token => token.quality === 3).length
+            const diamond = tokenInfos.filter(token => token.quality === 4).length
+            // TODO:gain tody got from backend
 
-            // get nft infos from backend
-            const stakedIDs = stakeNFTs.length > 0 ? stakeNFTs.map(nft => nft.tokenId.toNumber()) : []
-            console.log(stakedIDs)
-            const stakeNFTResp = stakeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
-            console.log(stakeNFTResp)
-
-            var gain = 0
-            if (stakeNFTResp.code === 200 && stakeNFTResp.result && stakeNFTResp.result.length > 0) {
-                // copper
-                const cropper = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 1).length
-                const silver = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 2).length
-                const gold = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 3).length
-                const diamond = stakeNFTResp.result.filter(nftInfo => nftInfo.quality === 4).length
-                console.log(cropper)
-                gain = cropper * 6 + silver * 12.5 + gold * 25 + diamond * 50
-            }
+            const gain = cropper * 6 + silver * 12.5 + gold * 25 + diamond * 50
             
             // get user info
             if (signInfo && signInfo[account]) {

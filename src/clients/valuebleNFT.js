@@ -101,10 +101,10 @@ const safeMint = async (amount, payType, isStake) => {
         }
         // local store this tx hash
         console.log('amount===', amount)
-        NoticeEmitter.on("mint success", (tokenIds) => {
+        NoticeEmitter.on("mint success", (nftInfos) => {
             resolve({
                 success: true,
-                tokenIds,
+                nftInfos,
             });
         });
     });

@@ -7,7 +7,6 @@ import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
 import { useEffect, useState } from "react"
 import { useWeb3React } from "@web3-react/core"
 import { getUserOwn, getUserOwnNum } from "../../clients/valuebleNFT"
-import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { useDispatch, useSelector } from "react-redux"
 import { asyncSetMyNft, getMyNft } from "../../redux/reducers/page"
 
@@ -49,6 +48,7 @@ const MyNFTPage = () => {
             return {
                 token_id: res.tokenId.toNumber(),
                 quality: res.tokenQuality.toNumber(),
+                isStaked: res.isStaked,
             }
         })
         console.log(tokenInfos)

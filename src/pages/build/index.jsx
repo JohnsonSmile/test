@@ -15,7 +15,6 @@ import { asyncSetLoading } from "../../redux/reducers/status"
 import { useDispatch, useSelector } from "react-redux"
 import PayOptionDialog from "./components/PayOptionDialog"
 import { asyncSetBuildAmount, getBuildAmount } from "../../redux/reducers/page"
-import { apiPostGetNFTInfosByIDs } from "../../http/api.js"
 
 
 const countBtns = [
@@ -182,35 +181,17 @@ const BuildPage = () => {
             const res = await safeMint(count, type, false)
             if (res.success) {
                 console.log(res)
-                const ids = res.tokenIds.map(tokenId => tokenId.toNumber())
-                console.log(ids)
-                // set result ?? {gold:10, sliver: 1, copper: 0, diamond: 1}
-                try {
-                    const nftInfoResp = await apiPostGetNFTInfosByIDs(ids)
-                    console.log(nftInfoResp)
-                    if (nftInfoResp.code === 200 && nftInfoResp.result && nftInfoResp.result.length > 0) {
-                        const cropper = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 1).length
-                        const silver = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 2).length
-                        const gold = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 3).length
-                        const diamond = nftInfoResp.result.filter(nftInfo => nftInfo.quality === 4).length
-                        const result = { gold, silver, cropper, diamond }
-                        dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
-                        // update build amount 
-                        getTotalSupplyCount()
-                        console.log(result)
-                        setResult(result)
-                        setOpen(true)
-                    } else {
-                        dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
-                        // update build amount 
-                        getTotalSupplyCount()
-                    }
-                } catch (e) {
-                    console.log(e)
-                    dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "", "铸造NFT成功"))
-                    // update build amount 
-                    getTotalSupplyCount()
-                }
+                const cropper = res.nftInfos.filter(nftInfo => nftInfo.tokenQuality.toNumber() === 1).length
+                const silver = res.nftInfos.filter(nftInfo => nftInfo.tokenQuality.toNumber() === 2).length
+                const gold = res.nftInfos.filter(nftInfo => nftInfo.tokenQuality.toNumber() === 3).length
+                const diamond = res.nftInfos.filter(nftInfo => nftInfo.tokenQuality.toNumber() === 4).length
+                const result = { gold, silver, cropper, diamond }
+                dispatch(asyncSetLoading(false, "", "", 0, "", "", true))
+                // update build amount 
+                getTotalSupplyCount()
+                console.log(result)
+                setResult(result)
+                setOpen(true)
             } else {
                 dispatch(asyncSetLoading(false, "铸造NFT",  "", 0, "铸造NFT失败"))
             }
