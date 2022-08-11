@@ -39,7 +39,7 @@ const getAllStaked = async (startIndex, pageNum) => {
 
 
 // ------post function-----
-const staking = async (amount, tokenIds) => {
+const staking = async (account, tokenIds) => {
     if (!window.Signer || !window.mineContract) {
         console.warn("in valuebleNFT safeMint ");
         initialize();
@@ -47,10 +47,10 @@ const staking = async (amount, tokenIds) => {
     return new Promise(async (resolve, reject) => {
         try {
             const tx = await window.mineContract.connect(window.Signer).staking(
-                amount,
+                account,
                 tokenIds,
                 {
-                  gasLimit: window.ERC721Contract.estimate.safeMint * amount,
+                  gasLimit: 300000 * tokenIds.length,
                 }
             );
 
@@ -72,7 +72,7 @@ const staking = async (amount, tokenIds) => {
             reject(e);
         }
         // local store this tx hash
-        console.log('amount===', amount)
+        console.log('amount===', tokenIds.length)
         NoticeEmitter.on("staking success", (tokenIds) => {
             resolve({
                 success: true,

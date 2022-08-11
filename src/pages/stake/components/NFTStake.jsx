@@ -48,6 +48,7 @@ const NFTStake = () => {
     const [selectedType, setSelectedType] = useState(1)
     const [nftIDs, setNftIDs] = useState([])
     const [stkIDs, setStkIDs] = useState([])
+    const { account } = useWeb3React()
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const handleTypeChange = (e) => {
@@ -73,6 +74,7 @@ const NFTStake = () => {
             dispatch(asyncSetLoading(true, "质押NFT", "正在获取授权"))
             var res
             try {
+                console.log(contracts.mine)
                 res = await setApprovalForAll(contracts.mine, true)
             } catch (err) {
                 console.log(err)
@@ -81,7 +83,7 @@ const NFTStake = () => {
             if (res.success) {
                 dispatch(asyncSetLoading(true, "质押NFT", "正在质押NFT"))
                 console.log(selectedIDs)
-                const resp = await staking(selectedIDs.length, selectedIDs)
+                const resp = await staking(account, selectedIDs)
                 if (resp.success) {
                     dispatch(asyncSetLoading(false, "质押NFT", "", 0, "", "质押NFT成功"))
                     const stakedIDSet = new Set(selectedIDs)
