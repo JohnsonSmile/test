@@ -7,7 +7,8 @@ import DiamondNFTImage from "../../assets/images/mynft/diamond_nft.png"
 import GoldNFTImage from "../../assets/images/mynft/gold_nft.png"
 import SilverNFTImage from "../../assets/images/mynft/silver_nft.png"
 import CopperNFTImage from "../../assets/images/mynft/copper_nft.png"
-import { getUserStakedTokenIDsByPage, stakeNFT } from "../../clients/valuebleNFT"
+import { getUserOwn, getUserOwnNum, stakeNFT } from "../../clients/valuebleNFT"
+import { getUserStaked } from "../../clients/mine"
 import { apiPostGetNFTInfosByIDs } from "../../http/api"
 import { useWeb3React } from "@web3-react/core"
 import { getUserListItems, getUserListItemsNum, unlist } from "../../clients/list"
@@ -213,86 +214,62 @@ const MyNFTListPage = () => {
 
     const initialInfos = async (status, type) => {
         // get all nfts not listed with type
-        // 闲置的和 staking的
+        const amount = await getUserOwnNum(account)
         const pageSize = 100
         var index = 0
         var resp = []
-        var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+        var res = await getUserOwn(account, index, pageSize)
         resp.push(...res)
-        while (res.length === 100) {
+        while (resp.length === amount) {
             index = pageSize * (index + 1)
-            res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            res = await getUserOwn(account, index, pageSize)
             resp.push(...res)
         }
         console.log(resp)
+        const tokenInfos = resp.map(res => {
+            return {
+                token_id: res.tokenId.toNumber(),
+                quality: res.tokenQuality.toNumber(),
+            }
+        })
+        console.log(tokenInfos)
 
         // get free
-        const freeNFTs = resp.filter(nft => {
-            return !nft.staking
+        const freeNFTs = tokenInfos.filter(nft => {
+            return !nft.isStaked
         })
-        console.log(freeNFTs)
-        const freeIDs = freeNFTs.length > 0 ? freeNFTs.map(nft => nft.tokenId.toNumber()) : []
-        console.log(freeIDs)
-
-        // get nft infos from backend
-        const freeNFTResp = freeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(freeIDs) : []
-        console.log(freeNFTResp)
-
 
 
         // get staked nfts
         const stakedNFTs = resp.filter(nft => {
-            return nft.staking
+            return nft.isStaked
         })
-        console.log(stakedNFTs)
-        const stakedIDs = stakedNFTs.length > 0 ? stakedNFTs.map(nft => nft.tokenId.toNumber()) : []
-        console.log(stakedIDs)
-
-        // get nft infos from backend
-        const stakedNFTResp = stakedNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
-        console.log(stakedNFTResp)
 
         // listed nft info
-        const amount = await getUserListItemsNum(account)
-        index = 0
-        resp = []
-        res = await getUserListItems(account, index, pageSize)
-        resp.push(...res)
-        while (resp.length === amount) {
-            index = pageSize * (index + 1)
-            res = await getUserListItemsNum(account, index, pageSize)
-            resp.push(...res)
-        }
-        console.log(resp)
-        const tokenIDS = resp.length > 0 ? resp.map(nft => nft.tokenId.toNumber()) : []
-        console.log(tokenIDS)
-
-        // get nft infos from backend
-        const onSaleNFTResp = resp.length > 0 ? await apiPostGetNFTInfosByIDs(tokenIDS) : []
-        console.log(onSaleNFTResp)
+        const listedNFTs = []
 
         // all infos
         var nftInfos = []
 
         // 1 闲置 2 质押中 3 出售中
-        if (freeNFTResp.code === 200 && freeNFTResp.result && freeNFTResp.result.length > 0) {
-            nftInfos.push(...(freeNFTResp.result.map(nft => {
+        if (freeNFTs.length > 0) {
+            nftInfos.push(...(freeNFTs.map(nft => {
                 return {
                     ...nft,
                     status: 1
                 }
             })))
         }
-        if (stakedNFTResp.code === 200 && stakedNFTResp.result && stakedNFTResp.result.length > 0) {
-            nftInfos.push(...(stakedNFTResp.result.map(nft => {
+        if (stakedNFTs.length > 0) {
+            nftInfos.push(...(stakedNFTs.map(nft => {
                 return {
                     ...nft,
                     status: 2
                 }
             })))
         }
-        if (onSaleNFTResp.code === 200 && onSaleNFTResp.result && onSaleNFTResp.result.length > 0) {
-            nftInfos.push(...(onSaleNFTResp.result.map(nft => {
+        if (listedNFTs.length > 0) {
+            nftInfos.push(...(listedNFTs.map(nft => {
                 return {
                     ...nft,
                     status: 3

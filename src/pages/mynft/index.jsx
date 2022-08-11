@@ -45,43 +45,37 @@ const MyNFTPage = () => {
             resp.push(...res)
         }
         console.log(resp)
-        const tokenIDS = resp.map(tokenId => tokenId.toNumber())
-        console.log(tokenIDS)
+        const tokenInfos = resp.map(res => {
+            return {
+                token_id: res.tokenId.toNumber(),
+                quality: res.tokenQuality.toNumber(),
+            }
+        })
+        console.log(tokenInfos)
 
-        // get nft infos from backend
-        const nftInfoResp = await apiPostGetNFTInfosByIDs(tokenIDS)
-        console.log(nftInfoResp)
-        if (nftInfoResp.code === 200 && nftInfoResp.result && nftInfoResp.result.length > 0) {
-            const copperInfos = nftInfoResp.result.filter(nft => {
-                return nft.quality === 1
-            })
-            console.log("copperInfos", copperInfos)
-            const silverInfos = nftInfoResp.result.filter(nft => {
-                return nft.quality === 2
-            })
-            console.log("silverInfos", silverInfos)
-            const goldInfos = nftInfoResp.result.filter(nft => {
-                return nft.quality === 3
-            })
-            console.log("goldInfos", goldInfos)
-            const diamondInfos = nftInfoResp.result.filter(nft => {
-                return nft.quality === 4
-            })
-            console.log("diamondInfos", diamondInfos)
-            dispatch(asyncSetMyNft({
-                copperNftInfos: copperInfos,
-                silverNftInfos: silverInfos,
-                goldNftInfos: goldInfos,
-                diamondNftInfos: diamondInfos,
-            }))
-        } else {
-            dispatch(asyncSetMyNft({
-                copperNftInfos: [],
-                silverNftInfos: [],
-                goldNftInfos: [],
-                diamondNftInfos: [],
-            }))
-        }
+        const copperInfos = tokenInfos.filter(nft => {
+            return nft.quality === 1
+        })
+        console.log("copperInfos", copperInfos)
+        const silverInfos = tokenInfos.filter(nft => {
+            return nft.quality === 2
+        })
+        console.log("silverInfos", silverInfos)
+        const goldInfos = tokenInfos.filter(nft => {
+            return nft.quality === 3
+        })
+        console.log("goldInfos", goldInfos)
+        const diamondInfos = tokenInfos.filter(nft => {
+            return nft.quality === 4
+        })
+        console.log("diamondInfos", diamondInfos)
+        dispatch(asyncSetMyNft({
+            copperNftInfos: copperInfos,
+            silverNftInfos: silverInfos,
+            goldNftInfos: goldInfos,
+            diamondNftInfos: diamondInfos,
+        }))
+
     }
     useEffect(() => {
         if (account) {

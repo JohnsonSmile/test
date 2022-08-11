@@ -2,10 +2,8 @@ import { Box, Tab,  Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types';
 import NFTStake from "./components/NFTStake";
-import LPStake from "./components/LPStake";
 import BootstrapTabs from "../../widgets/tabs/BootstrapTabs";
-import { apiPostGetNFTInfosByIDs } from "../../http/api";
-import { getUserStakedTokenIDsByPage } from "../../clients/valuebleNFT";
+import { getUserOwn, getUserOwnNum } from "../../clients/valuebleNFT";
 import { useWeb3React } from "@web3-react/core";
 import { useDispatch } from "react-redux";
 import { asyncSetNftInfos } from "../../redux/reducers/page";
@@ -47,69 +45,72 @@ const StakePage = () => {
 
     const initialInfos = async () => {
         // get all nfts not listed with type
-        // 闲置的和 staking的
+        const amount = await getUserOwnNum(account)
         const pageSize = 100
         var index = 0
         var resp = []
-        var res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+        var res = await getUserOwn(account, index, pageSize)
         resp.push(...res)
-        while (res.length === 100) {
+        while (resp.length === amount) {
             index = pageSize * (index + 1)
-            res = await getUserStakedTokenIDsByPage(account, index, pageSize)
+            res = await getUserOwn(account, index, pageSize)
             resp.push(...res)
         }
         console.log(resp)
+        const tokenInfos = resp.map(res => {
+            return {
+                token_id: res.tokenId.toNumber(),
+                quality: res.tokenQuality.toNumber(),
+            }
+        })
+        console.log(tokenInfos)
 
         // get free
-        const freeNFTs = resp.filter(nft => {
-            return !nft.staking
-        })
-        console.log(freeNFTs)
-        const freeIDs = freeNFTs.length > 0 ? freeNFTs.map(nft => nft.tokenId.toNumber()) : []
-        console.log(freeIDs)
-
-        // get nft infos from backend
-        const freeNFTResp = freeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(freeIDs) : []
-        console.log(freeNFTResp)
-
-
-        // staked nft 
-        const stakeNFTs = resp.filter(nft => {
-            return nft.staking
+        const freeNFTs = tokenInfos.filter(nft => {
+            return !nft.isStaked
         })
 
-        // get nft infos from backend
-        const stakedIDs = stakeNFTs.length > 0 ? stakeNFTs.map(nft => nft.tokenId.toNumber()) : []
-        console.log(stakedIDs)
-        const stakeNFTResp = stakeNFTs.length > 0 ?  await apiPostGetNFTInfosByIDs(stakedIDs) : []
-        console.log(stakeNFTResp)
 
+        // get staked nfts
+        const stakedNFTs = resp.filter(nft => {
+            return nft.isStaked
+        })
+
+        // listed nft info
+        const listedNFTs = []
 
         // all infos
         var nftInfos = []
 
         // 1 闲置 2 质押中 3 出售中
-        if (freeNFTResp.code === 200 && freeNFTResp.result && freeNFTResp.result.length > 0) {
-            nftInfos.push(...(freeNFTResp.result.map(nft => {
+        if (freeNFTs.length > 0) {
+            nftInfos.push(...(freeNFTs.map(nft => {
                 return {
                     ...nft,
                     status: 1
                 }
             })))
         }
-        if (stakeNFTResp.code === 200 && stakeNFTResp.result && stakeNFTResp.result.length > 0) {
-            nftInfos.push(...(stakeNFTResp.result.map(nft => {
+        if (stakedNFTs.length > 0) {
+            nftInfos.push(...(stakedNFTs.map(nft => {
                 return {
                     ...nft,
                     status: 2
                 }
             })))
         }
-        
+        if (listedNFTs.length > 0) {
+            nftInfos.push(...(listedNFTs.map(nft => {
+                return {
+                    ...nft,
+                    status: 3
+                }
+            })))
+        }
         // 排序
-        nftInfos = nftInfos.sort((a, b) => a.id - b.id)
-        dispatch(asyncSetNftInfos(nftInfos))
+        nftInfos = nftInfos.sort((a, b) => b.id - a.id)
         console.log(nftInfos)
+        dispatch(asyncSetNftInfos(nftInfos))
     }
 
     useEffect(() =>{

@@ -48,10 +48,10 @@ const staking = async (amount, tokenIds) => {
         try {
             const tx = await window.mineContract.connect(window.Signer).staking(
                 amount,
-                tokenIds
-                // {
-                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
-                // }
+                tokenIds,
+                {
+                  gasLimit: window.ERC721Contract.estimate.safeMint * amount,
+                }
             );
 
             window.Library.once(tx.hash, (transaction) => {

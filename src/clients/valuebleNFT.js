@@ -66,10 +66,10 @@ const safeMint = async (amount, payType, isStake) => {
             const tx = await window.valuebleNFTContract.connect(window.Signer).safeMint(
                 amount,
                 payType,
-                isStake
-                // {
-                //   gasLimit: window.ERC721Contract.estimate.safeMint * amount,
-                // }
+                isStake,
+                {
+                  gasLimit: 300000 * amount,
+                }
             );
 
             window.Library.once(tx.hash, (transaction) => {

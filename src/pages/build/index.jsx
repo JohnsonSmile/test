@@ -106,13 +106,18 @@ const BuildPage = () => {
                 }
                 // get approved usdt
                 dispatch(asyncSetLoading(true, "铸造NFT", "获取USDT授权..."))
-                const usdtApproved = await getUsdtAllowance(account, contracts.socialNFT)
+                var usdtApproved
+                try {
+                    usdtApproved = await getUsdtAllowance(account, contracts.valuebleNFT)
+                } catch (err) {
+                    console.log(err)
+                }
                 console.log(getFormatBigNumber(usdtApproved))
                 if (usdtApproved.lt(priceInfo.totalUsdtPrice)) {
                     // approve usdt
                     // const approveUsdtResp = await usdtApprove(contracts.socialNFT, priceInfo.totalUsdtPrice)
                     // approve all usdt
-                    const approveUsdtResp = await usdtApprove(contracts.socialNFT, usdtBalance)
+                    const approveUsdtResp = await usdtApprove(contracts.valuebleNFT, usdtBalance)
                     console.log(approveUsdtResp)
                     if (!approveUsdtResp || !approveUsdtResp.success) {
                         dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取USDT授权失败!"))
@@ -131,13 +136,13 @@ const BuildPage = () => {
                 }
                 dispatch(asyncSetLoading(true, "铸造NFT", "获取Value授权..."))
                 // get approved value
-                const valueApproved = await getValueAllowance(account, contracts.socialNFT)
+                const valueApproved = await getValueAllowance(account, contracts.valuebleNFT)
                 console.log(getFormatBigNumber(valueApproved))
                 if (valueApproved.lt(priceInfo.totalValuePrice)) {
                     // approve value
                     // const approveValueResp = await valueApprove(contracts.socialNFT, priceInfo.totalValuePrice)
                     // approve all 
-                    const approveValueResp = await valueApprove(contracts.socialNFT, valueBalance)
+                    const approveValueResp = await valueApprove(contracts.valuebleNFT, valueBalance)
                     console.log(approveValueResp)
                     if (!approveValueResp || !approveValueResp.success) {
                         dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取Value授权失败!"))
@@ -156,13 +161,13 @@ const BuildPage = () => {
                 }
                 dispatch(asyncSetLoading(true, "铸造NFT", "获取VSD授权..."))
                 // get approved vsd
-                const vsdApproved = await getVSDAllowance(account, contracts.socialNFT)
+                const vsdApproved = await getVSDAllowance(account, contracts.ValuebleNFT)
                 console.log(getFormatBigNumber(vsdApproved))
                 if (vsdApproved.lt(priceInfo.totalVsdPrice)) {
                     // // approved vsd
                     // const approveVsdResp = await VSDApprove(contracts.socialNFT, priceInfo.totalVsdPrice)
                     // approve all 
-                    const approveVsdResp = await VSDApprove(contracts.socialNFT, vsdBalance)
+                    const approveVsdResp = await VSDApprove(contracts.valuebleNFT, vsdBalance)
                     console.log(approveVsdResp)
                     if (!approveVsdResp || !approveVsdResp.success) {
                         dispatch(asyncSetLoading(false, "铸造NFT", "", 0, "获取VSD授权失败!"))
@@ -173,8 +178,8 @@ const BuildPage = () => {
             }
             dispatch(asyncSetLoading(true, "铸造NFT", "Mint NFT..."))
             console.log('safe mint')
-            // safe mint
-            const res = await safeMint(count, type)
+            // safe mint, 是否build并质押
+            const res = await safeMint(count, type, false)
             if (res.success) {
                 console.log(res)
                 const ids = res.tokenIds.map(tokenId => tokenId.toNumber())
