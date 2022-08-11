@@ -91,6 +91,37 @@ const apiPostGetNFTInfosByIDs = async (ids) => {
     }
 }
 
+const apiPostStakeToken = async (stake_nfts, address) => {
+    const resp = await http.post("/api/stake", {
+        stake_nfts,
+        address
+    })
+    if (resp.status === 200) {
+        return resp.data
+    } else {
+        return {
+            code: resp.status,
+            message: resp.statusText
+        }
+    }
+}
+
+
+const apiPostRescueToken  = async (rescue_ids, address) => {
+    const resp = await http.post("/api/rescue", {
+        rescue_ids,
+        address
+    })
+    if (resp.status === 200) {
+        return resp.data
+    } else {
+        return {
+            code: resp.status,
+            message: resp.statusText
+        }
+    }
+}
+
 export {
     apiPostLogin,
     apiPostCreateUser,
@@ -99,4 +130,6 @@ export {
     apiPostGetNFTInfosByIDs,
     apiGetSignInfos,
     apiPostSignIn,
+    apiPostStakeToken,
+    apiPostRescueToken
 }

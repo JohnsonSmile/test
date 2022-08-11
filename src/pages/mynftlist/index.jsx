@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux"
 import { asyncSetLoading } from "../../redux/reducers/status"
 import { asyncSetSelectedIDs } from "../../redux/reducers/page"
 import { toast } from "react-toastify"
+import { apiPostRescueToken } from "../../http"
 
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
@@ -102,6 +103,8 @@ const MyNFTListPage = () => {
                     })
                     return res
                 })
+                const res = await apiPostRescueToken([nftInfo.token_id], account)
+                console.log(res)
             } else {
                 dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
             }

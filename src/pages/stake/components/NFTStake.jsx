@@ -15,6 +15,7 @@ import { rescue, staking } from "../../../clients/mine";
 import { useWeb3React } from "@web3-react/core";
 import { approve, getIsApprovedForAll, setApprovalForAll } from "../../../clients/valuebleNFT";
 import { contracts } from "../../../clients/contracts";
+import { apiPostRescueToken, apiPostStakeToken } from "../../../http";
 
 const NFTImages = [CopperNFTImage, SilverNFTImage, GoldNFTImage, DiamondNFTImage]
 
@@ -101,6 +102,14 @@ const NFTStake = () => {
                 dispatch(asyncSetNftInfos(nfts))
                 dispatch(asyncSetSelectedIDs([]))
                 console.log(resp)
+                const res = await apiPostStakeToken(
+                    selectedIDs.map(id => {
+                    return {
+                        token_id: id,
+                        quality: selectedType
+                    }
+                }), account)
+                console.log(res)
             } else {
                 dispatch(asyncSetLoading(false, "质押NFT",  "", 0, "质押NFT失败"))
             }
@@ -137,6 +146,9 @@ const NFTStake = () => {
                 })
                 dispatch(asyncSetNftInfos(nfts))
                 dispatch(asyncSetSelectedIDs([]))
+
+                const res = await apiPostRescueToken(stkIDs, account)
+                console.log(res)
             } else {
                 dispatch(asyncSetLoading(false, "解除质押NFT",  "", 0, "解除质押NFT失败"))
             }
